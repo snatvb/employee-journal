@@ -1,0 +1,15 @@
+body, html {
+  width: 100%;
+  height: 100%;
+  font-family: Arial, Tahoma, serif;
+  background-color: #242424;
+  color: #cfcfcf;
+}
+
+input {
+  color: #cfcfcf;
+}
+
+* {
+  box-sizing: border-box;
+}
