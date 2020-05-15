@@ -5,28 +5,22 @@ import Action.Store
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation as Navigation
 import Helpers exposing (packModelWithCmd)
-import Model exposing (Model)
+import Model exposing (Model, ViewModel)
 import Router exposing (handleUrl)
 import Store exposing (initStore)
-import Url exposing (Url)
+import Url as URL exposing (Url)
 import View.Home
+import View.NewEmployee
 
 
 init : () -> Url -> Navigation.Key -> ( Model, Cmd Action )
 init _ url key =
-    handleUrl (initStore key) url
+    handleUrl <| initStore url key
 
 
 subscriptions : Model -> Sub Action
 subscriptions _ =
     Sub.none
-
-
-updateStore : Action.Store.Action -> Model -> ( Model, Cmd Action )
-updateStore action model =
-    case model of
-        Model.Home home ->
-            packModelWithCmd Model.Home View.Home.updateStore action home
 
 
 update : Action -> Model -> ( Model, Cmd Action )
@@ -36,51 +30,46 @@ update action model =
             ( model, Cmd.none )
 
         Action.UrlChanged _ ->
-            ( model, Cmd.none )
+            handleUrl model.store
 
         Action.LinkClicked request ->
             updateByClickUrl request model
 
         Action.Store storeAction ->
-            updateStore storeAction model
+            ( model, Cmd.none )
 
         _ ->
             ( model, Cmd.none )
+
+
+updateUrl : Url -> Model -> Model
+updateUrl url model =
+    { model
+        | store =
+            Store.updateUrl url model.store
+    }
 
 
 updateByClickUrl : UrlRequest -> Model -> ( Model, Cmd Action )
 updateByClickUrl request model =
     case request of
         Browser.Internal url ->
-            case url.fragment of
-                Nothing ->
-                    -- If we got a link that didn't include a fragment,
-                    -- it's from one of those (href "") attributes that
-                    -- we have to include to make the RealWorld CSS work.
-                    --
-                    -- In an application doing path routing instead of
-                    -- fragment-based routing, this entire
-                    -- `case url.fragment of` expression this comment
-                    -- is inside would be unnecessary.
-                    ( model, Cmd.none )
+            ( updateUrl url model, Navigation.pushUrl model.store.navigationKey (URL.toString url) )
 
-                Just _ ->
-                    ( model, Cmd.none )
-                    -- ( model
-                    -- , Navigation.pushUrl (model.store.navKey (toSession model)) (Url.toString url)
-                    -- )
-
-        Browser.External href ->
+        Browser.External url ->
             ( model
-            , Navigation.load href
+            , Navigation.load url
             )
 
 
 render : Model -> Document Action
 render model =
-    case model of
+    case model.viewModel of
         Model.Home home ->
-            View.Home.render home
+            View.Home.render model.store home
+
+        Model.NewEmployee newEmployee ->
+            View.NewEmployee.render model.store newEmployee
 
 
 main : Program () Model Action

@@ -10562,19 +10562,35 @@ var $elm$browser$Browser$application = _Browser_application;
 var $author$project$Model$Home = function (a) {
 	return {$: 'Home', a: a};
 };
+var $author$project$Model$buildModel = F2(
+	function (store, model) {
+		return {store: store, viewModel: model};
+	});
 var $author$project$Router$convertInitView = F3(
-	function (packer, init, store) {
-		var _v0 = init(store);
+	function (packer, _v0, store) {
 		var model = _v0.a;
 		var cmd = _v0.b;
 		return _Utils_Tuple2(
-			packer(model),
+			A2(
+				$author$project$Model$buildModel,
+				store,
+				packer(model)),
 			cmd);
 	});
-var $author$project$View$Home$init = function (store) {
-	return _Utils_Tuple2(
-		{counter: 0, store: store},
-		$elm$core$Platform$Cmd$none);
+var $author$project$View$Home$init = _Utils_Tuple2(
+	{counter: 0},
+	$elm$core$Platform$Cmd$none);
+var $author$project$Router$getHome = function (store) {
+	return A3($author$project$Router$convertInitView, $author$project$Model$Home, $author$project$View$Home$init, store);
+};
+var $author$project$Model$NewEmployee = function (a) {
+	return {$: 'NewEmployee', a: a};
+};
+var $author$project$View$NewEmployee$init = _Utils_Tuple2(
+	{name: 'Example name', surname: 'Example surname'},
+	$elm$core$Platform$Cmd$none);
+var $author$project$Router$getNewEmployee = function (store) {
+	return A3($author$project$Router$convertInitView, $author$project$Model$NewEmployee, $author$project$View$NewEmployee$init, store);
 };
 var $elm$url$Url$Parser$Parser = function (a) {
 	return {$: 'Parser', a: a};
@@ -10631,6 +10647,32 @@ var $author$project$Router$route = F2(
 	function (parser, handler) {
 		return A2($elm$url$Url$Parser$map, handler, parser);
 	});
+var $elm$url$Url$Parser$s = function (str) {
+	return $elm$url$Url$Parser$Parser(
+		function (_v0) {
+			var visited = _v0.visited;
+			var unvisited = _v0.unvisited;
+			var params = _v0.params;
+			var frag = _v0.frag;
+			var value = _v0.value;
+			if (!unvisited.b) {
+				return _List_Nil;
+			} else {
+				var next = unvisited.a;
+				var rest = unvisited.b;
+				return _Utils_eq(next, str) ? _List_fromArray(
+					[
+						A5(
+						$elm$url$Url$Parser$State,
+						A2($elm$core$List$cons, next, visited),
+						rest,
+						params,
+						frag,
+						value)
+					]) : _List_Nil;
+			}
+		});
+};
 var $elm$url$Url$Parser$top = $elm$url$Url$Parser$Parser(
 	function (state) {
 		return _List_fromArray(
@@ -10643,7 +10685,11 @@ var $author$project$Router$parse = function (store) {
 				A2(
 				$author$project$Router$route,
 				$elm$url$Url$Parser$top,
-				A3($author$project$Router$convertInitView, $author$project$Model$Home, $author$project$View$Home$init, store))
+				$author$project$Router$getHome(store)),
+				A2(
+				$author$project$Router$route,
+				$elm$url$Url$Parser$s('add-employee'),
+				$author$project$Router$getNewEmployee(store))
 			]));
 };
 var $elm$url$Url$Parser$getFirstMatch = function (states) {
@@ -10761,31 +10807,30 @@ var $elm$url$Url$Parser$parse = F2(
 					url.fragment,
 					$elm$core$Basics$identity)));
 	});
-var $author$project$Router$handleUrl = F2(
-	function (store, url) {
-		var _v0 = A2(
-			$elm$url$Url$Parser$parse,
-			$author$project$Router$parse(store),
-			url);
-		if (_v0.$ === 'Just') {
-			var answer = _v0.a;
-			return answer;
-		} else {
-			return A3($author$project$Router$convertInitView, $author$project$Model$Home, $author$project$View$Home$init, store);
-		}
-	});
-var $author$project$Store$initStore = function (key) {
-	return {
-		employees: {items: $elm$core$Dict$empty, lastId: 0},
-		navigationKey: key
-	};
+var $author$project$Router$handleUrl = function (store) {
+	var _v0 = A2(
+		$elm$url$Url$Parser$parse,
+		$author$project$Router$parse(store),
+		store.url);
+	if (_v0.$ === 'Just') {
+		var answer = _v0.a;
+		return answer;
+	} else {
+		return $author$project$Router$getHome(store);
+	}
 };
+var $author$project$Store$initStore = F2(
+	function (url, key) {
+		return {
+			employees: {items: $elm$core$Dict$empty, lastId: 0},
+			navigationKey: key,
+			url: url
+		};
+	});
 var $author$project$Main$init = F3(
 	function (_v0, url, key) {
-		return A2(
-			$author$project$Router$handleUrl,
-			$author$project$Store$initStore(key),
-			url);
+		return $author$project$Router$handleUrl(
+			A2($author$project$Store$initStore, url, key));
 	});
 var $rtfeldman$elm_css$VirtualDom$Styled$accumulateStyles = F2(
 	function (_v0, styles) {
@@ -13569,135 +13614,184 @@ var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
 		$elm$virtual_dom$VirtualDom$text(str));
 };
 var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
-var $author$project$View$Home$view = function (model) {
-	return A2(
-		$rtfeldman$elm_css$Html$Styled$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$rtfeldman$elm_css$Html$Styled$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$rtfeldman$elm_css$Html$Styled$text('Hello world')
-					])),
-				$author$project$Components$Input$render(_List_Nil),
-				A2(
-				$rtfeldman$elm_css$Html$Styled$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$rtfeldman$elm_css$Html$Styled$text(
-						$elm$core$String$fromInt(model.counter))
-					])),
-				A2(
-				$rtfeldman$elm_css$Html$Styled$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$author$project$Components$Link$default,
-						_List_fromArray(
-							[
-								$rtfeldman$elm_css$Html$Styled$Attributes$href('add-employee')
-							]),
-						_List_fromArray(
-							[
-								$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
-							]))
-					]))
-			]));
-};
-var $author$project$View$Home$render = function (model) {
-	return A2(
-		$author$project$Helpers$packDocument,
-		'Home',
-		$author$project$View$Home$view(model));
-};
+var $author$project$View$Home$view = F2(
+	function (_v0, model) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$text('Hello world')
+						])),
+					$author$project$Components$Input$render(_List_Nil),
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$text(
+							$elm$core$String$fromInt(model.counter))
+						])),
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$author$project$Components$Link$default,
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$Attributes$href('add-employee')
+								]),
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
+								]))
+						]))
+				]));
+	});
+var $author$project$View$Home$render = F2(
+	function (store, model) {
+		return A2(
+			$author$project$Helpers$packDocument,
+			'Home',
+			A2($author$project$View$Home$view, store, model));
+	});
+var $author$project$View$NewEmployee$view = F2(
+	function (_v0, model) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$text(model.name)
+						])),
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$author$project$Components$Link$default,
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$Attributes$href('/')
+								]),
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$text('Назад')
+								]))
+						]))
+				]));
+	});
+var $author$project$View$NewEmployee$render = F2(
+	function (store, model) {
+		return A2(
+			$author$project$Helpers$packDocument,
+			'Home',
+			A2($author$project$View$NewEmployee$view, store, model));
+	});
 var $author$project$Main$render = function (model) {
-	var home = model.a;
-	return $author$project$View$Home$render(home);
+	var _v0 = model.viewModel;
+	if (_v0.$ === 'Home') {
+		var home = _v0.a;
+		return A2($author$project$View$Home$render, model.store, home);
+	} else {
+		var newEmployee = _v0.a;
+		return A2($author$project$View$NewEmployee$render, model.store, newEmployee);
+	}
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$none;
 };
-var $author$project$Main$updateByClickUrl = F2(
-	function (request, model) {
-		return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-	});
-var $author$project$Helpers$packModelWithCmd = F4(
-	function (packer, updateFn, action, model) {
-		var _v0 = A2(updateFn, action, model);
-		var updatedModel = _v0.a;
-		var cmd = _v0.b;
-		return _Utils_Tuple2(
-			packer(updatedModel),
-			cmd);
-	});
-var $author$project$Employee$add = F3(
-	function (employees, id, employee) {
-		return A3($elm$core$Dict$insert, id, employee, employees);
-	});
-var $author$project$Store$Employees$change = F3(
-	function (id, employee, employees) {
-		return _Utils_update(
-			employees,
-			{
-				items: A3($author$project$Employee$add, employees.items, id, employee)
-			});
-	});
-var $author$project$Store$Employees$update = F2(
-	function (action, model) {
-		if (action.$ === 'Change') {
-			var id = action.a;
-			var employee = action.b;
-			return _Utils_Tuple2(
-				A3($author$project$Store$Employees$change, id, employee, model),
-				$elm$core$Platform$Cmd$none);
+var $elm$browser$Browser$Navigation$load = _Browser_load;
+var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
+var $elm$url$Url$addPort = F2(
+	function (maybePort, starter) {
+		if (maybePort.$ === 'Nothing') {
+			return starter;
 		} else {
-			var employee = action.a;
-			return _Utils_Tuple2(
-				{
-					items: A3($author$project$Employee$add, model.items, model.lastId, employee),
-					lastId: model.lastId + 1
-				},
-				$elm$core$Platform$Cmd$none);
+			var port_ = maybePort.a;
+			return starter + (':' + $elm$core$String$fromInt(port_));
 		}
 	});
-var $author$project$Store$updateEmployees = F2(
-	function (action, model) {
-		var _v0 = A2($author$project$Store$Employees$update, action, model.employees);
-		var employees = _v0.a;
-		var cmd = _v0.b;
-		return _Utils_Tuple2(
-			_Utils_update(
+var $elm$url$Url$addPrefixed = F3(
+	function (prefix, maybeSegment, starter) {
+		if (maybeSegment.$ === 'Nothing') {
+			return starter;
+		} else {
+			var segment = maybeSegment.a;
+			return _Utils_ap(
+				starter,
+				_Utils_ap(prefix, segment));
+		}
+	});
+var $elm$url$Url$toString = function (url) {
+	var http = function () {
+		var _v0 = url.protocol;
+		if (_v0.$ === 'Http') {
+			return 'http://';
+		} else {
+			return 'https://';
+		}
+	}();
+	return A3(
+		$elm$url$Url$addPrefixed,
+		'#',
+		url.fragment,
+		A3(
+			$elm$url$Url$addPrefixed,
+			'?',
+			url.query,
+			_Utils_ap(
+				A2(
+					$elm$url$Url$addPort,
+					url.port_,
+					_Utils_ap(http, url.host)),
+				url.path)));
+};
+var $author$project$Store$updateUrl = F2(
+	function (url, store) {
+		return _Utils_update(
+			store,
+			{url: url});
+	});
+var $author$project$Main$updateUrl = F2(
+	function (url, model) {
+		return _Utils_update(
+			model,
+			{
+				store: A2($author$project$Store$updateUrl, url, model.store)
+			});
+	});
+var $author$project$Main$updateByClickUrl = F2(
+	function (request, model) {
+		if (request.$ === 'Internal') {
+			var url = request.a;
+			return _Utils_Tuple2(
+				A2($author$project$Main$updateUrl, url, model),
+				A2(
+					$elm$browser$Browser$Navigation$pushUrl,
+					model.store.navigationKey,
+					$elm$url$Url$toString(url)));
+		} else {
+			var url = request.a;
+			return _Utils_Tuple2(
 				model,
-				{employees: employees}),
-			cmd);
-	});
-var $author$project$Store$update = F2(
-	function (action, model) {
-		var actionEmployees = action.a;
-		return A2($author$project$Store$updateEmployees, actionEmployees, model);
-	});
-var $author$project$View$Home$updateStore = F2(
-	function (storeAction, model) {
-		var _v0 = A2($author$project$Store$update, storeAction, model.store);
-		var store = _v0.a;
-		var cmd = _v0.b;
-		return _Utils_Tuple2(
-			_Utils_update(
-				model,
-				{store: store}),
-			cmd);
-	});
-var $author$project$Main$updateStore = F2(
-	function (action, model) {
-		var home = model.a;
-		return A4($author$project$Helpers$packModelWithCmd, $author$project$Model$Home, $author$project$View$Home$updateStore, action, home);
+				$elm$browser$Browser$Navigation$load(url));
+		}
 	});
 var $author$project$Main$update = F2(
 	function (action, model) {
@@ -13705,13 +13799,13 @@ var $author$project$Main$update = F2(
 			case 'None':
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			case 'UrlChanged':
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				return $author$project$Router$handleUrl(model.store);
 			case 'LinkClicked':
 				var request = action.a;
 				return A2($author$project$Main$updateByClickUrl, request, model);
 			case 'Store':
 				var storeAction = action.a;
-				return A2($author$project$Main$updateStore, storeAction, model);
+				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			default:
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}

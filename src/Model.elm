@@ -1,6 +1,23 @@
-module Model exposing (Model(..))
+module Model exposing (Model, ViewModel(..), buildModel)
 
+import Store exposing (Store)
 import View.Home
+import View.NewEmployee
 
-type Model
+
+type ViewModel
     = Home View.Home.Model
+    | NewEmployee View.NewEmployee.Model
+
+
+type alias Model =
+    { viewModel : ViewModel
+    , store : Store
+    }
+
+
+buildModel : Store -> ViewModel -> Model
+buildModel store model =
+    { viewModel = model
+    , store = store
+    }

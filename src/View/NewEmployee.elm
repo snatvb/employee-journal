@@ -1,4 +1,4 @@
-module View.Home exposing (Model, init, render)
+module View.NewEmployee exposing (Model, init, render)
 
 import Action exposing (Action)
 import Browser exposing (Document)
@@ -11,13 +11,15 @@ import Store exposing (Store)
 
 
 type alias Model =
-    { counter : Int
+    { name : String
+    , surname: String
     }
 
 
 init : ( Model, Cmd Action )
 init =
-    ( { counter = 0
+    ( { name = "Example name"
+    , surname = "Example surname"
       }
     , Cmd.none
     )
@@ -38,11 +40,10 @@ init =
 view : Store -> Model -> Html Action
 view _ model =
     div []
-        [ div [] [ text "Hello world" ]
-        , Input.render []
-        , div [] [ text <| String.fromInt model.counter ]
+        [ div [] [ text model.name ]
+        -- , Input.render [ text model.name ]
         , div []
-            [ Link.default [ href "add-employee" ] [ text "Новый сотрудник" ]
+            [ Link.default [ href "/" ] [ text "Назад" ]
             ]
         ]
 
