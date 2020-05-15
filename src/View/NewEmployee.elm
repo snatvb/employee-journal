@@ -8,10 +8,11 @@ import ComponentSize
 import Components.Employee
 import Components.Input as Input
 import Components.Link as Link
+import Css exposing (..)
 import Employee exposing (Employee)
 import Helpers exposing (packDocument)
-import Html.Styled exposing (Html, div, text)
-import Html.Styled.Attributes exposing (href, value)
+import Html.Styled exposing (Attribute, Html, div, text)
+import Html.Styled.Attributes exposing (css, href, value)
 import Html.Styled.Events exposing (onInput)
 import Store exposing (Store)
 
@@ -24,8 +25,8 @@ type alias Model =
 
 init : ( Model, Cmd Action )
 init =
-    ( { name = "Example name"
-      , surname = "Example surname"
+    ( { name = "Name"
+      , surname = "Surname"
       }
     , Cmd.none
     )
@@ -59,19 +60,61 @@ actionChangeSurname =
     Action.Views << ViewsActions.NewEmployee << NewEmployeeActions.UpdateSurname
 
 
-view : Store -> Model -> Html Action
-view _ model =
-    div []
-        [ div [] [ text model.name ]
-        , Input.render [ value model.name, onInput actionChangeName ]
-        , Input.render [ value model.surname, onInput actionChangeSurname ]
-        , div []
+exmapleStyles : List (Attribute Action)
+exmapleStyles =
+    [ css
+        [ width (px 300)
+        ]
+    ]
+
+
+exmaple : Model -> Html Action
+exmaple model =
+    div exmapleStyles
+        [ Components.Employee.render ComponentSize.Medium <| buildEmployee model
+        ]
+
+
+formStyles : Attribute Action
+formStyles =
+    css
+        [ marginRight (px 30)
+        ]
+
+row : Html Action -> Html Action
+row html =
+  div [css [ marginTop (px 10) ]] [html]
+
+form : Model -> Html Action
+form model =
+    div [formStyles]
+        [ row <| div [] [ text "Новый сотрудник" ]
+        , row <| Input.render [ value model.name, onInput actionChangeName ]
+        , row <| Input.render [ value model.surname, onInput actionChangeSurname ]
+        , row <| div []
             [ Link.default [ href "/" ] [ text "Назад" ]
             ]
-        , Components.Employee.render ComponentSize.Medium <| buildEmployee model
+        ]
+
+
+baseStyles : Attribute Action
+baseStyles =
+    css
+        [ displayFlex
+        , justifyContent center
+        , alignItems center
+        , paddingTop (px 20)
+        ]
+
+
+view : Store -> Model -> Html Action
+view _ model =
+    div [ baseStyles ]
+        [ form model
+        , exmaple model
         ]
 
 
 render : Store -> Model -> Document Action
 render store model =
-    packDocument "Home" (view store model)
+    packDocument "Новый сотрудник" (view store model)

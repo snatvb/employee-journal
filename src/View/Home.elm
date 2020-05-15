@@ -3,11 +3,11 @@ module View.Home exposing (Model, init, render, update)
 import Action exposing (Action)
 import Action.Views.Home as HomeActions
 import Browser exposing (Document)
-import Components.Input as Input
 import Components.Link as Link
+import Css exposing (..)
 import Helpers exposing (packDocument)
-import Html.Styled exposing (Html, a, div, text)
-import Html.Styled.Attributes exposing (href)
+import Html.Styled exposing (Attribute, Html, div, text)
+import Html.Styled.Attributes exposing (css, href)
 import Store exposing (Store)
 
 
@@ -29,12 +29,28 @@ update _ model =
     ( model, Cmd.none )
 
 
+baseStyles : Attribute Action
+baseStyles =
+    css
+        [ displayFlex
+        , flexDirection column
+        , justifyContent center
+        , alignItems center
+        ]
+
+
+headerStyles : Attribute Action
+headerStyles =
+    css
+        [ fontSize (px 24)
+        , margin2 (px 20) (px 0)
+        ]
+
+
 view : Store -> Model -> Html Action
-view _ model =
-    div []
-        [ div [] [ text "Hello world" ]
-        , Input.render []
-        , div [] [ text <| String.fromInt model.counter ]
+view _ _ =
+    div [ baseStyles ]
+        [ div [headerStyles] [ text "Журнал сотрудников" ]
         , div []
             [ Link.default [ href "add-employee" ] [ text "Новый сотрудник" ]
             ]

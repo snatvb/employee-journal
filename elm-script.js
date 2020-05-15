@@ -10587,7 +10587,7 @@ var $author$project$Model$NewEmployee = function (a) {
 	return {$: 'NewEmployee', a: a};
 };
 var $author$project$View$NewEmployee$init = _Utils_Tuple2(
-	{name: 'Example name', surname: 'Example surname'},
+	{name: 'Name', surname: 'Surname'},
 	$elm$core$Platform$Cmd$none);
 var $author$project$Router$getNewEmployee = function (store) {
 	return A3($author$project$Router$convertInitView, $author$project$Model$NewEmployee, $author$project$View$NewEmployee$init, store);
@@ -12997,23 +12997,119 @@ var $author$project$Helpers$packDocument = F2(
 			title: title
 		};
 	});
-var $rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
-	function (a, b, c) {
-		return {$: 'Node', a: a, b: b, c: c};
-	});
-var $rtfeldman$elm_css$VirtualDom$Styled$node = $rtfeldman$elm_css$VirtualDom$Styled$Node;
-var $rtfeldman$elm_css$Html$Styled$node = $rtfeldman$elm_css$VirtualDom$Styled$node;
-var $rtfeldman$elm_css$Html$Styled$a = $rtfeldman$elm_css$Html$Styled$node('a');
+var $rtfeldman$elm_css$Css$Preprocess$ApplyStyles = function (a) {
+	return {$: 'ApplyStyles', a: a};
+};
 var $rtfeldman$elm_css$Css$Preprocess$AppendProperty = function (a) {
 	return {$: 'AppendProperty', a: a};
+};
+var $rtfeldman$elm_css$Css$Internal$property = F2(
+	function (key, value) {
+		return $rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
+	});
+var $rtfeldman$elm_css$Css$Internal$getOverloadedProperty = F3(
+	function (functionName, desiredKey, style) {
+		getOverloadedProperty:
+		while (true) {
+			switch (style.$) {
+				case 'AppendProperty':
+					var str = style.a;
+					var key = A2(
+						$elm$core$Maybe$withDefault,
+						'',
+						$elm$core$List$head(
+							A2($elm$core$String$split, ':', str)));
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, key);
+				case 'ExtendSelector':
+					var selector = style.a;
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-selector'));
+				case 'NestSnippet':
+					var combinator = style.a;
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-combinator'));
+				case 'WithPseudoElement':
+					var pseudoElement = style.a;
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-pseudo-element setter'));
+				case 'WithMedia':
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-media-query'));
+				case 'WithKeyframes':
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-keyframes'));
+				default:
+					if (!style.a.b) {
+						return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-empty-Style'));
+					} else {
+						if (!style.a.b.b) {
+							var _v1 = style.a;
+							var only = _v1.a;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = only;
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						} else {
+							var _v2 = style.a;
+							var first = _v2.a;
+							var rest = _v2.b;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = $rtfeldman$elm_css$Css$Preprocess$ApplyStyles(rest);
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						}
+					}
+			}
+		}
+	});
+var $rtfeldman$elm_css$Css$Internal$IncompatibleUnits = {$: 'IncompatibleUnits'};
+var $rtfeldman$elm_css$Css$Structure$Compatible = {$: 'Compatible'};
+var $rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
+	function (units, unitLabel, numericValue) {
+		return {
+			absoluteLength: $rtfeldman$elm_css$Css$Structure$Compatible,
+			calc: $rtfeldman$elm_css$Css$Structure$Compatible,
+			flexBasis: $rtfeldman$elm_css$Css$Structure$Compatible,
+			fontSize: $rtfeldman$elm_css$Css$Structure$Compatible,
+			length: $rtfeldman$elm_css$Css$Structure$Compatible,
+			lengthOrAuto: $rtfeldman$elm_css$Css$Structure$Compatible,
+			lengthOrAutoOrCoverOrContain: $rtfeldman$elm_css$Css$Structure$Compatible,
+			lengthOrMinMaxDimension: $rtfeldman$elm_css$Css$Structure$Compatible,
+			lengthOrNone: $rtfeldman$elm_css$Css$Structure$Compatible,
+			lengthOrNoneOrMinMaxDimension: $rtfeldman$elm_css$Css$Structure$Compatible,
+			lengthOrNumber: $rtfeldman$elm_css$Css$Structure$Compatible,
+			lengthOrNumberOrAutoOrNoneOrContent: $rtfeldman$elm_css$Css$Structure$Compatible,
+			numericValue: numericValue,
+			textIndent: $rtfeldman$elm_css$Css$Structure$Compatible,
+			unitLabel: unitLabel,
+			units: units,
+			value: _Utils_ap(
+				$elm$core$String$fromFloat(numericValue),
+				unitLabel)
+		};
+	});
+var $rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty = A3($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$Internal$IncompatibleUnits, '', 0);
+var $rtfeldman$elm_css$Css$alignItems = function (fn) {
+	return A3(
+		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
+		'alignItems',
+		'align-items',
+		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
 };
 var $rtfeldman$elm_css$Css$property = F2(
 	function (key, value) {
 		return $rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
 	});
-var $rtfeldman$elm_css$Css$color = function (c) {
-	return A2($rtfeldman$elm_css$Css$property, 'color', c.value);
-};
+var $rtfeldman$elm_css$Css$prop1 = F2(
+	function (key, arg) {
+		return A2($rtfeldman$elm_css$Css$property, key, arg.value);
+	});
+var $rtfeldman$elm_css$Css$center = $rtfeldman$elm_css$Css$prop1('center');
+var $rtfeldman$elm_css$Css$row = {flexDirection: $rtfeldman$elm_css$Css$Structure$Compatible, flexDirectionOrWrap: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'row'};
+var $rtfeldman$elm_css$Css$column = _Utils_update(
+	$rtfeldman$elm_css$Css$row,
+	{value: 'column'});
 var $rtfeldman$elm_css$VirtualDom$Styled$Attribute = F3(
 	function (a, b, c) {
 		return {$: 'Attribute', a: a, b: b, c: c};
@@ -13052,7 +13148,33 @@ var $rtfeldman$elm_css$Html$Styled$Internal$css = function (styles) {
 	return A3($rtfeldman$elm_css$VirtualDom$Styled$Attribute, classProperty, styles, classname);
 };
 var $rtfeldman$elm_css$Html$Styled$Attributes$css = $rtfeldman$elm_css$Html$Styled$Internal$css;
-var $rtfeldman$elm_css$Css$Structure$Compatible = {$: 'Compatible'};
+var $rtfeldman$elm_css$Css$displayFlex = A2($rtfeldman$elm_css$Css$property, 'display', 'flex');
+var $rtfeldman$elm_css$Css$flexDirection = $rtfeldman$elm_css$Css$prop1('flex-direction');
+var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
+	return A3(
+		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
+		'justifyContent',
+		'justify-content',
+		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
+};
+var $author$project$View$Home$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$displayFlex,
+			$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column),
+			$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center)
+		]));
+var $rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
+	function (a, b, c) {
+		return {$: 'Node', a: a, b: b, c: c};
+	});
+var $rtfeldman$elm_css$VirtualDom$Styled$node = $rtfeldman$elm_css$VirtualDom$Styled$Node;
+var $rtfeldman$elm_css$Html$Styled$node = $rtfeldman$elm_css$VirtualDom$Styled$node;
+var $rtfeldman$elm_css$Html$Styled$a = $rtfeldman$elm_css$Html$Styled$node('a');
+var $rtfeldman$elm_css$Css$color = function (c) {
+	return A2($rtfeldman$elm_css$Css$property, 'color', c.value);
+};
 var $rtfeldman$elm_css$Css$withPrecedingHash = function (str) {
 	return A2($elm$core$String$startsWith, '#', str) ? str : A2(
 		$elm$core$String$cons,
@@ -13443,10 +13565,6 @@ var $rtfeldman$elm_css$Css$pseudoClass = function (_class) {
 };
 var $rtfeldman$elm_css$Css$hover = $rtfeldman$elm_css$Css$pseudoClass('hover');
 var $rtfeldman$elm_css$Css$none = {backgroundImage: $rtfeldman$elm_css$Css$Structure$Compatible, blockAxisOverflow: $rtfeldman$elm_css$Css$Structure$Compatible, borderStyle: $rtfeldman$elm_css$Css$Structure$Compatible, cursor: $rtfeldman$elm_css$Css$Structure$Compatible, display: $rtfeldman$elm_css$Css$Structure$Compatible, hoverCapability: $rtfeldman$elm_css$Css$Structure$Compatible, inlineAxisOverflow: $rtfeldman$elm_css$Css$Structure$Compatible, keyframes: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: $rtfeldman$elm_css$Css$Structure$Compatible, listStyleType: $rtfeldman$elm_css$Css$Structure$Compatible, listStyleTypeOrPositionOrImage: $rtfeldman$elm_css$Css$Structure$Compatible, none: $rtfeldman$elm_css$Css$Structure$Compatible, outline: $rtfeldman$elm_css$Css$Structure$Compatible, pointerDevice: $rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: $rtfeldman$elm_css$Css$Structure$Compatible, resize: $rtfeldman$elm_css$Css$Structure$Compatible, scriptingSupport: $rtfeldman$elm_css$Css$Structure$Compatible, textDecorationLine: $rtfeldman$elm_css$Css$Structure$Compatible, textTransform: $rtfeldman$elm_css$Css$Structure$Compatible, touchAction: $rtfeldman$elm_css$Css$Structure$Compatible, transform: $rtfeldman$elm_css$Css$Structure$Compatible, updateFrequency: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'none'};
-var $rtfeldman$elm_css$Css$prop1 = F2(
-	function (key, arg) {
-		return A2($rtfeldman$elm_css$Css$property, key, arg.value);
-	});
 var $rtfeldman$elm_css$Css$textDecoration = $rtfeldman$elm_css$Css$prop1('text-decoration');
 var $rtfeldman$elm_css$Css$visited = $rtfeldman$elm_css$Css$pseudoClass('visited');
 var $author$project$Components$Link$addCustomAttributes = function (attributes) {
@@ -13484,6 +13602,31 @@ var $author$project$Components$Link$default = F2(
 			html);
 	});
 var $rtfeldman$elm_css$Html$Styled$div = $rtfeldman$elm_css$Html$Styled$node('div');
+var $rtfeldman$elm_css$Css$fontSize = $rtfeldman$elm_css$Css$prop1('font-size');
+var $rtfeldman$elm_css$Css$prop2 = F3(
+	function (key, argA, argB) {
+		return A2(
+			$rtfeldman$elm_css$Css$property,
+			key,
+			A2(
+				$elm$core$String$join,
+				' ',
+				_List_fromArray(
+					[argA.value, argB.value])));
+	});
+var $rtfeldman$elm_css$Css$margin2 = $rtfeldman$elm_css$Css$prop2('margin');
+var $rtfeldman$elm_css$Css$PxUnits = {$: 'PxUnits'};
+var $rtfeldman$elm_css$Css$px = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PxUnits, 'px');
+var $author$project$View$Home$headerStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$fontSize(
+			$rtfeldman$elm_css$Css$px(24)),
+			A2(
+			$rtfeldman$elm_css$Css$margin2,
+			$rtfeldman$elm_css$Css$px(20),
+			$rtfeldman$elm_css$Css$px(0))
+		]));
 var $rtfeldman$elm_css$VirtualDom$Styled$property = F2(
 	function (key, value) {
 		return A3(
@@ -13502,40 +13645,365 @@ var $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
 var $rtfeldman$elm_css$Html$Styled$Attributes$href = function (url) {
 	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'href', url);
 };
+var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
+	return {$: 'Unstyled', a: a};
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
+	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
+		$elm$virtual_dom$VirtualDom$text(str));
+};
+var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
+var $author$project$View$Home$view = F2(
+	function (_v0, _v1) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[$author$project$View$Home$baseStyles]),
+			_List_fromArray(
+				[
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_fromArray(
+						[$author$project$View$Home$headerStyles]),
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$text('Журнал сотрудников')
+						])),
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$author$project$Components$Link$default,
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$Attributes$href('add-employee')
+								]),
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
+								]))
+						]))
+				]));
+	});
+var $author$project$View$Home$render = F2(
+	function (store, model) {
+		return A2(
+			$author$project$Helpers$packDocument,
+			'Home',
+			A2($author$project$View$Home$view, store, model));
+	});
+var $rtfeldman$elm_css$Css$paddingTop = $rtfeldman$elm_css$Css$prop1('padding-top');
+var $author$project$View$NewEmployee$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$displayFlex,
+			$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$paddingTop(
+			$rtfeldman$elm_css$Css$px(20))
+		]));
+var $author$project$ComponentSize$Medium = {$: 'Medium'};
+var $author$project$View$NewEmployee$buildEmployee = function (model) {
+	return {id: 0, name: model.name, surname: model.surname};
+};
+var $rtfeldman$elm_css$Css$width = $rtfeldman$elm_css$Css$prop1('width');
+var $author$project$View$NewEmployee$exmapleStyles = _List_fromArray(
+	[
+		$rtfeldman$elm_css$Html$Styled$Attributes$css(
+		_List_fromArray(
+			[
+				$rtfeldman$elm_css$Css$width(
+				$rtfeldman$elm_css$Css$px(300))
+			]))
+	]);
+var $author$project$Components$Employee$getBaseStylesBySize = function (size) {
+	return _List_fromArray(
+		[
+			$rtfeldman$elm_css$Html$Styled$Attributes$css(
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Css$fontSize(
+					$rtfeldman$elm_css$Css$px(14))
+				]))
+		]);
+};
+var $author$project$Components$Employee$baseStyles = function (size) {
+	return $elm$core$List$concat(
+		_List_fromArray(
+			[
+				$author$project$Components$Employee$getBaseStylesBySize(size),
+				_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Css$displayFlex,
+							$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column),
+							$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
+							$rtfeldman$elm_css$Css$color(
+							$rtfeldman$elm_css$Css$hex('f3f3f3'))
+						]))
+				])
+			]));
+};
+var $author$project$Components$Employee$employeeToAvatar = F2(
+	function (size, employee) {
+		return {id: employee.id, name: employee.name, size: size, url: $elm$core$Maybe$Nothing};
+	});
+var $author$project$Components$Employee$fontSizeFullName = function (size) {
+	return $rtfeldman$elm_css$Css$fontSize(
+		$rtfeldman$elm_css$Css$px(18));
+};
+var $rtfeldman$elm_css$Css$marginTop = $rtfeldman$elm_css$Css$prop1('margin-top');
+var $author$project$Components$Employee$fullName = F2(
+	function (size, employee) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							$author$project$Components$Employee$fontSizeFullName(size),
+							$rtfeldman$elm_css$Css$marginTop(
+							$rtfeldman$elm_css$Css$px(10))
+						]))
+				]),
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$text(employee.name + (' ' + employee.surname))
+				]));
+	});
 var $rtfeldman$elm_css$Css$backgroundColor = function (c) {
 	return A2($rtfeldman$elm_css$Css$property, 'background-color', c.value);
 };
-var $rtfeldman$elm_css$Css$border = $rtfeldman$elm_css$Css$prop1('border');
 var $rtfeldman$elm_css$Css$borderRadius = $rtfeldman$elm_css$Css$prop1('border-radius');
+var $author$project$Helpers$Color$colors = $elm$core$Array$fromList(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333')
+		]));
+var $author$project$Helpers$Color$calcColorIndex = function (_int) {
+	return (_int / $elm$core$Array$length($author$project$Helpers$Color$colors)) | 0;
+};
+var $author$project$Helpers$Color$getById = function (_int) {
+	var _v0 = A2(
+		$elm$core$Array$get,
+		$author$project$Helpers$Color$calcColorIndex(_int),
+		$author$project$Helpers$Color$colors);
+	if (_v0.$ === 'Just') {
+		var color = _v0.a;
+		return color;
+	} else {
+		return $rtfeldman$elm_css$Css$hex('ffffff');
+	}
+};
+var $author$project$Components$Avatar$getBackgroundColor = function (avatar) {
+	var _v0 = avatar.url;
+	if (_v0.$ === 'Just') {
+		return $rtfeldman$elm_css$Css$hex('00000000');
+	} else {
+		return $author$project$Helpers$Color$getById(avatar.id);
+	}
+};
+var $rtfeldman$elm_css$Css$height = $rtfeldman$elm_css$Css$prop1('height');
+var $author$project$Components$Avatar$getBaseStylesBySize = function (avatar) {
+	var _v0 = avatar.size;
+	return _List_fromArray(
+		[
+			$rtfeldman$elm_css$Html$Styled$Attributes$css(
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Css$width(
+					$rtfeldman$elm_css$Css$px(100)),
+					$rtfeldman$elm_css$Css$height(
+					$rtfeldman$elm_css$Css$px(100)),
+					$rtfeldman$elm_css$Css$fontSize(
+					$rtfeldman$elm_css$Css$px(32))
+				]))
+		]);
+};
+var $author$project$Components$Avatar$baseStyles = function (avatar) {
+	return $elm$core$List$concat(
+		_List_fromArray(
+			[
+				$author$project$Components$Avatar$getBaseStylesBySize(avatar),
+				_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Css$borderRadius(
+							$rtfeldman$elm_css$Css$px(9999)),
+							$rtfeldman$elm_css$Css$backgroundColor(
+							$author$project$Components$Avatar$getBackgroundColor(avatar))
+						]))
+				])
+			]));
+};
+var $elm$core$String$toUpper = _String_toUpper;
+var $elm$core$String$trim = _String_trim;
+var $author$project$Helpers$String$getFirstToAvatar = function (str) {
+	var first = $elm$core$List$head(
+		$elm$core$String$toList(
+			$elm$core$String$trim(str)));
+	if (first.$ === 'Just') {
+		var value = first.a;
+		return $elm$core$String$toUpper(
+			$elm$core$String$fromChar(value));
+	} else {
+		return '#';
+	}
+};
+var $rtfeldman$elm_css$Html$Styled$img = $rtfeldman$elm_css$Html$Styled$node('img');
+var $rtfeldman$elm_css$Css$PercentageUnits = {$: 'PercentageUnits'};
+var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PercentageUnits, '%');
+var $author$project$Components$Avatar$photoEmptyStyles = _List_fromArray(
+	[
+		$rtfeldman$elm_css$Html$Styled$Attributes$css(
+		_List_fromArray(
+			[
+				$rtfeldman$elm_css$Css$displayFlex,
+				$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
+				$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
+				$rtfeldman$elm_css$Css$width(
+				$rtfeldman$elm_css$Css$pct(100)),
+				$rtfeldman$elm_css$Css$height(
+				$rtfeldman$elm_css$Css$pct(100))
+			]))
+	]);
+var $rtfeldman$elm_css$Html$Styled$Attributes$src = function (url) {
+	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'src', url);
+};
+var $author$project$Components$Avatar$photo = function (avatar) {
+	var _v0 = avatar.url;
+	if (_v0.$ === 'Just') {
+		var url = _v0.a;
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$img,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Attributes$src(url)
+				]),
+			_List_Nil);
+	} else {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			$author$project$Components$Avatar$photoEmptyStyles,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$text(
+					$author$project$Helpers$String$getFirstToAvatar(avatar.name))
+				]));
+	}
+};
+var $author$project$Components$Avatar$render = function (avatar) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$div,
+		$author$project$Components$Avatar$baseStyles(avatar),
+		_List_fromArray(
+			[
+				$author$project$Components$Avatar$photo(avatar)
+			]));
+};
+var $author$project$Components$Employee$render = F2(
+	function (size, employee) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			$author$project$Components$Employee$baseStyles(size),
+			_List_fromArray(
+				[
+					$author$project$Components$Avatar$render(
+					A2($author$project$Components$Employee$employeeToAvatar, size, employee)),
+					A2($author$project$Components$Employee$fullName, size, employee)
+				]));
+	});
+var $author$project$View$NewEmployee$exmaple = function (model) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$div,
+		$author$project$View$NewEmployee$exmapleStyles,
+		_List_fromArray(
+			[
+				A2(
+				$author$project$Components$Employee$render,
+				$author$project$ComponentSize$Medium,
+				$author$project$View$NewEmployee$buildEmployee(model))
+			]));
+};
+var $author$project$Action$Views$NewEmployee = function (a) {
+	return {$: 'NewEmployee', a: a};
+};
+var $author$project$Action$Views$NewEmployee$UpdateName = function (a) {
+	return {$: 'UpdateName', a: a};
+};
+var $author$project$Action$Views = function (a) {
+	return {$: 'Views', a: a};
+};
+var $author$project$View$NewEmployee$actionChangeName = A2(
+	$elm$core$Basics$composeL,
+	A2($elm$core$Basics$composeL, $author$project$Action$Views, $author$project$Action$Views$NewEmployee),
+	$author$project$Action$Views$NewEmployee$UpdateName);
+var $author$project$Action$Views$NewEmployee$UpdateSurname = function (a) {
+	return {$: 'UpdateSurname', a: a};
+};
+var $author$project$View$NewEmployee$actionChangeSurname = A2(
+	$elm$core$Basics$composeL,
+	A2($elm$core$Basics$composeL, $author$project$Action$Views, $author$project$Action$Views$NewEmployee),
+	$author$project$Action$Views$NewEmployee$UpdateSurname);
+var $rtfeldman$elm_css$Css$marginRight = $rtfeldman$elm_css$Css$prop1('margin-right');
+var $author$project$View$NewEmployee$formStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$marginRight(
+			$rtfeldman$elm_css$Css$px(30))
+		]));
+var $rtfeldman$elm_css$Html$Styled$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$on = F2(
+	function (eventName, handler) {
+		return A3(
+			$rtfeldman$elm_css$VirtualDom$Styled$Attribute,
+			A2($elm$virtual_dom$VirtualDom$on, eventName, handler),
+			_List_Nil,
+			'');
+	});
+var $rtfeldman$elm_css$Html$Styled$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$rtfeldman$elm_css$VirtualDom$Styled$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $rtfeldman$elm_css$Html$Styled$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $rtfeldman$elm_css$Html$Styled$Events$onInput = function (tagger) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$rtfeldman$elm_css$Html$Styled$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $rtfeldman$elm_css$Html$Styled$Events$targetValue)));
+};
+var $rtfeldman$elm_css$Css$border = $rtfeldman$elm_css$Css$prop1('border');
 var $rtfeldman$elm_css$Css$focus = $rtfeldman$elm_css$Css$pseudoClass('focus');
 var $rtfeldman$elm_css$Css$outline = $rtfeldman$elm_css$Css$prop1('outline');
 var $rtfeldman$elm_css$Css$padding = $rtfeldman$elm_css$Css$prop1('padding');
-var $rtfeldman$elm_css$Css$PxUnits = {$: 'PxUnits'};
-var $rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
-	function (units, unitLabel, numericValue) {
-		return {
-			absoluteLength: $rtfeldman$elm_css$Css$Structure$Compatible,
-			calc: $rtfeldman$elm_css$Css$Structure$Compatible,
-			flexBasis: $rtfeldman$elm_css$Css$Structure$Compatible,
-			fontSize: $rtfeldman$elm_css$Css$Structure$Compatible,
-			length: $rtfeldman$elm_css$Css$Structure$Compatible,
-			lengthOrAuto: $rtfeldman$elm_css$Css$Structure$Compatible,
-			lengthOrAutoOrCoverOrContain: $rtfeldman$elm_css$Css$Structure$Compatible,
-			lengthOrMinMaxDimension: $rtfeldman$elm_css$Css$Structure$Compatible,
-			lengthOrNone: $rtfeldman$elm_css$Css$Structure$Compatible,
-			lengthOrNoneOrMinMaxDimension: $rtfeldman$elm_css$Css$Structure$Compatible,
-			lengthOrNumber: $rtfeldman$elm_css$Css$Structure$Compatible,
-			lengthOrNumberOrAutoOrNoneOrContent: $rtfeldman$elm_css$Css$Structure$Compatible,
-			numericValue: numericValue,
-			textIndent: $rtfeldman$elm_css$Css$Structure$Compatible,
-			unitLabel: unitLabel,
-			units: units,
-			value: _Utils_ap(
-				$elm$core$String$fromFloat(numericValue),
-				unitLabel)
-		};
-	});
-var $rtfeldman$elm_css$Css$px = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PxUnits, 'px');
 var $rtfeldman$elm_css$Css$cssFunction = F2(
 	function (funcName, args) {
 		return funcName + ('(' + (A2($elm$core$String$join, ', ', args) + ')'));
@@ -13606,378 +14074,53 @@ var $author$project$Components$Input$render = function (attributes) {
 				_List_Nil)
 			]));
 };
-var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
-	return {$: 'Unstyled', a: a};
-};
-var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
-	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
-		$elm$virtual_dom$VirtualDom$text(str));
-};
-var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
-var $author$project$View$Home$view = F2(
-	function (_v0, model) {
-		return A2(
-			$rtfeldman$elm_css$Html$Styled$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					$rtfeldman$elm_css$Html$Styled$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$text('Hello world')
-						])),
-					$author$project$Components$Input$render(_List_Nil),
-					A2(
-					$rtfeldman$elm_css$Html$Styled$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$text(
-							$elm$core$String$fromInt(model.counter))
-						])),
-					A2(
-					$rtfeldman$elm_css$Html$Styled$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$author$project$Components$Link$default,
-							_List_fromArray(
-								[
-									$rtfeldman$elm_css$Html$Styled$Attributes$href('add-employee')
-								]),
-							_List_fromArray(
-								[
-									$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
-								]))
-						]))
-				]));
-	});
-var $author$project$View$Home$render = F2(
-	function (store, model) {
-		return A2(
-			$author$project$Helpers$packDocument,
-			'Home',
-			A2($author$project$View$Home$view, store, model));
-	});
-var $author$project$ComponentSize$Medium = {$: 'Medium'};
-var $author$project$Action$Views$NewEmployee = function (a) {
-	return {$: 'NewEmployee', a: a};
-};
-var $author$project$Action$Views$NewEmployee$UpdateName = function (a) {
-	return {$: 'UpdateName', a: a};
-};
-var $author$project$Action$Views = function (a) {
-	return {$: 'Views', a: a};
-};
-var $author$project$View$NewEmployee$actionChangeName = A2(
-	$elm$core$Basics$composeL,
-	A2($elm$core$Basics$composeL, $author$project$Action$Views, $author$project$Action$Views$NewEmployee),
-	$author$project$Action$Views$NewEmployee$UpdateName);
-var $author$project$Action$Views$NewEmployee$UpdateSurname = function (a) {
-	return {$: 'UpdateSurname', a: a};
-};
-var $author$project$View$NewEmployee$actionChangeSurname = A2(
-	$elm$core$Basics$composeL,
-	A2($elm$core$Basics$composeL, $author$project$Action$Views, $author$project$Action$Views$NewEmployee),
-	$author$project$Action$Views$NewEmployee$UpdateSurname);
-var $author$project$View$NewEmployee$buildEmployee = function (model) {
-	return {id: 0, name: model.name, surname: model.surname};
-};
-var $rtfeldman$elm_css$Html$Styled$Events$alwaysStop = function (x) {
-	return _Utils_Tuple2(x, true);
-};
-var $rtfeldman$elm_css$VirtualDom$Styled$on = F2(
-	function (eventName, handler) {
-		return A3(
-			$rtfeldman$elm_css$VirtualDom$Styled$Attribute,
-			A2($elm$virtual_dom$VirtualDom$on, eventName, handler),
-			_List_Nil,
-			'');
-	});
-var $rtfeldman$elm_css$Html$Styled$Events$stopPropagationOn = F2(
-	function (event, decoder) {
-		return A2(
-			$rtfeldman$elm_css$VirtualDom$Styled$on,
-			event,
-			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $rtfeldman$elm_css$Html$Styled$Events$targetValue = A2(
-	$elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'value']),
-	$elm$json$Json$Decode$string);
-var $rtfeldman$elm_css$Html$Styled$Events$onInput = function (tagger) {
-	return A2(
-		$rtfeldman$elm_css$Html$Styled$Events$stopPropagationOn,
-		'input',
-		A2(
-			$elm$json$Json$Decode$map,
-			$rtfeldman$elm_css$Html$Styled$Events$alwaysStop,
-			A2($elm$json$Json$Decode$map, tagger, $rtfeldman$elm_css$Html$Styled$Events$targetValue)));
-};
-var $rtfeldman$elm_css$Css$fontSize = $rtfeldman$elm_css$Css$prop1('font-size');
-var $author$project$Components$Employee$getBaseStylesBySize = function (size) {
-	return _List_fromArray(
-		[
-			$rtfeldman$elm_css$Html$Styled$Attributes$css(
-			_List_fromArray(
-				[
-					$rtfeldman$elm_css$Css$fontSize(
-					$rtfeldman$elm_css$Css$px(14))
-				]))
-		]);
-};
-var $author$project$Components$Employee$baseStyles = function (size) {
-	return $elm$core$List$concat(
-		_List_fromArray(
-			[
-				$author$project$Components$Employee$getBaseStylesBySize(size),
-				_List_fromArray(
-				[
-					$rtfeldman$elm_css$Html$Styled$Attributes$css(
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Css$color(
-							$rtfeldman$elm_css$Css$hex('f3f3f3'))
-						]))
-				])
-			]));
-};
-var $author$project$Components$Employee$employeeToAvatar = function (employee) {
-	return {id: employee.id, name: employee.name, url: $elm$core$Maybe$Nothing};
-};
-var $author$project$Helpers$Color$colors = $elm$core$Array$fromList(
-	_List_fromArray(
-		[
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333')
-		]));
-var $author$project$Helpers$Color$calcColorIndex = function (_int) {
-	return (_int / $elm$core$Array$length($author$project$Helpers$Color$colors)) | 0;
-};
-var $author$project$Helpers$Color$getById = function (_int) {
-	var _v0 = A2(
-		$elm$core$Array$get,
-		$author$project$Helpers$Color$calcColorIndex(_int),
-		$author$project$Helpers$Color$colors);
-	if (_v0.$ === 'Just') {
-		var color = _v0.a;
-		return color;
-	} else {
-		return $rtfeldman$elm_css$Css$hex('ffffff');
-	}
-};
-var $author$project$Components$Avatar$getBackgroundColor = function (avatar) {
-	var _v0 = avatar.url;
-	if (_v0.$ === 'Just') {
-		return $rtfeldman$elm_css$Css$hex('00000000');
-	} else {
-		return $author$project$Helpers$Color$getById(avatar.id);
-	}
-};
-var $author$project$Components$Avatar$baseStyles = function (avatar) {
-	return _List_fromArray(
-		[
-			$rtfeldman$elm_css$Html$Styled$Attributes$css(
-			_List_fromArray(
-				[
-					$rtfeldman$elm_css$Css$borderRadius(
-					$rtfeldman$elm_css$Css$px(9999)),
-					$rtfeldman$elm_css$Css$backgroundColor(
-					$author$project$Components$Avatar$getBackgroundColor(avatar))
-				]))
-		]);
-};
-var $elm$core$String$toUpper = _String_toUpper;
-var $elm$core$String$trim = _String_trim;
-var $author$project$Helpers$String$getFirstToAvatar = function (str) {
-	var first = $elm$core$List$head(
-		$elm$core$String$toList(
-			$elm$core$String$trim(str)));
-	if (first.$ === 'Just') {
-		var value = first.a;
-		return $elm$core$String$toUpper(
-			$elm$core$String$fromChar(value));
-	} else {
-		return '#';
-	}
-};
-var $rtfeldman$elm_css$Html$Styled$img = $rtfeldman$elm_css$Html$Styled$node('img');
-var $rtfeldman$elm_css$Css$Preprocess$ApplyStyles = function (a) {
-	return {$: 'ApplyStyles', a: a};
-};
-var $rtfeldman$elm_css$Css$Internal$property = F2(
-	function (key, value) {
-		return $rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
-	});
-var $rtfeldman$elm_css$Css$Internal$getOverloadedProperty = F3(
-	function (functionName, desiredKey, style) {
-		getOverloadedProperty:
-		while (true) {
-			switch (style.$) {
-				case 'AppendProperty':
-					var str = style.a;
-					var key = A2(
-						$elm$core$Maybe$withDefault,
-						'',
-						$elm$core$List$head(
-							A2($elm$core$String$split, ':', str)));
-					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, key);
-				case 'ExtendSelector':
-					var selector = style.a;
-					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-selector'));
-				case 'NestSnippet':
-					var combinator = style.a;
-					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-combinator'));
-				case 'WithPseudoElement':
-					var pseudoElement = style.a;
-					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-pseudo-element setter'));
-				case 'WithMedia':
-					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-media-query'));
-				case 'WithKeyframes':
-					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-keyframes'));
-				default:
-					if (!style.a.b) {
-						return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-empty-Style'));
-					} else {
-						if (!style.a.b.b) {
-							var _v1 = style.a;
-							var only = _v1.a;
-							var $temp$functionName = functionName,
-								$temp$desiredKey = desiredKey,
-								$temp$style = only;
-							functionName = $temp$functionName;
-							desiredKey = $temp$desiredKey;
-							style = $temp$style;
-							continue getOverloadedProperty;
-						} else {
-							var _v2 = style.a;
-							var first = _v2.a;
-							var rest = _v2.b;
-							var $temp$functionName = functionName,
-								$temp$desiredKey = desiredKey,
-								$temp$style = $rtfeldman$elm_css$Css$Preprocess$ApplyStyles(rest);
-							functionName = $temp$functionName;
-							desiredKey = $temp$desiredKey;
-							style = $temp$style;
-							continue getOverloadedProperty;
-						}
-					}
-			}
-		}
-	});
-var $rtfeldman$elm_css$Css$Internal$IncompatibleUnits = {$: 'IncompatibleUnits'};
-var $rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty = A3($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$Internal$IncompatibleUnits, '', 0);
-var $rtfeldman$elm_css$Css$alignItems = function (fn) {
-	return A3(
-		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
-		'alignItems',
-		'align-items',
-		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
-};
-var $rtfeldman$elm_css$Css$center = $rtfeldman$elm_css$Css$prop1('center');
-var $rtfeldman$elm_css$Css$displayFlex = A2($rtfeldman$elm_css$Css$property, 'display', 'flex');
-var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
-	return A3(
-		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
-		'justifyContent',
-		'justify-content',
-		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
-};
-var $author$project$Components$Avatar$photoEmptyStyles = _List_fromArray(
-	[
-		$rtfeldman$elm_css$Html$Styled$Attributes$css(
-		_List_fromArray(
-			[
-				$rtfeldman$elm_css$Css$displayFlex,
-				$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
-				$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center)
-			]))
-	]);
-var $rtfeldman$elm_css$Html$Styled$Attributes$src = function (url) {
-	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'src', url);
-};
-var $author$project$Components$Avatar$photo = function (avatar) {
-	var _v0 = avatar.url;
-	if (_v0.$ === 'Just') {
-		var url = _v0.a;
-		return A2(
-			$rtfeldman$elm_css$Html$Styled$img,
-			_List_fromArray(
-				[
-					$rtfeldman$elm_css$Html$Styled$Attributes$src(url)
-				]),
-			_List_Nil);
-	} else {
-		return A2(
-			$rtfeldman$elm_css$Html$Styled$div,
-			$author$project$Components$Avatar$photoEmptyStyles,
-			_List_fromArray(
-				[
-					$rtfeldman$elm_css$Html$Styled$text(
-					$author$project$Helpers$String$getFirstToAvatar(avatar.name))
-				]));
-	}
-};
-var $author$project$Components$Avatar$render = function (avatar) {
+var $author$project$View$NewEmployee$row = function (html) {
 	return A2(
 		$rtfeldman$elm_css$Html$Styled$div,
-		$author$project$Components$Avatar$baseStyles(avatar),
 		_List_fromArray(
 			[
-				$author$project$Components$Avatar$photo(avatar)
-			]));
+				$rtfeldman$elm_css$Html$Styled$Attributes$css(
+				_List_fromArray(
+					[
+						$rtfeldman$elm_css$Css$marginTop(
+						$rtfeldman$elm_css$Css$px(10))
+					]))
+			]),
+		_List_fromArray(
+			[html]));
 };
-var $author$project$Components$Employee$render = F2(
-	function (size, employee) {
-		return A2(
-			$rtfeldman$elm_css$Html$Styled$div,
-			$author$project$Components$Employee$baseStyles(size),
-			_List_fromArray(
-				[
-					$author$project$Components$Avatar$render(
-					$author$project$Components$Employee$employeeToAvatar(employee))
-				]));
-	});
 var $rtfeldman$elm_css$Html$Styled$Attributes$value = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('value');
-var $author$project$View$NewEmployee$view = F2(
-	function (_v0, model) {
-		return A2(
-			$rtfeldman$elm_css$Html$Styled$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
+var $author$project$View$NewEmployee$form = function (model) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$div,
+		_List_fromArray(
+			[$author$project$View$NewEmployee$formStyles]),
+		_List_fromArray(
+			[
+				$author$project$View$NewEmployee$row(
+				A2(
 					$rtfeldman$elm_css$Html$Styled$div,
 					_List_Nil,
 					_List_fromArray(
 						[
-							$rtfeldman$elm_css$Html$Styled$text(model.name)
-						])),
-					$author$project$Components$Input$render(
+							$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
+						]))),
+				$author$project$View$NewEmployee$row(
+				$author$project$Components$Input$render(
 					_List_fromArray(
 						[
 							$rtfeldman$elm_css$Html$Styled$Attributes$value(model.name),
 							$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeName)
-						])),
-					$author$project$Components$Input$render(
+						]))),
+				$author$project$View$NewEmployee$row(
+				$author$project$Components$Input$render(
 					_List_fromArray(
 						[
 							$rtfeldman$elm_css$Html$Styled$Attributes$value(model.surname),
 							$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeSurname)
-						])),
-					A2(
+						]))),
+				$author$project$View$NewEmployee$row(
+				A2(
 					$rtfeldman$elm_css$Html$Styled$div,
 					_List_Nil,
 					_List_fromArray(
@@ -13992,18 +14135,26 @@ var $author$project$View$NewEmployee$view = F2(
 								[
 									$rtfeldman$elm_css$Html$Styled$text('Назад')
 								]))
-						])),
-					A2(
-					$author$project$Components$Employee$render,
-					$author$project$ComponentSize$Medium,
-					$author$project$View$NewEmployee$buildEmployee(model))
+						])))
+			]));
+};
+var $author$project$View$NewEmployee$view = F2(
+	function (_v0, model) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[$author$project$View$NewEmployee$baseStyles]),
+			_List_fromArray(
+				[
+					$author$project$View$NewEmployee$form(model),
+					$author$project$View$NewEmployee$exmaple(model)
 				]));
 	});
 var $author$project$View$NewEmployee$render = F2(
 	function (store, model) {
 		return A2(
 			$author$project$Helpers$packDocument,
-			'Home',
+			'Новый сотрудник',
 			A2($author$project$View$NewEmployee$view, store, model));
 	});
 var $author$project$Main$render = function (model) {
