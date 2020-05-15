@@ -1,7 +1,6 @@
 module Router exposing (..)
 
 import Action exposing (Action)
-import Debug
 import Model exposing (Model, ViewModel, buildModel)
 import Store exposing (Store)
 import Url exposing (Url)

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "elm-live src/Main.elm --open -- --output=elm-script.js --debug",
+    "start": "elm-live src/Main.elm --pushstate -- --output=elm-script.js --debug",
     "build": "elm make src/Main.elm --output=elm-script.js"
   },
   "devDependencies": {

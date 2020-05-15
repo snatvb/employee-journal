@@ -13662,6 +13662,295 @@ var $author$project$View$Home$render = F2(
 			'Home',
 			A2($author$project$View$Home$view, store, model));
 	});
+var $author$project$ComponentSize$Medium = {$: 'Medium'};
+var $author$project$Action$Views$NewEmployee = function (a) {
+	return {$: 'NewEmployee', a: a};
+};
+var $author$project$Action$Views$NewEmployee$UpdateName = function (a) {
+	return {$: 'UpdateName', a: a};
+};
+var $author$project$Action$Views = function (a) {
+	return {$: 'Views', a: a};
+};
+var $author$project$View$NewEmployee$actionChangeName = A2(
+	$elm$core$Basics$composeL,
+	A2($elm$core$Basics$composeL, $author$project$Action$Views, $author$project$Action$Views$NewEmployee),
+	$author$project$Action$Views$NewEmployee$UpdateName);
+var $author$project$Action$Views$NewEmployee$UpdateSurname = function (a) {
+	return {$: 'UpdateSurname', a: a};
+};
+var $author$project$View$NewEmployee$actionChangeSurname = A2(
+	$elm$core$Basics$composeL,
+	A2($elm$core$Basics$composeL, $author$project$Action$Views, $author$project$Action$Views$NewEmployee),
+	$author$project$Action$Views$NewEmployee$UpdateSurname);
+var $author$project$View$NewEmployee$buildEmployee = function (model) {
+	return {id: 0, name: model.name, surname: model.surname};
+};
+var $rtfeldman$elm_css$Html$Styled$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$on = F2(
+	function (eventName, handler) {
+		return A3(
+			$rtfeldman$elm_css$VirtualDom$Styled$Attribute,
+			A2($elm$virtual_dom$VirtualDom$on, eventName, handler),
+			_List_Nil,
+			'');
+	});
+var $rtfeldman$elm_css$Html$Styled$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$rtfeldman$elm_css$VirtualDom$Styled$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $rtfeldman$elm_css$Html$Styled$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $rtfeldman$elm_css$Html$Styled$Events$onInput = function (tagger) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$rtfeldman$elm_css$Html$Styled$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $rtfeldman$elm_css$Html$Styled$Events$targetValue)));
+};
+var $rtfeldman$elm_css$Css$fontSize = $rtfeldman$elm_css$Css$prop1('font-size');
+var $author$project$Components$Employee$getBaseStylesBySize = function (size) {
+	return _List_fromArray(
+		[
+			$rtfeldman$elm_css$Html$Styled$Attributes$css(
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Css$fontSize(
+					$rtfeldman$elm_css$Css$px(14))
+				]))
+		]);
+};
+var $author$project$Components$Employee$baseStyles = function (size) {
+	return $elm$core$List$concat(
+		_List_fromArray(
+			[
+				$author$project$Components$Employee$getBaseStylesBySize(size),
+				_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Css$color(
+							$rtfeldman$elm_css$Css$hex('f3f3f3'))
+						]))
+				])
+			]));
+};
+var $author$project$Components$Employee$employeeToAvatar = function (employee) {
+	return {id: employee.id, name: employee.name, url: $elm$core$Maybe$Nothing};
+};
+var $author$project$Helpers$Color$colors = $elm$core$Array$fromList(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333'),
+			$rtfeldman$elm_css$Css$hex('333333')
+		]));
+var $author$project$Helpers$Color$calcColorIndex = function (_int) {
+	return (_int / $elm$core$Array$length($author$project$Helpers$Color$colors)) | 0;
+};
+var $author$project$Helpers$Color$getById = function (_int) {
+	var _v0 = A2(
+		$elm$core$Array$get,
+		$author$project$Helpers$Color$calcColorIndex(_int),
+		$author$project$Helpers$Color$colors);
+	if (_v0.$ === 'Just') {
+		var color = _v0.a;
+		return color;
+	} else {
+		return $rtfeldman$elm_css$Css$hex('ffffff');
+	}
+};
+var $author$project$Components$Avatar$getBackgroundColor = function (avatar) {
+	var _v0 = avatar.url;
+	if (_v0.$ === 'Just') {
+		return $rtfeldman$elm_css$Css$hex('00000000');
+	} else {
+		return $author$project$Helpers$Color$getById(avatar.id);
+	}
+};
+var $author$project$Components$Avatar$baseStyles = function (avatar) {
+	return _List_fromArray(
+		[
+			$rtfeldman$elm_css$Html$Styled$Attributes$css(
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Css$borderRadius(
+					$rtfeldman$elm_css$Css$px(9999)),
+					$rtfeldman$elm_css$Css$backgroundColor(
+					$author$project$Components$Avatar$getBackgroundColor(avatar))
+				]))
+		]);
+};
+var $elm$core$String$toUpper = _String_toUpper;
+var $elm$core$String$trim = _String_trim;
+var $author$project$Helpers$String$getFirstToAvatar = function (str) {
+	var first = $elm$core$List$head(
+		$elm$core$String$toList(
+			$elm$core$String$trim(str)));
+	if (first.$ === 'Just') {
+		var value = first.a;
+		return $elm$core$String$toUpper(
+			$elm$core$String$fromChar(value));
+	} else {
+		return '#';
+	}
+};
+var $rtfeldman$elm_css$Html$Styled$img = $rtfeldman$elm_css$Html$Styled$node('img');
+var $rtfeldman$elm_css$Css$Preprocess$ApplyStyles = function (a) {
+	return {$: 'ApplyStyles', a: a};
+};
+var $rtfeldman$elm_css$Css$Internal$property = F2(
+	function (key, value) {
+		return $rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
+	});
+var $rtfeldman$elm_css$Css$Internal$getOverloadedProperty = F3(
+	function (functionName, desiredKey, style) {
+		getOverloadedProperty:
+		while (true) {
+			switch (style.$) {
+				case 'AppendProperty':
+					var str = style.a;
+					var key = A2(
+						$elm$core$Maybe$withDefault,
+						'',
+						$elm$core$List$head(
+							A2($elm$core$String$split, ':', str)));
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, key);
+				case 'ExtendSelector':
+					var selector = style.a;
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-selector'));
+				case 'NestSnippet':
+					var combinator = style.a;
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-combinator'));
+				case 'WithPseudoElement':
+					var pseudoElement = style.a;
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-pseudo-element setter'));
+				case 'WithMedia':
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-media-query'));
+				case 'WithKeyframes':
+					return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-keyframes'));
+				default:
+					if (!style.a.b) {
+						return A2($rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-empty-Style'));
+					} else {
+						if (!style.a.b.b) {
+							var _v1 = style.a;
+							var only = _v1.a;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = only;
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						} else {
+							var _v2 = style.a;
+							var first = _v2.a;
+							var rest = _v2.b;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = $rtfeldman$elm_css$Css$Preprocess$ApplyStyles(rest);
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						}
+					}
+			}
+		}
+	});
+var $rtfeldman$elm_css$Css$Internal$IncompatibleUnits = {$: 'IncompatibleUnits'};
+var $rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty = A3($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$Internal$IncompatibleUnits, '', 0);
+var $rtfeldman$elm_css$Css$alignItems = function (fn) {
+	return A3(
+		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
+		'alignItems',
+		'align-items',
+		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
+};
+var $rtfeldman$elm_css$Css$center = $rtfeldman$elm_css$Css$prop1('center');
+var $rtfeldman$elm_css$Css$displayFlex = A2($rtfeldman$elm_css$Css$property, 'display', 'flex');
+var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
+	return A3(
+		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
+		'justifyContent',
+		'justify-content',
+		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
+};
+var $author$project$Components$Avatar$photoEmptyStyles = _List_fromArray(
+	[
+		$rtfeldman$elm_css$Html$Styled$Attributes$css(
+		_List_fromArray(
+			[
+				$rtfeldman$elm_css$Css$displayFlex,
+				$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
+				$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center)
+			]))
+	]);
+var $rtfeldman$elm_css$Html$Styled$Attributes$src = function (url) {
+	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'src', url);
+};
+var $author$project$Components$Avatar$photo = function (avatar) {
+	var _v0 = avatar.url;
+	if (_v0.$ === 'Just') {
+		var url = _v0.a;
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$img,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$Attributes$src(url)
+				]),
+			_List_Nil);
+	} else {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			$author$project$Components$Avatar$photoEmptyStyles,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$text(
+					$author$project$Helpers$String$getFirstToAvatar(avatar.name))
+				]));
+	}
+};
+var $author$project$Components$Avatar$render = function (avatar) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$div,
+		$author$project$Components$Avatar$baseStyles(avatar),
+		_List_fromArray(
+			[
+				$author$project$Components$Avatar$photo(avatar)
+			]));
+};
+var $author$project$Components$Employee$render = F2(
+	function (size, employee) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			$author$project$Components$Employee$baseStyles(size),
+			_List_fromArray(
+				[
+					$author$project$Components$Avatar$render(
+					$author$project$Components$Employee$employeeToAvatar(employee))
+				]));
+	});
+var $rtfeldman$elm_css$Html$Styled$Attributes$value = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('value');
 var $author$project$View$NewEmployee$view = F2(
 	function (_v0, model) {
 		return A2(
@@ -13675,6 +13964,18 @@ var $author$project$View$NewEmployee$view = F2(
 					_List_fromArray(
 						[
 							$rtfeldman$elm_css$Html$Styled$text(model.name)
+						])),
+					$author$project$Components$Input$render(
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$Attributes$value(model.name),
+							$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeName)
+						])),
+					$author$project$Components$Input$render(
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$Attributes$value(model.surname),
+							$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeSurname)
 						])),
 					A2(
 					$rtfeldman$elm_css$Html$Styled$div,
@@ -13691,7 +13992,11 @@ var $author$project$View$NewEmployee$view = F2(
 								[
 									$rtfeldman$elm_css$Html$Styled$text('Назад')
 								]))
-						]))
+						])),
+					A2(
+					$author$project$Components$Employee$render,
+					$author$project$ComponentSize$Medium,
+					$author$project$View$NewEmployee$buildEmployee(model))
 				]));
 	});
 var $author$project$View$NewEmployee$render = F2(
@@ -13716,6 +14021,73 @@ var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$none;
 };
+var $author$project$Helpers$packModelWithCmd = F4(
+	function (packer, updateFn, action, model) {
+		var _v0 = A2(updateFn, action, model);
+		var updatedModel = _v0.a;
+		var cmd = _v0.b;
+		return _Utils_Tuple2(
+			packer(updatedModel),
+			cmd);
+	});
+var $author$project$View$Home$update = F2(
+	function (_v0, model) {
+		return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+	});
+var $author$project$View$NewEmployee$update = F2(
+	function (action, model) {
+		if (action.$ === 'UpdateName') {
+			var name = action.a;
+			return _Utils_Tuple2(
+				_Utils_update(
+					model,
+					{name: name}),
+				$elm$core$Platform$Cmd$none);
+		} else {
+			var surname = action.a;
+			return _Utils_Tuple2(
+				_Utils_update(
+					model,
+					{surname: surname}),
+				$elm$core$Platform$Cmd$none);
+		}
+	});
+var $author$project$View$updateViewModel = F2(
+	function (action, viewModel) {
+		var _v0 = _Utils_Tuple2(action, viewModel);
+		_v0$2:
+		while (true) {
+			if (_v0.a.$ === 'Home') {
+				if (_v0.b.$ === 'Home') {
+					var viewActon = _v0.a.a;
+					var model = _v0.b.a;
+					return A4($author$project$Helpers$packModelWithCmd, $author$project$Model$Home, $author$project$View$Home$update, viewActon, model);
+				} else {
+					break _v0$2;
+				}
+			} else {
+				if (_v0.b.$ === 'NewEmployee') {
+					var viewActon = _v0.a.a;
+					var model = _v0.b.a;
+					return A4($author$project$Helpers$packModelWithCmd, $author$project$Model$NewEmployee, $author$project$View$NewEmployee$update, viewActon, model);
+				} else {
+					break _v0$2;
+				}
+			}
+		}
+		return _Utils_Tuple2(viewModel, $elm$core$Platform$Cmd$none);
+	});
+var $author$project$View$update = F2(
+	function (action, model) {
+		var _v0 = A2($author$project$View$updateViewModel, action, model.viewModel);
+		var viewModel = _v0.a;
+		var cmd = _v0.b;
+		return _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{viewModel: viewModel}),
+			cmd);
+	});
 var $elm$browser$Browser$Navigation$load = _Browser_load;
 var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
 var $elm$url$Url$addPort = F2(
@@ -13793,6 +14165,63 @@ var $author$project$Main$updateByClickUrl = F2(
 				$elm$browser$Browser$Navigation$load(url));
 		}
 	});
+var $author$project$Employee$add = F3(
+	function (employees, id, employee) {
+		return A3($elm$core$Dict$insert, id, employee, employees);
+	});
+var $author$project$Store$Employees$change = F3(
+	function (id, employee, employees) {
+		return _Utils_update(
+			employees,
+			{
+				items: A3($author$project$Employee$add, employees.items, id, employee)
+			});
+	});
+var $author$project$Store$Employees$update = F2(
+	function (action, model) {
+		if (action.$ === 'Change') {
+			var id = action.a;
+			var employee = action.b;
+			return _Utils_Tuple2(
+				A3($author$project$Store$Employees$change, id, employee, model),
+				$elm$core$Platform$Cmd$none);
+		} else {
+			var employee = action.a;
+			return _Utils_Tuple2(
+				{
+					items: A3($author$project$Employee$add, model.items, model.lastId, employee),
+					lastId: model.lastId + 1
+				},
+				$elm$core$Platform$Cmd$none);
+		}
+	});
+var $author$project$Store$updateEmployees = F2(
+	function (action, model) {
+		var _v0 = A2($author$project$Store$Employees$update, action, model.employees);
+		var employees = _v0.a;
+		var cmd = _v0.b;
+		return _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{employees: employees}),
+			cmd);
+	});
+var $author$project$Store$update = F2(
+	function (action, model) {
+		var actionEmployees = action.a;
+		return A2($author$project$Store$updateEmployees, actionEmployees, model);
+	});
+var $author$project$Main$updateStore = F2(
+	function (action, model) {
+		var _v0 = A2($author$project$Store$update, action, model.store);
+		var newStore = _v0.a;
+		var cmd = _v0.b;
+		return _Utils_Tuple2(
+			_Utils_update(
+				model,
+				{store: newStore}),
+			cmd);
+	});
 var $author$project$Main$update = F2(
 	function (action, model) {
 		switch (action.$) {
@@ -13805,7 +14234,10 @@ var $author$project$Main$update = F2(
 				return A2($author$project$Main$updateByClickUrl, request, model);
 			case 'Store':
 				var storeAction = action.a;
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				return A2($author$project$Main$updateStore, storeAction, model);
+			case 'Views':
+				var viewsAction = action.a;
+				return A2($author$project$View$update, viewsAction, model);
 			default:
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
@@ -13813,4 +14245,4 @@ var $author$project$Main$update = F2(
 var $author$project$Main$main = $elm$browser$Browser$application(
 	{init: $author$project$Main$init, onUrlChange: $author$project$Action$UrlChanged, onUrlRequest: $author$project$Action$LinkClicked, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$render});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Action.Action","aliases":{"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"},"Employee.Employee":{"args":[],"type":"{ id : Employee.Id, name : String.String, surname : String.String }"},"Employee.Id":{"args":[],"type":"Basics.Int"}},"unions":{"Action.Action":{"args":[],"tags":{"None":[],"Store":["Action.Store.Action"],"Example":["Action.Example.Action"],"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"]}},"Action.Example.Action":{"args":[],"tags":{"Increment":[],"Decrement":[]}},"Action.Store.Action":{"args":[],"tags":{"Employees":["Action.Store.Employees.Action"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Action.Store.Employees.Action":{"args":[],"tags":{"Add":["Employee.Employee"],"Change":["Employee.Id","Employee.Employee"]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Action.Action","aliases":{"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"},"Employee.Employee":{"args":[],"type":"{ id : Employee.Id, name : String.String, surname : String.String }"},"Employee.Id":{"args":[],"type":"Basics.Int"}},"unions":{"Action.Action":{"args":[],"tags":{"None":[],"Store":["Action.Store.Action"],"Example":["Action.Example.Action"],"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"Views":["Action.Views.Action"]}},"Action.Example.Action":{"args":[],"tags":{"Increment":[],"Decrement":[]}},"Action.Store.Action":{"args":[],"tags":{"Employees":["Action.Store.Employees.Action"]}},"Action.Views.Action":{"args":[],"tags":{"Home":["Action.Views.Home.Action"],"NewEmployee":["Action.Views.NewEmployee.Action"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Action.Store.Employees.Action":{"args":[],"tags":{"Add":["Employee.Employee"],"Change":["Employee.Id","Employee.Employee"]}},"Action.Views.Home.Action":{"args":[],"tags":{"None":[]}},"Action.Views.NewEmployee.Action":{"args":[],"tags":{"UpdateName":["String.String"],"UpdateSurname":["String.String"]}}}}})}});}(this));

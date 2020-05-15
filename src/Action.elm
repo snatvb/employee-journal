@@ -1,9 +1,11 @@
 module Action exposing (Action(..))
 
+import Action.Example
+import Action.Store
+import Action.Views
 import Browser exposing (UrlRequest)
 import Url exposing (Url)
-import Action.Store
-import Action.Example
+
 
 type Action
     = None
@@ -11,3 +13,4 @@ type Action
     | Example Action.Example.Action
     | LinkClicked UrlRequest
     | UrlChanged Url
+    | Views Action.Views.Action

@@ -9,6 +9,7 @@ import Model exposing (Model, ViewModel)
 import Router exposing (handleUrl)
 import Store exposing (initStore)
 import Url as URL exposing (Url)
+import View
 import View.Home
 import View.NewEmployee
 
@@ -21,6 +22,15 @@ init _ url key =
 subscriptions : Model -> Sub Action
 subscriptions _ =
     Sub.none
+
+
+updateStore : Action.Store.Action -> Model -> ( Model, Cmd Action )
+updateStore action model =
+    let
+        ( newStore, cmd ) =
+            Store.update action model.store
+    in
+    ( { model | store = newStore }, cmd )
 
 
 update : Action -> Model -> ( Model, Cmd Action )
@@ -36,7 +46,10 @@ update action model =
             updateByClickUrl request model
 
         Action.Store storeAction ->
-            ( model, Cmd.none )
+            updateStore storeAction model
+
+        Action.Views viewsAction ->
+            View.update viewsAction model
 
         _ ->
             ( model, Cmd.none )

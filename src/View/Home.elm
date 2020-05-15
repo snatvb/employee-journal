@@ -1,6 +1,7 @@
-module View.Home exposing (Model, init, render)
+module View.Home exposing (Model, init, render, update)
 
 import Action exposing (Action)
+import Action.Views.Home as HomeActions
 import Browser exposing (Document)
 import Components.Input as Input
 import Components.Link as Link
@@ -23,16 +24,9 @@ init =
     )
 
 
-
--- update : Action -> Model -> ( Model, Cmd Action )
--- update action model =
---     case action of
---         Action.Store storeAction ->
---             let
---                 ( store, cmd ) =
---                     St.update storeAction model.store
---             in
---             ( { model | store = store }, cmd )
+update : HomeActions.Action -> Model -> ( Model, Cmd Action )
+update _ model =
+    ( model, Cmd.none )
 
 
 view : Store -> Model -> Html Action
