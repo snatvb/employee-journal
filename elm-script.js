@@ -13645,16 +13645,6 @@ var $author$project$View$Home$employeesStyles = $rtfeldman$elm_css$Html$Styled$A
 			$rtfeldman$elm_css$Css$px(40),
 			$rtfeldman$elm_css$Css$px(0))
 		]));
-var $author$project$View$Home$getLastThreeEmployees = function (employees) {
-	return A3(
-		$elm$core$Basics$composeL,
-		A2(
-			$elm$core$Basics$composeL,
-			$elm$core$List$take(3),
-			$elm$core$List$reverse),
-		$elm$core$Dict$values,
-		employees);
-};
 var $rtfeldman$elm_css$Css$fontSize = $rtfeldman$elm_css$Css$prop1('font-size');
 var $author$project$View$Home$headerStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
 	_List_fromArray(
@@ -13680,6 +13670,35 @@ var $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
 var $rtfeldman$elm_css$Html$Styled$Attributes$href = function (url) {
 	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'href', url);
 };
+var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
+	return {$: 'Unstyled', a: a};
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
+	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
+		$elm$virtual_dom$VirtualDom$text(str));
+};
+var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
+var $author$project$Action$None = {$: 'None'};
+var $author$project$View$Home$getLastThreeEmployees = function (employees) {
+	return A3(
+		$elm$core$Basics$composeL,
+		A2(
+			$elm$core$Basics$composeL,
+			$elm$core$List$take(3),
+			$elm$core$List$reverse),
+		$elm$core$Dict$values,
+		employees);
+};
+var $author$project$Components$Employees$Item = function (a) {
+	return {$: 'Item', a: a};
+};
+var $author$project$Components$Event$OnClick = function (a) {
+	return {$: 'OnClick', a: a};
+};
+var $author$project$Components$Employees$onItemClick = function (action) {
+	return $author$project$Components$Employees$Item(
+		$author$project$Components$Event$OnClick(action));
+};
 var $rtfeldman$elm_css$Css$flexWrap = $rtfeldman$elm_css$Css$prop1('flex-wrap');
 var $rtfeldman$elm_css$Css$wrap = {flexDirectionOrWrap: $rtfeldman$elm_css$Css$Structure$Compatible, flexWrap: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'wrap'};
 var $author$project$Components$Employees$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
@@ -13690,14 +13709,139 @@ var $author$project$Components$Employees$baseStyles = $rtfeldman$elm_css$Html$St
 			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
 			$rtfeldman$elm_css$Css$flexWrap($rtfeldman$elm_css$Css$wrap)
 		]));
-var $author$project$Components$Employees$itemStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
-	_List_fromArray(
+var $author$project$Components$Employees$controlsAsAttributes = F2(
+	function (converter, controls) {
+		return A3(
+			$elm$core$Basics$composeL,
+			$elm$core$List$filterMap($elm$core$Basics$identity),
+			$elm$core$List$map(converter),
+			controls);
+	});
+var $author$project$Components$Event$isClick = function (event) {
+	if (event.$ === 'OnClick') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $author$project$Components$Employees$clickInControl = function (control) {
+	if (control.$ === 'Item') {
+		var event = control.a;
+		return $author$project$Components$Event$isClick(event);
+	} else {
+		return false;
+	}
+};
+var $author$project$Components$Employees$hasClick = function (controls) {
+	return A2($elm$core$List$any, $author$project$Components$Employees$clickInControl, controls);
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$on = F2(
+	function (eventName, handler) {
+		return A3(
+			$rtfeldman$elm_css$VirtualDom$Styled$Attribute,
+			A2($elm$virtual_dom$VirtualDom$on, eventName, handler),
+			_List_Nil,
+			'');
+	});
+var $rtfeldman$elm_css$Html$Styled$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$rtfeldman$elm_css$VirtualDom$Styled$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $rtfeldman$elm_css$Html$Styled$Events$onMouseEnter = function (msg) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$Events$on,
+		'mouseenter',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$Components$Employees$eventToAttribute = function (event) {
+	switch (event.$) {
+		case 'OnClick':
+			var action = event.a;
+			return $elm$core$Maybe$Just(
+				$rtfeldman$elm_css$Html$Styled$Events$onClick(action));
+		case 'OnHover':
+			var action = event.a;
+			return $elm$core$Maybe$Just(
+				$rtfeldman$elm_css$Html$Styled$Events$onMouseEnter(action));
+		default:
+			return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Components$Employees$itemControlAsAttribute = function (control) {
+	if (control.$ === 'Item') {
+		var event = control.a;
+		return $author$project$Components$Employees$eventToAttribute(event);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $rtfeldman$elm_css$Css$borderRadius = $rtfeldman$elm_css$Css$prop1('border-radius');
+var $rtfeldman$elm_css$Css$backgroundColor = function (c) {
+	return A2($rtfeldman$elm_css$Css$property, 'background-color', c.value);
+};
+var $rtfeldman$elm_css$Css$cursor = $rtfeldman$elm_css$Css$prop1('cursor');
+var $rtfeldman$elm_css$Css$pointer = {cursor: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'pointer'};
+var $rtfeldman$elm_css$Css$cssFunction = F2(
+	function (funcName, args) {
+		return funcName + ('(' + (A2($elm$core$String$join, ', ', args) + ')'));
+	});
+var $rtfeldman$elm_css$Css$rgba = F4(
+	function (r, g, b, alpha) {
+		return {
+			alpha: alpha,
+			blue: b,
+			color: $rtfeldman$elm_css$Css$Structure$Compatible,
+			green: g,
+			red: r,
+			value: A2(
+				$rtfeldman$elm_css$Css$cssFunction,
+				'rgba',
+				_Utils_ap(
+					A2(
+						$elm$core$List$map,
+						$elm$core$String$fromInt,
+						_List_fromArray(
+							[r, g, b])),
+					_List_fromArray(
+						[
+							$elm$core$String$fromFloat(alpha)
+						])))
+		};
+	});
+var $author$project$Components$Employees$getItemHoverStyles = function (needHover) {
+	return needHover ? _List_fromArray(
 		[
-			A2(
-			$rtfeldman$elm_css$Css$margin2,
-			$rtfeldman$elm_css$Css$px(0),
-			$rtfeldman$elm_css$Css$px(10))
-		]));
+			$rtfeldman$elm_css$Css$backgroundColor(
+			A4($rtfeldman$elm_css$Css$rgba, 0, 0, 0, 0.2)),
+			$rtfeldman$elm_css$Css$cursor($rtfeldman$elm_css$Css$pointer)
+		]) : _List_Nil;
+};
+var $rtfeldman$elm_css$Css$padding = $rtfeldman$elm_css$Css$prop1('padding');
+var $author$project$Components$Employees$itemStyles = function (needHover) {
+	return $rtfeldman$elm_css$Html$Styled$Attributes$css(
+		_List_fromArray(
+			[
+				A2(
+				$rtfeldman$elm_css$Css$margin2,
+				$rtfeldman$elm_css$Css$px(0),
+				$rtfeldman$elm_css$Css$px(10)),
+				$rtfeldman$elm_css$Css$padding(
+				$rtfeldman$elm_css$Css$px(10)),
+				$rtfeldman$elm_css$Css$borderRadius(
+				$rtfeldman$elm_css$Css$px(3)),
+				$rtfeldman$elm_css$Css$hover(
+				$author$project$Components$Employees$getItemHoverStyles(needHover))
+			]));
+};
 var $author$project$ComponentSize$Medium = {$: 'Medium'};
 var $author$project$Components$Employee$getBaseStylesBySize = function (size) {
 	return _List_fromArray(
@@ -13738,14 +13882,6 @@ var $author$project$Components$Employee$fontSizeFullName = function (size) {
 		$rtfeldman$elm_css$Css$px(18));
 };
 var $rtfeldman$elm_css$Css$marginTop = $rtfeldman$elm_css$Css$prop1('margin-top');
-var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
-	return {$: 'Unstyled', a: a};
-};
-var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
-	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
-		$elm$virtual_dom$VirtualDom$text(str));
-};
-var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
 var $author$project$Components$Employee$fullName = F2(
 	function (size, employee) {
 		return A2(
@@ -13765,16 +13901,13 @@ var $author$project$Components$Employee$fullName = F2(
 					$rtfeldman$elm_css$Html$Styled$text(employee.name + (' ' + employee.surname))
 				]));
 	});
-var $rtfeldman$elm_css$Css$backgroundColor = function (c) {
-	return A2($rtfeldman$elm_css$Css$property, 'background-color', c.value);
-};
-var $rtfeldman$elm_css$Css$borderRadius = $rtfeldman$elm_css$Css$prop1('border-radius');
+var $author$project$Helpers$Color$defaultColor = $rtfeldman$elm_css$Css$hex('#333333');
 var $author$project$Helpers$Color$colors = $elm$core$Array$fromList(
 	_List_fromArray(
 		[
-			$rtfeldman$elm_css$Css$hex('#333333'),
+			$author$project$Helpers$Color$defaultColor,
 			$rtfeldman$elm_css$Css$hex('#3498db'),
-			$rtfeldman$elm_css$Css$hex('#22313f'),
+			$rtfeldman$elm_css$Css$hex('#2c3e50'),
 			$rtfeldman$elm_css$Css$hex('#c0392b'),
 			$rtfeldman$elm_css$Css$hex('#9b59b6'),
 			$rtfeldman$elm_css$Css$hex('#f39c12')
@@ -13791,7 +13924,7 @@ var $author$project$Helpers$Color$getById = function (_int) {
 		var color = _v0.a;
 		return color;
 	} else {
-		return $rtfeldman$elm_css$Css$hex('ffffff');
+		return $author$project$Helpers$Color$defaultColor;
 	}
 };
 var $author$project$Components$Avatar$getBackgroundColor = function (avatar) {
@@ -13925,22 +14058,40 @@ var $author$project$Components$Employee$view = F2(
 var $author$project$Components$Employee$render = function (employee) {
 	return A2($author$project$Components$Employee$view, $author$project$ComponentSize$Medium, employee);
 };
-var $author$project$Components$Employees$renderItem = function (employee) {
+var $author$project$Components$Employees$renderItem = F2(
+	function (controls, employee) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			A2(
+				$elm$core$List$cons,
+				$author$project$Components$Employees$itemStyles(
+					$author$project$Components$Employees$hasClick(controls)),
+				A2($author$project$Components$Employees$controlsAsAttributes, $author$project$Components$Employees$itemControlAsAttribute, controls)),
+			_List_fromArray(
+				[
+					$author$project$Components$Employee$render(employee)
+				]));
+	});
+var $author$project$Components$Employees$renderItems = function (controls) {
+	return $elm$core$List$map(
+		$author$project$Components$Employees$renderItem(controls));
+};
+var $author$project$Components$Employees$render = F2(
+	function (controls, employees) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[$author$project$Components$Employees$baseStyles]),
+			A2($author$project$Components$Employees$renderItems, controls, employees));
+	});
+var $author$project$View$Home$viewEmployees = function (store) {
 	return A2(
-		$rtfeldman$elm_css$Html$Styled$div,
-		_List_fromArray(
-			[$author$project$Components$Employees$itemStyles]),
+		$author$project$Components$Employees$render,
 		_List_fromArray(
 			[
-				$author$project$Components$Employee$render(employee)
-			]));
-};
-var $author$project$Components$Employees$render = function (employees) {
-	return A2(
-		$rtfeldman$elm_css$Html$Styled$div,
-		_List_fromArray(
-			[$author$project$Components$Employees$baseStyles]),
-		A2($elm$core$List$map, $author$project$Components$Employees$renderItem, employees));
+				$author$project$Components$Employees$onItemClick($author$project$Action$None)
+			]),
+		$author$project$View$Home$getLastThreeEmployees(store.employees.items));
 };
 var $author$project$View$Home$view = F2(
 	function (store, _v0) {
@@ -13964,8 +14115,7 @@ var $author$project$View$Home$view = F2(
 						[$author$project$View$Home$employeesStyles]),
 					_List_fromArray(
 						[
-							$author$project$Components$Employees$render(
-							$author$project$View$Home$getLastThreeEmployees(store.employees.items))
+							$author$project$View$Home$viewEmployees(store)
 						])),
 					A2(
 					$rtfeldman$elm_css$Html$Styled$div,
@@ -14051,27 +14201,6 @@ var $author$project$View$NewEmployee$formStyles = $rtfeldman$elm_css$Html$Styled
 			$rtfeldman$elm_css$Css$marginRight(
 			$rtfeldman$elm_css$Css$px(30))
 		]));
-var $rtfeldman$elm_css$VirtualDom$Styled$on = F2(
-	function (eventName, handler) {
-		return A3(
-			$rtfeldman$elm_css$VirtualDom$Styled$Attribute,
-			A2($elm$virtual_dom$VirtualDom$on, eventName, handler),
-			_List_Nil,
-			'');
-	});
-var $rtfeldman$elm_css$Html$Styled$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$rtfeldman$elm_css$VirtualDom$Styled$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
-	return A2(
-		$rtfeldman$elm_css$Html$Styled$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
 var $rtfeldman$elm_css$Html$Styled$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
@@ -14096,9 +14225,7 @@ var $rtfeldman$elm_css$Html$Styled$Events$onInput = function (tagger) {
 			$rtfeldman$elm_css$Html$Styled$Events$alwaysStop,
 			A2($elm$json$Json$Decode$map, tagger, $rtfeldman$elm_css$Html$Styled$Events$targetValue)));
 };
-var $rtfeldman$elm_css$Css$cursor = $rtfeldman$elm_css$Css$prop1('cursor');
 var $rtfeldman$elm_css$Css$outline = $rtfeldman$elm_css$Css$prop1('outline');
-var $rtfeldman$elm_css$Css$pointer = {cursor: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'pointer'};
 var $author$project$Components$Button$baseInterectiveStyles = _List_fromArray(
 	[
 		$rtfeldman$elm_css$Css$cursor($rtfeldman$elm_css$Css$pointer),
@@ -14159,34 +14286,6 @@ var $author$project$Components$Button$view = F3(
 var $author$project$Components$Button$render = F2(
 	function (attributes, html) {
 		return A3($author$project$Components$Button$view, $author$project$ComponentSize$Medium, attributes, html);
-	});
-var $rtfeldman$elm_css$Css$padding = $rtfeldman$elm_css$Css$prop1('padding');
-var $rtfeldman$elm_css$Css$cssFunction = F2(
-	function (funcName, args) {
-		return funcName + ('(' + (A2($elm$core$String$join, ', ', args) + ')'));
-	});
-var $rtfeldman$elm_css$Css$rgba = F4(
-	function (r, g, b, alpha) {
-		return {
-			alpha: alpha,
-			blue: b,
-			color: $rtfeldman$elm_css$Css$Structure$Compatible,
-			green: g,
-			red: r,
-			value: A2(
-				$rtfeldman$elm_css$Css$cssFunction,
-				'rgba',
-				_Utils_ap(
-					A2(
-						$elm$core$List$map,
-						$elm$core$String$fromInt,
-						_List_fromArray(
-							[r, g, b])),
-					_List_fromArray(
-						[
-							$elm$core$String$fromFloat(alpha)
-						])))
-		};
 	});
 var $rtfeldman$elm_css$Css$UnitlessInteger = {$: 'UnitlessInteger'};
 var $rtfeldman$elm_css$Css$zero = {length: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAuto: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAutoOrCoverOrContain: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrMinMaxDimension: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: $rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumber: $rtfeldman$elm_css$Css$Structure$Compatible, number: $rtfeldman$elm_css$Css$Structure$Compatible, numericValue: 0, outline: $rtfeldman$elm_css$Css$Structure$Compatible, unitLabel: '', units: $rtfeldman$elm_css$Css$UnitlessInteger, value: '0'};

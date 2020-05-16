@@ -58,11 +58,19 @@ employeesStyles =
         ]
 
 
+viewEmployees : Store -> Html Action
+viewEmployees store =
+    EmployeesComponent.render
+        [EmployeesComponent.onItemClick Action.None]
+    <|
+        getLastThreeEmployees store.employees.items
+
+
 view : Store -> Model -> Html Action
 view store _ =
     div [ baseStyles ]
         [ div [ headerStyles ] [ text "Журнал сотрудников" ]
-        , div [ employeesStyles ] [ EmployeesComponent.render <| getLastThreeEmployees store.employees.items ]
+        , div [ employeesStyles ] [ viewEmployees store ]
         , div []
             [ Link.default [ href "add-employee" ] [ text "Новый сотрудник" ]
             ]

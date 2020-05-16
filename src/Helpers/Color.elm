@@ -3,13 +3,15 @@ module Helpers.Color exposing (getById)
 import Array
 import Css exposing (Color, hex)
 
+defaultColor : Color
+defaultColor = hex "#333333"
 
 colors : Array.Array Color
 colors =
     Array.fromList
-        [ hex "#333333"
+        [ defaultColor
         , hex "#3498db"
-        , hex "#22313f"
+        , hex "#2c3e50"
         , hex "#c0392b"
         , hex "#9b59b6"
         , hex "#f39c12"
@@ -28,4 +30,4 @@ getById int =
             color
 
         Nothing ->
-            hex "ffffff"
+            defaultColor
