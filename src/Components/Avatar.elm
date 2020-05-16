@@ -1,6 +1,5 @@
 module Components.Avatar exposing (Avatar, baseStyles, render)
 
-import Array
 import ComponentSize exposing (Size)
 import Css exposing (..)
 import Helpers.Color
@@ -84,7 +83,7 @@ photo : Avatar -> Html action
 photo avatar =
     case avatar.url of
         Just url ->
-            img [ src url ] []
+            img (photoAttrs url) []
 
         Nothing ->
             div photoEmptyStyles

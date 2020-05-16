@@ -15,7 +15,7 @@ change : Employee.Id -> Employee.Employee -> Model -> Model
 change id employee employees =
     { employees
         | items =
-            Employee.add employees.items id employee
+            Employee.insert employees.items id employee
     }
 
 
@@ -25,9 +25,9 @@ update action model =
         EmployeesActions.Change id employee ->
             ( change id employee model, Cmd.none )
 
-        EmployeesActions.Add employee ->
+        EmployeesActions.Insert employee ->
             ( { lastId = model.lastId + 1
-              , items = Employee.add model.items model.lastId employee
+              , items = Employee.insert model.items model.lastId <| Employee.updateId model.lastId employee
               }
             , Cmd.none
             )

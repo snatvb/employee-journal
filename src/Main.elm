@@ -4,8 +4,7 @@ import Action exposing (Action)
 import Action.Store
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation as Navigation
-import Helpers exposing (packModelWithCmd)
-import Model exposing (Model, ViewModel)
+import Model exposing (Model)
 import Router exposing (handleUrl)
 import Store exposing (initStore)
 import Url as URL exposing (Url)

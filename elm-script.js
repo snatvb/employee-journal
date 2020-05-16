@@ -13869,6 +13869,23 @@ var $author$project$Helpers$String$getFirstToAvatar = function (str) {
 var $rtfeldman$elm_css$Html$Styled$img = $rtfeldman$elm_css$Html$Styled$node('img');
 var $rtfeldman$elm_css$Css$PercentageUnits = {$: 'PercentageUnits'};
 var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PercentageUnits, '%');
+var $rtfeldman$elm_css$Html$Styled$Attributes$src = function (url) {
+	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'src', url);
+};
+var $author$project$Components$Avatar$photoAttrs = function (url) {
+	return _List_fromArray(
+		[
+			$rtfeldman$elm_css$Html$Styled$Attributes$src(url),
+			$rtfeldman$elm_css$Html$Styled$Attributes$css(
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Css$width(
+					$rtfeldman$elm_css$Css$pct(100)),
+					$rtfeldman$elm_css$Css$height(
+					$rtfeldman$elm_css$Css$pct(100))
+				]))
+		]);
+};
 var $author$project$Components$Avatar$photoEmptyStyles = _List_fromArray(
 	[
 		$rtfeldman$elm_css$Html$Styled$Attributes$css(
@@ -13883,19 +13900,13 @@ var $author$project$Components$Avatar$photoEmptyStyles = _List_fromArray(
 				$rtfeldman$elm_css$Css$pct(100))
 			]))
 	]);
-var $rtfeldman$elm_css$Html$Styled$Attributes$src = function (url) {
-	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'src', url);
-};
 var $author$project$Components$Avatar$photo = function (avatar) {
 	var _v0 = avatar.url;
 	if (_v0.$ === 'Just') {
 		var url = _v0.a;
 		return A2(
 			$rtfeldman$elm_css$Html$Styled$img,
-			_List_fromArray(
-				[
-					$rtfeldman$elm_css$Html$Styled$Attributes$src(url)
-				]),
+			$author$project$Components$Avatar$photoAttrs(url),
 			_List_Nil);
 	} else {
 		return A2(
@@ -13968,9 +13979,6 @@ var $author$project$View$NewEmployee$formStyles = $rtfeldman$elm_css$Html$Styled
 			$rtfeldman$elm_css$Css$marginRight(
 			$rtfeldman$elm_css$Css$px(30))
 		]));
-var $rtfeldman$elm_css$Html$Styled$Events$alwaysStop = function (x) {
-	return _Utils_Tuple2(x, true);
-};
 var $rtfeldman$elm_css$VirtualDom$Styled$on = F2(
 	function (eventName, handler) {
 		return A3(
@@ -13979,6 +13987,22 @@ var $rtfeldman$elm_css$VirtualDom$Styled$on = F2(
 			_List_Nil,
 			'');
 	});
+var $rtfeldman$elm_css$Html$Styled$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$rtfeldman$elm_css$VirtualDom$Styled$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $rtfeldman$elm_css$Html$Styled$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
 var $rtfeldman$elm_css$Html$Styled$Events$stopPropagationOn = F2(
 	function (event, decoder) {
 		return A2(
@@ -14000,9 +14024,66 @@ var $rtfeldman$elm_css$Html$Styled$Events$onInput = function (tagger) {
 			$rtfeldman$elm_css$Html$Styled$Events$alwaysStop,
 			A2($elm$json$Json$Decode$map, tagger, $rtfeldman$elm_css$Html$Styled$Events$targetValue)));
 };
+var $rtfeldman$elm_css$Css$cursor = $rtfeldman$elm_css$Css$prop1('cursor');
+var $rtfeldman$elm_css$Css$outline = $rtfeldman$elm_css$Css$prop1('outline');
+var $rtfeldman$elm_css$Css$pointer = {cursor: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'pointer'};
+var $author$project$Components$Button$baseInterectiveStyles = _List_fromArray(
+	[
+		$rtfeldman$elm_css$Css$cursor($rtfeldman$elm_css$Css$pointer),
+		$rtfeldman$elm_css$Css$backgroundColor(
+		$rtfeldman$elm_css$Css$hex('#111')),
+		$rtfeldman$elm_css$Css$outline($rtfeldman$elm_css$Css$none)
+	]);
+var $rtfeldman$elm_css$Css$padding2 = $rtfeldman$elm_css$Css$prop2('padding');
+var $author$project$Components$Button$baseStylesBySize = function (size) {
+	return _List_fromArray(
+		[
+			A2(
+			$rtfeldman$elm_css$Css$padding2,
+			$rtfeldman$elm_css$Css$px(8),
+			$rtfeldman$elm_css$Css$px(12)),
+			$rtfeldman$elm_css$Css$fontSize(
+			$rtfeldman$elm_css$Css$px(16))
+		]);
+};
 var $rtfeldman$elm_css$Css$border = $rtfeldman$elm_css$Css$prop1('border');
 var $rtfeldman$elm_css$Css$focus = $rtfeldman$elm_css$Css$pseudoClass('focus');
-var $rtfeldman$elm_css$Css$outline = $rtfeldman$elm_css$Css$prop1('outline');
+var $author$project$Components$Button$baseStyles = function (size) {
+	return $rtfeldman$elm_css$Html$Styled$Attributes$css(
+		$elm$core$List$concat(
+			_List_fromArray(
+				[
+					$author$project$Components$Button$baseStylesBySize(size),
+					_List_fromArray(
+					[
+						$rtfeldman$elm_css$Css$borderRadius(
+						$rtfeldman$elm_css$Css$px(3)),
+						$rtfeldman$elm_css$Css$border(
+						$rtfeldman$elm_css$Css$px(0)),
+						$rtfeldman$elm_css$Css$backgroundColor(
+						$rtfeldman$elm_css$Css$hex('#191919')),
+						$rtfeldman$elm_css$Css$color(
+						$rtfeldman$elm_css$Css$hex('#f3f3f3')),
+						$rtfeldman$elm_css$Css$focus($author$project$Components$Button$baseInterectiveStyles),
+						$rtfeldman$elm_css$Css$hover($author$project$Components$Button$baseInterectiveStyles)
+					])
+				])));
+};
+var $author$project$Components$Button$baseAttributes = F2(
+	function (size, attributes) {
+		return A2(
+			$elm$core$List$cons,
+			$author$project$Components$Button$baseStyles(size),
+			attributes);
+	});
+var $rtfeldman$elm_css$Html$Styled$button = $rtfeldman$elm_css$Html$Styled$node('button');
+var $author$project$Components$Button$render = F3(
+	function (size, attributes, html) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$button,
+			A2($author$project$Components$Button$baseAttributes, size, attributes),
+			html);
+	});
 var $rtfeldman$elm_css$Css$padding = $rtfeldman$elm_css$Css$prop1('padding');
 var $rtfeldman$elm_css$Css$cssFunction = F2(
 	function (funcName, args) {
@@ -14089,6 +14170,22 @@ var $author$project$View$NewEmployee$row = function (html) {
 		_List_fromArray(
 			[html]));
 };
+var $author$project$Action$Store$Employees = function (a) {
+	return {$: 'Employees', a: a};
+};
+var $author$project$Action$Store$Employees$Insert = function (a) {
+	return {$: 'Insert', a: a};
+};
+var $author$project$Action$Store = function (a) {
+	return {$: 'Store', a: a};
+};
+var $author$project$View$NewEmployee$save = function (model) {
+	return A3(
+		$elm$core$Basics$composeL,
+		A2($elm$core$Basics$composeL, $author$project$Action$Store, $author$project$Action$Store$Employees),
+		$author$project$Action$Store$Employees$Insert,
+		$author$project$View$NewEmployee$buildEmployee(model));
+};
 var $rtfeldman$elm_css$Html$Styled$Attributes$value = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('value');
 var $author$project$View$NewEmployee$form = function (model) {
 	return A2(
@@ -14118,6 +14215,19 @@ var $author$project$View$NewEmployee$form = function (model) {
 						[
 							$rtfeldman$elm_css$Html$Styled$Attributes$value(model.surname),
 							$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeSurname)
+						]))),
+				$author$project$View$NewEmployee$row(
+				A3(
+					$author$project$Components$Button$render,
+					$author$project$ComponentSize$Medium,
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$Events$onClick(
+							$author$project$View$NewEmployee$save(model))
+						]),
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$text('Сохранить')
 						]))),
 				$author$project$View$NewEmployee$row(
 				A2(
@@ -14316,7 +14426,7 @@ var $author$project$Main$updateByClickUrl = F2(
 				$elm$browser$Browser$Navigation$load(url));
 		}
 	});
-var $author$project$Employee$add = F3(
+var $author$project$Employee$insert = F3(
 	function (employees, id, employee) {
 		return A3($elm$core$Dict$insert, id, employee, employees);
 	});
@@ -14325,8 +14435,14 @@ var $author$project$Store$Employees$change = F3(
 		return _Utils_update(
 			employees,
 			{
-				items: A3($author$project$Employee$add, employees.items, id, employee)
+				items: A3($author$project$Employee$insert, employees.items, id, employee)
 			});
+	});
+var $author$project$Employee$updateId = F2(
+	function (id, employee) {
+		return _Utils_update(
+			employee,
+			{id: id});
 	});
 var $author$project$Store$Employees$update = F2(
 	function (action, model) {
@@ -14340,7 +14456,11 @@ var $author$project$Store$Employees$update = F2(
 			var employee = action.a;
 			return _Utils_Tuple2(
 				{
-					items: A3($author$project$Employee$add, model.items, model.lastId, employee),
+					items: A3(
+						$author$project$Employee$insert,
+						model.items,
+						model.lastId,
+						A2($author$project$Employee$updateId, model.lastId, employee)),
 					lastId: model.lastId + 1
 				},
 				$elm$core$Platform$Cmd$none);
@@ -14396,4 +14516,4 @@ var $author$project$Main$update = F2(
 var $author$project$Main$main = $elm$browser$Browser$application(
 	{init: $author$project$Main$init, onUrlChange: $author$project$Action$UrlChanged, onUrlRequest: $author$project$Action$LinkClicked, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$render});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Action.Action","aliases":{"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"},"Employee.Employee":{"args":[],"type":"{ id : Employee.Id, name : String.String, surname : String.String }"},"Employee.Id":{"args":[],"type":"Basics.Int"}},"unions":{"Action.Action":{"args":[],"tags":{"None":[],"Store":["Action.Store.Action"],"Example":["Action.Example.Action"],"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"Views":["Action.Views.Action"]}},"Action.Example.Action":{"args":[],"tags":{"Increment":[],"Decrement":[]}},"Action.Store.Action":{"args":[],"tags":{"Employees":["Action.Store.Employees.Action"]}},"Action.Views.Action":{"args":[],"tags":{"Home":["Action.Views.Home.Action"],"NewEmployee":["Action.Views.NewEmployee.Action"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Action.Store.Employees.Action":{"args":[],"tags":{"Add":["Employee.Employee"],"Change":["Employee.Id","Employee.Employee"]}},"Action.Views.Home.Action":{"args":[],"tags":{"None":[]}},"Action.Views.NewEmployee.Action":{"args":[],"tags":{"UpdateName":["String.String"],"UpdateSurname":["String.String"]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Action.Action","aliases":{"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"},"Employee.Employee":{"args":[],"type":"{ id : Employee.Id, name : String.String, surname : String.String }"},"Employee.Id":{"args":[],"type":"Basics.Int"}},"unions":{"Action.Action":{"args":[],"tags":{"None":[],"Store":["Action.Store.Action"],"Example":["Action.Example.Action"],"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"Views":["Action.Views.Action"]}},"Action.Example.Action":{"args":[],"tags":{"Increment":[],"Decrement":[]}},"Action.Store.Action":{"args":[],"tags":{"Employees":["Action.Store.Employees.Action"]}},"Action.Views.Action":{"args":[],"tags":{"Home":["Action.Views.Home.Action"],"NewEmployee":["Action.Views.NewEmployee.Action"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Action.Store.Employees.Action":{"args":[],"tags":{"Insert":["Employee.Employee"],"Change":["Employee.Id","Employee.Employee"]}},"Action.Views.Home.Action":{"args":[],"tags":{"None":[]}},"Action.Views.NewEmployee.Action":{"args":[],"tags":{"UpdateName":["String.String"],"UpdateSurname":["String.String"]}}}}})}});}(this));

@@ -1,10 +1,9 @@
-module Router exposing (..)
+module Router exposing (handleUrl)
 
 import Action exposing (Action)
 import Model exposing (Model, ViewModel, buildModel)
 import Store exposing (Store)
-import Url exposing (Url)
-import Url.Parser as Parser exposing ((</>), Parser, oneOf, s, string, top)
+import Url.Parser as Parser exposing (Parser, oneOf, s, top)
 import View.Home
 import View.NewEmployee
 

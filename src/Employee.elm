@@ -1,4 +1,4 @@
-module Employee exposing (..)
+module Employee exposing (Employee, Employees, insert, remove, updateId, Id)
 
 import Dict
 
@@ -12,10 +12,14 @@ type alias Employee =
 
 type alias Employees = Dict.Dict Id Employee
 
-add : Employees -> Id -> Employee -> Employees
-add employees id employee =
+insert : Employees -> Id -> Employee -> Employees
+insert employees id employee =
   Dict.insert id employee employees
 
 remove : Employees -> Id -> Employees
 remove employees id =
   Dict.remove id employees
+
+updateId : Id -> Employee -> Employee
+updateId id employee =
+  { employee | id = id }

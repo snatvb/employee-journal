@@ -1,12 +1,9 @@
 module Components.Employee exposing (render)
 
-import Array
 import ComponentSize exposing (Size)
 import Components.Avatar as Avatar
 import Css exposing (..)
 import Employee exposing (Employee)
-import Helpers.Color
-import Helpers.String
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css)
 

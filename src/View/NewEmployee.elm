@@ -2,9 +2,12 @@ module View.NewEmployee exposing (Model, init, render, update)
 
 import Action exposing (Action)
 import Action.Views as ViewsActions
+import Action.Store
+import Action.Store.Employees
 import Action.Views.NewEmployee as NewEmployeeActions
 import Browser exposing (Document)
 import ComponentSize
+import Components.Button as Button
 import Components.Employee
 import Components.Input as Input
 import Components.Link as Link
@@ -13,7 +16,7 @@ import Employee exposing (Employee)
 import Helpers exposing (packDocument)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href, value)
-import Html.Styled.Events exposing (onInput)
+import Html.Styled.Events exposing (onClick, onInput)
 import Store exposing (Store)
 
 
@@ -81,19 +84,23 @@ formStyles =
         [ marginRight (px 30)
         ]
 
+
 row : Html Action -> Html Action
 row html =
-  div [css [ marginTop (px 10) ]] [html]
+    div [ css [ marginTop (px 10) ] ] [ html ]
+
 
 form : Model -> Html Action
 form model =
-    div [formStyles]
+    div [ formStyles ]
         [ row <| div [] [ text "Новый сотрудник" ]
         , row <| Input.render [ value model.name, onInput actionChangeName ]
         , row <| Input.render [ value model.surname, onInput actionChangeSurname ]
-        , row <| div []
-            [ Link.default [ href "/" ] [ text "Назад" ]
-            ]
+        , row <| Button.render ComponentSize.Medium [ onClick <| save model ] [ text "Сохранить" ]
+        , row <|
+            div []
+                [ Link.default [ href "/" ] [ text "Назад" ]
+                ]
         ]
 
 
@@ -118,3 +125,8 @@ view _ model =
 render : Store -> Model -> Document Action
 render store model =
     packDocument "Новый сотрудник" (view store model)
+
+
+save : Model -> Action
+save model =
+    Action.Store << Action.Store.Employees << Action.Store.Employees.Insert <| buildEmployee model
