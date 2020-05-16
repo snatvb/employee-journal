@@ -1,19 +1,18 @@
 module View.NewEmployee exposing (Model, init, render, update)
 
 import Action exposing (Action)
-import Action.Views as ViewsActions
 import Action.Store
 import Action.Store.Employees
+import Action.Views as ViewsActions
 import Action.Views.NewEmployee as NewEmployeeActions
 import Browser exposing (Document)
-import ComponentSize
 import Components.Button as Button
 import Components.Employee
 import Components.Input as Input
 import Components.Link as Link
 import Css exposing (..)
 import Employee exposing (Employee)
-import Helpers exposing (packDocument)
+import Helpers exposing (packDocument, prepareInternalUrlRequest)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href, value)
 import Html.Styled.Events exposing (onClick, onInput)
@@ -74,7 +73,7 @@ exmapleStyles =
 exmaple : Model -> Html Action
 exmaple model =
     div exmapleStyles
-        [ Components.Employee.render ComponentSize.Medium <| buildEmployee model
+        [ Components.Employee.render <| buildEmployee model
         ]
 
 
@@ -90,13 +89,13 @@ row html =
     div [ css [ marginTop (px 10) ] ] [ html ]
 
 
-form : Model -> Html Action
-form model =
+form : Store -> Model -> Html Action
+form store model =
     div [ formStyles ]
         [ row <| div [] [ text "Новый сотрудник" ]
         , row <| Input.render [ value model.name, onInput actionChangeName ]
         , row <| Input.render [ value model.surname, onInput actionChangeSurname ]
-        , row <| Button.render ComponentSize.Medium [ onClick <| save model ] [ text "Сохранить" ]
+        , row <| Button.render [ onClick <| save store model ] [ text "Сохранить" ]
         , row <|
             div []
                 [ Link.default [ href "/" ] [ text "Назад" ]
@@ -115,9 +114,9 @@ baseStyles =
 
 
 view : Store -> Model -> Html Action
-view _ model =
+view store model =
     div [ baseStyles ]
-        [ form model
+        [ form store model
         , exmaple model
         ]
 
@@ -127,6 +126,11 @@ render store model =
     packDocument "Новый сотрудник" (view store model)
 
 
-save : Model -> Action
-save model =
-    Action.Store << Action.Store.Employees << Action.Store.Employees.Insert <| buildEmployee model
+save : Store -> Model -> Action
+save store model =
+    Action.RedirectAfterAction (prepareInternalUrlRequest "/" store.url)
+        << Action.Store
+        << Action.Store.Employees
+        << Action.Store.Employees.Insert
+    <|
+        buildEmployee model

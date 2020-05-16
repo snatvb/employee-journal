@@ -1,12 +1,13 @@
-module Store.Employees exposing (Model, update)
+module Store.Employees exposing (Model, encode, update)
 
 import Action exposing (Action)
 import Action.Store.Employees as EmployeesActions
 import Employee
+import Json.Encode as Encoder
 
 
 type alias Model =
-    { lastId : Int
+    { nextId : Int
     , items : Employee.Employees
     }
 
@@ -19,6 +20,13 @@ change id employee employees =
     }
 
 
+insert : Model -> Employee.Employee -> Model
+insert model employee =
+    { nextId = model.nextId + 1
+    , items = Employee.insert model.items model.nextId <| Employee.updateId model.nextId employee
+    }
+
+
 update : EmployeesActions.Action -> Model -> ( Model, Cmd Action )
 update action model =
     case action of
@@ -26,8 +34,14 @@ update action model =
             ( change id employee model, Cmd.none )
 
         EmployeesActions.Insert employee ->
-            ( { lastId = model.lastId + 1
-              , items = Employee.insert model.items model.lastId <| Employee.updateId model.lastId employee
-              }
+            ( insert model employee
             , Cmd.none
             )
+
+
+encode : Model -> Encoder.Value
+encode model =
+    Encoder.object
+        [ ( "nextId", Encoder.int model.nextId )
+        , ( "items", Employee.encodeEmployees model.items )
+        ]

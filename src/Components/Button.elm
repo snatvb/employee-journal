@@ -43,6 +43,10 @@ baseAttributes size attributes =
     baseStyles size :: attributes
 
 
-render : Size -> List (Attribute action) -> List (Html action) -> Html action
-render size attributes html =
+view : Size -> List (Attribute action) -> List (Html action) -> Html action
+view size attributes html =
     button (baseAttributes size attributes) html
+
+render : List (Attribute action) -> List (Html action) -> Html action
+render attributes html =
+    view ComponentSize.Medium attributes html

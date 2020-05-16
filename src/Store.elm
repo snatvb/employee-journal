@@ -5,6 +5,9 @@ import Action.Store as StoreActions
 import Action.Store.Employees as EmployeesActions
 import Browser.Navigation as Navigation
 import Dict exposing (empty)
+import Employee
+import Json.Encode as Encoder
+import Ports exposing (saveStore)
 import Store.Employees
 import Url exposing (Url)
 
@@ -16,9 +19,18 @@ type alias Store =
     }
 
 
+initEmployeesForTest : Employee.Employees
+initEmployeesForTest =
+    Dict.fromList
+        [ ( 0, { id = 0, name = "Ivan", surname = "Ivanov" } )
+        , ( 1, { id = 1, name = "Sergey", surname = "Bulkin" } )
+        , ( 2, { id = 2, name = "Vasiliy", surname = "Pechkin" } )
+        ]
+
+
 initStore : Url -> Navigation.Key -> Store
 initStore url key =
-    { employees = { lastId = 0, items = empty }
+    { employees = { nextId = 3, items = initEmployeesForTest }
     , navigationKey = key
     , url = url
     }
@@ -38,8 +50,23 @@ updateUrl url store =
     { store | url = url }
 
 
-update : StoreActions.Action -> Store -> ( Store, Cmd Action )
-update action model =
+updateModel : StoreActions.Action -> Store -> ( Store, Cmd Action )
+updateModel action model =
     case action of
         StoreActions.Employees actionEmployees ->
             updateEmployees actionEmployees model
+
+
+update : StoreActions.Action -> Store -> ( Store, Cmd Action )
+update action model =
+    let
+        ( newModel, cmds ) =
+            updateModel action model
+    in
+    ( newModel, Cmd.batch [ saveStore (encode newModel), cmds ] )
+
+
+encode : Store -> Encoder.Value
+encode store =
+    Encoder.object
+        [ ( "employees", Store.Employees.encode store.employees ) ]

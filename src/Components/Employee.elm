@@ -58,9 +58,13 @@ fullName size employee =
         [ text <| employee.name ++ " " ++ employee.surname ]
 
 
-render : Size -> Employee -> Html action
-render size employee =
+view : Size -> Employee -> Html action
+view size employee =
     div (baseStyles size)
         [ Avatar.render <| employeeToAvatar size employee
         , fullName size employee
         ]
+
+render : Employee -> Html action
+render employee =
+    view ComponentSize.Medium employee

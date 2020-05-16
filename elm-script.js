@@ -10819,10 +10819,23 @@ var $author$project$Router$handleUrl = function (store) {
 		return $author$project$Router$getHome(store);
 	}
 };
+var $author$project$Store$initEmployeesForTest = $elm$core$Dict$fromList(
+	_List_fromArray(
+		[
+			_Utils_Tuple2(
+			0,
+			{id: 0, name: 'Ivan', surname: 'Ivanov'}),
+			_Utils_Tuple2(
+			1,
+			{id: 1, name: 'Sergey', surname: 'Bulkin'}),
+			_Utils_Tuple2(
+			2,
+			{id: 2, name: 'Vasiliy', surname: 'Pechkin'})
+		]));
 var $author$project$Store$initStore = F2(
 	function (url, key) {
 		return {
-			employees: {items: $elm$core$Dict$empty, lastId: 0},
+			employees: {items: $author$project$Store$initEmployeesForTest, nextId: 3},
 			navigationKey: key,
 			url: url
 		};
@@ -13150,6 +13163,7 @@ var $rtfeldman$elm_css$Html$Styled$Internal$css = function (styles) {
 var $rtfeldman$elm_css$Html$Styled$Attributes$css = $rtfeldman$elm_css$Html$Styled$Internal$css;
 var $rtfeldman$elm_css$Css$displayFlex = A2($rtfeldman$elm_css$Css$property, 'display', 'flex');
 var $rtfeldman$elm_css$Css$flexDirection = $rtfeldman$elm_css$Css$prop1('flex-direction');
+var $rtfeldman$elm_css$Css$height = $rtfeldman$elm_css$Css$prop1('height');
 var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
 	return A3(
 		$rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
@@ -13157,13 +13171,20 @@ var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
 		'justify-content',
 		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
 };
+var $rtfeldman$elm_css$Css$PercentageUnits = {$: 'PercentageUnits'};
+var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PercentageUnits, '%');
+var $rtfeldman$elm_css$Css$width = $rtfeldman$elm_css$Css$prop1('width');
 var $author$project$View$Home$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
 	_List_fromArray(
 		[
 			$rtfeldman$elm_css$Css$displayFlex,
 			$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column),
 			$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
-			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center)
+			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$width(
+			$rtfeldman$elm_css$Css$pct(100)),
+			$rtfeldman$elm_css$Css$height(
+			$rtfeldman$elm_css$Css$pct(100))
 		]));
 var $rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
 	function (a, b, c) {
@@ -13602,7 +13623,6 @@ var $author$project$Components$Link$default = F2(
 			html);
 	});
 var $rtfeldman$elm_css$Html$Styled$div = $rtfeldman$elm_css$Html$Styled$node('div');
-var $rtfeldman$elm_css$Css$fontSize = $rtfeldman$elm_css$Css$prop1('font-size');
 var $rtfeldman$elm_css$Css$prop2 = F3(
 	function (key, argA, argB) {
 		return A2(
@@ -13617,15 +13637,30 @@ var $rtfeldman$elm_css$Css$prop2 = F3(
 var $rtfeldman$elm_css$Css$margin2 = $rtfeldman$elm_css$Css$prop2('margin');
 var $rtfeldman$elm_css$Css$PxUnits = {$: 'PxUnits'};
 var $rtfeldman$elm_css$Css$px = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PxUnits, 'px');
+var $author$project$View$Home$employeesStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			A2(
+			$rtfeldman$elm_css$Css$margin2,
+			$rtfeldman$elm_css$Css$px(40),
+			$rtfeldman$elm_css$Css$px(0))
+		]));
+var $author$project$View$Home$getLastThreeEmployees = function (employees) {
+	return A3(
+		$elm$core$Basics$composeL,
+		A2(
+			$elm$core$Basics$composeL,
+			$elm$core$List$take(3),
+			$elm$core$List$reverse),
+		$elm$core$Dict$values,
+		employees);
+};
+var $rtfeldman$elm_css$Css$fontSize = $rtfeldman$elm_css$Css$prop1('font-size');
 var $author$project$View$Home$headerStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
 	_List_fromArray(
 		[
 			$rtfeldman$elm_css$Css$fontSize(
-			$rtfeldman$elm_css$Css$px(24)),
-			A2(
-			$rtfeldman$elm_css$Css$margin2,
-			$rtfeldman$elm_css$Css$px(20),
-			$rtfeldman$elm_css$Css$px(0))
+			$rtfeldman$elm_css$Css$px(24))
 		]));
 var $rtfeldman$elm_css$VirtualDom$Styled$property = F2(
 	function (key, value) {
@@ -13645,79 +13680,25 @@ var $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
 var $rtfeldman$elm_css$Html$Styled$Attributes$href = function (url) {
 	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'href', url);
 };
-var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
-	return {$: 'Unstyled', a: a};
-};
-var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
-	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
-		$elm$virtual_dom$VirtualDom$text(str));
-};
-var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
-var $author$project$View$Home$view = F2(
-	function (_v0, _v1) {
-		return A2(
-			$rtfeldman$elm_css$Html$Styled$div,
-			_List_fromArray(
-				[$author$project$View$Home$baseStyles]),
-			_List_fromArray(
-				[
-					A2(
-					$rtfeldman$elm_css$Html$Styled$div,
-					_List_fromArray(
-						[$author$project$View$Home$headerStyles]),
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$text('Журнал сотрудников')
-						])),
-					A2(
-					$rtfeldman$elm_css$Html$Styled$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$author$project$Components$Link$default,
-							_List_fromArray(
-								[
-									$rtfeldman$elm_css$Html$Styled$Attributes$href('add-employee')
-								]),
-							_List_fromArray(
-								[
-									$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
-								]))
-						]))
-				]));
-	});
-var $author$project$View$Home$render = F2(
-	function (store, model) {
-		return A2(
-			$author$project$Helpers$packDocument,
-			'Home',
-			A2($author$project$View$Home$view, store, model));
-	});
-var $rtfeldman$elm_css$Css$paddingTop = $rtfeldman$elm_css$Css$prop1('padding-top');
-var $author$project$View$NewEmployee$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+var $rtfeldman$elm_css$Css$flexWrap = $rtfeldman$elm_css$Css$prop1('flex-wrap');
+var $rtfeldman$elm_css$Css$wrap = {flexDirectionOrWrap: $rtfeldman$elm_css$Css$Structure$Compatible, flexWrap: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'wrap'};
+var $author$project$Components$Employees$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
 	_List_fromArray(
 		[
 			$rtfeldman$elm_css$Css$displayFlex,
 			$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
 			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
-			$rtfeldman$elm_css$Css$paddingTop(
-			$rtfeldman$elm_css$Css$px(20))
+			$rtfeldman$elm_css$Css$flexWrap($rtfeldman$elm_css$Css$wrap)
+		]));
+var $author$project$Components$Employees$itemStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			A2(
+			$rtfeldman$elm_css$Css$margin2,
+			$rtfeldman$elm_css$Css$px(0),
+			$rtfeldman$elm_css$Css$px(10))
 		]));
 var $author$project$ComponentSize$Medium = {$: 'Medium'};
-var $author$project$View$NewEmployee$buildEmployee = function (model) {
-	return {id: 0, name: model.name, surname: model.surname};
-};
-var $rtfeldman$elm_css$Css$width = $rtfeldman$elm_css$Css$prop1('width');
-var $author$project$View$NewEmployee$exmapleStyles = _List_fromArray(
-	[
-		$rtfeldman$elm_css$Html$Styled$Attributes$css(
-		_List_fromArray(
-			[
-				$rtfeldman$elm_css$Css$width(
-				$rtfeldman$elm_css$Css$px(300))
-			]))
-	]);
 var $author$project$Components$Employee$getBaseStylesBySize = function (size) {
 	return _List_fromArray(
 		[
@@ -13757,6 +13738,14 @@ var $author$project$Components$Employee$fontSizeFullName = function (size) {
 		$rtfeldman$elm_css$Css$px(18));
 };
 var $rtfeldman$elm_css$Css$marginTop = $rtfeldman$elm_css$Css$prop1('margin-top');
+var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
+	return {$: 'Unstyled', a: a};
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
+	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
+		$elm$virtual_dom$VirtualDom$text(str));
+};
+var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
 var $author$project$Components$Employee$fullName = F2(
 	function (size, employee) {
 		return A2(
@@ -13783,19 +13772,15 @@ var $rtfeldman$elm_css$Css$borderRadius = $rtfeldman$elm_css$Css$prop1('border-r
 var $author$project$Helpers$Color$colors = $elm$core$Array$fromList(
 	_List_fromArray(
 		[
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333'),
-			$rtfeldman$elm_css$Css$hex('333333')
+			$rtfeldman$elm_css$Css$hex('#333333'),
+			$rtfeldman$elm_css$Css$hex('#3498db'),
+			$rtfeldman$elm_css$Css$hex('#22313f'),
+			$rtfeldman$elm_css$Css$hex('#c0392b'),
+			$rtfeldman$elm_css$Css$hex('#9b59b6'),
+			$rtfeldman$elm_css$Css$hex('#f39c12')
 		]));
 var $author$project$Helpers$Color$calcColorIndex = function (_int) {
-	return (_int / $elm$core$Array$length($author$project$Helpers$Color$colors)) | 0;
+	return _int % $elm$core$Array$length($author$project$Helpers$Color$colors);
 };
 var $author$project$Helpers$Color$getById = function (_int) {
 	var _v0 = A2(
@@ -13817,7 +13802,6 @@ var $author$project$Components$Avatar$getBackgroundColor = function (avatar) {
 		return $author$project$Helpers$Color$getById(avatar.id);
 	}
 };
-var $rtfeldman$elm_css$Css$height = $rtfeldman$elm_css$Css$prop1('height');
 var $author$project$Components$Avatar$getBaseStylesBySize = function (avatar) {
 	var _v0 = avatar.size;
 	return _List_fromArray(
@@ -13867,8 +13851,6 @@ var $author$project$Helpers$String$getFirstToAvatar = function (str) {
 	}
 };
 var $rtfeldman$elm_css$Html$Styled$img = $rtfeldman$elm_css$Html$Styled$node('img');
-var $rtfeldman$elm_css$Css$PercentageUnits = {$: 'PercentageUnits'};
-var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PercentageUnits, '%');
 var $rtfeldman$elm_css$Html$Styled$Attributes$src = function (url) {
 	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'src', url);
 };
@@ -13928,7 +13910,7 @@ var $author$project$Components$Avatar$render = function (avatar) {
 				$author$project$Components$Avatar$photo(avatar)
 			]));
 };
-var $author$project$Components$Employee$render = F2(
+var $author$project$Components$Employee$view = F2(
 	function (size, employee) {
 		return A2(
 			$rtfeldman$elm_css$Html$Styled$div,
@@ -13940,15 +13922,105 @@ var $author$project$Components$Employee$render = F2(
 					A2($author$project$Components$Employee$fullName, size, employee)
 				]));
 	});
+var $author$project$Components$Employee$render = function (employee) {
+	return A2($author$project$Components$Employee$view, $author$project$ComponentSize$Medium, employee);
+};
+var $author$project$Components$Employees$renderItem = function (employee) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$div,
+		_List_fromArray(
+			[$author$project$Components$Employees$itemStyles]),
+		_List_fromArray(
+			[
+				$author$project$Components$Employee$render(employee)
+			]));
+};
+var $author$project$Components$Employees$render = function (employees) {
+	return A2(
+		$rtfeldman$elm_css$Html$Styled$div,
+		_List_fromArray(
+			[$author$project$Components$Employees$baseStyles]),
+		A2($elm$core$List$map, $author$project$Components$Employees$renderItem, employees));
+};
+var $author$project$View$Home$view = F2(
+	function (store, _v0) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[$author$project$View$Home$baseStyles]),
+			_List_fromArray(
+				[
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_fromArray(
+						[$author$project$View$Home$headerStyles]),
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$text('Журнал сотрудников')
+						])),
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_fromArray(
+						[$author$project$View$Home$employeesStyles]),
+					_List_fromArray(
+						[
+							$author$project$Components$Employees$render(
+							$author$project$View$Home$getLastThreeEmployees(store.employees.items))
+						])),
+					A2(
+					$rtfeldman$elm_css$Html$Styled$div,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$author$project$Components$Link$default,
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$Attributes$href('add-employee')
+								]),
+							_List_fromArray(
+								[
+									$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
+								]))
+						]))
+				]));
+	});
+var $author$project$View$Home$render = F2(
+	function (store, model) {
+		return A2(
+			$author$project$Helpers$packDocument,
+			'Home',
+			A2($author$project$View$Home$view, store, model));
+	});
+var $rtfeldman$elm_css$Css$paddingTop = $rtfeldman$elm_css$Css$prop1('padding-top');
+var $author$project$View$NewEmployee$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$displayFlex,
+			$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$paddingTop(
+			$rtfeldman$elm_css$Css$px(20))
+		]));
+var $author$project$View$NewEmployee$buildEmployee = function (model) {
+	return {id: 0, name: model.name, surname: model.surname};
+};
+var $author$project$View$NewEmployee$exmapleStyles = _List_fromArray(
+	[
+		$rtfeldman$elm_css$Html$Styled$Attributes$css(
+		_List_fromArray(
+			[
+				$rtfeldman$elm_css$Css$width(
+				$rtfeldman$elm_css$Css$px(300))
+			]))
+	]);
 var $author$project$View$NewEmployee$exmaple = function (model) {
 	return A2(
 		$rtfeldman$elm_css$Html$Styled$div,
 		$author$project$View$NewEmployee$exmapleStyles,
 		_List_fromArray(
 			[
-				A2(
-				$author$project$Components$Employee$render,
-				$author$project$ComponentSize$Medium,
+				$author$project$Components$Employee$render(
 				$author$project$View$NewEmployee$buildEmployee(model))
 			]));
 };
@@ -14077,12 +14149,16 @@ var $author$project$Components$Button$baseAttributes = F2(
 			attributes);
 	});
 var $rtfeldman$elm_css$Html$Styled$button = $rtfeldman$elm_css$Html$Styled$node('button');
-var $author$project$Components$Button$render = F3(
+var $author$project$Components$Button$view = F3(
 	function (size, attributes, html) {
 		return A2(
 			$rtfeldman$elm_css$Html$Styled$button,
 			A2($author$project$Components$Button$baseAttributes, size, attributes),
 			html);
+	});
+var $author$project$Components$Button$render = F2(
+	function (attributes, html) {
+		return A3($author$project$Components$Button$view, $author$project$ComponentSize$Medium, attributes, html);
 	});
 var $rtfeldman$elm_css$Css$padding = $rtfeldman$elm_css$Css$prop1('padding');
 var $rtfeldman$elm_css$Css$cssFunction = F2(
@@ -14176,87 +14252,106 @@ var $author$project$Action$Store$Employees = function (a) {
 var $author$project$Action$Store$Employees$Insert = function (a) {
 	return {$: 'Insert', a: a};
 };
+var $author$project$Action$RedirectAfterAction = F2(
+	function (a, b) {
+		return {$: 'RedirectAfterAction', a: a, b: b};
+	});
 var $author$project$Action$Store = function (a) {
 	return {$: 'Store', a: a};
 };
-var $author$project$View$NewEmployee$save = function (model) {
-	return A3(
-		$elm$core$Basics$composeL,
-		A2($elm$core$Basics$composeL, $author$project$Action$Store, $author$project$Action$Store$Employees),
-		$author$project$Action$Store$Employees$Insert,
-		$author$project$View$NewEmployee$buildEmployee(model));
-};
+var $author$project$Helpers$prepareInternalUrlRequest = F2(
+	function (path, url) {
+		return $elm$browser$Browser$Internal(
+			_Utils_update(
+				url,
+				{path: path}));
+	});
+var $author$project$View$NewEmployee$save = F2(
+	function (store, model) {
+		return A3(
+			$elm$core$Basics$composeL,
+			A2(
+				$elm$core$Basics$composeL,
+				A2(
+					$elm$core$Basics$composeL,
+					$author$project$Action$RedirectAfterAction(
+						A2($author$project$Helpers$prepareInternalUrlRequest, '/', store.url)),
+					$author$project$Action$Store),
+				$author$project$Action$Store$Employees),
+			$author$project$Action$Store$Employees$Insert,
+			$author$project$View$NewEmployee$buildEmployee(model));
+	});
 var $rtfeldman$elm_css$Html$Styled$Attributes$value = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('value');
-var $author$project$View$NewEmployee$form = function (model) {
-	return A2(
-		$rtfeldman$elm_css$Html$Styled$div,
-		_List_fromArray(
-			[$author$project$View$NewEmployee$formStyles]),
-		_List_fromArray(
-			[
-				$author$project$View$NewEmployee$row(
-				A2(
-					$rtfeldman$elm_css$Html$Styled$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
-						]))),
-				$author$project$View$NewEmployee$row(
-				$author$project$Components$Input$render(
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$Attributes$value(model.name),
-							$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeName)
-						]))),
-				$author$project$View$NewEmployee$row(
-				$author$project$Components$Input$render(
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$Attributes$value(model.surname),
-							$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeSurname)
-						]))),
-				$author$project$View$NewEmployee$row(
-				A3(
-					$author$project$Components$Button$render,
-					$author$project$ComponentSize$Medium,
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$Events$onClick(
-							$author$project$View$NewEmployee$save(model))
-						]),
-					_List_fromArray(
-						[
-							$rtfeldman$elm_css$Html$Styled$text('Сохранить')
-						]))),
-				$author$project$View$NewEmployee$row(
-				A2(
-					$rtfeldman$elm_css$Html$Styled$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$author$project$Components$Link$default,
-							_List_fromArray(
-								[
-									$rtfeldman$elm_css$Html$Styled$Attributes$href('/')
-								]),
-							_List_fromArray(
-								[
-									$rtfeldman$elm_css$Html$Styled$text('Назад')
-								]))
-						])))
-			]));
-};
+var $author$project$View$NewEmployee$form = F2(
+	function (store, model) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[$author$project$View$NewEmployee$formStyles]),
+			_List_fromArray(
+				[
+					$author$project$View$NewEmployee$row(
+					A2(
+						$rtfeldman$elm_css$Html$Styled$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$text('Новый сотрудник')
+							]))),
+					$author$project$View$NewEmployee$row(
+					$author$project$Components$Input$render(
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$Attributes$value(model.name),
+								$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeName)
+							]))),
+					$author$project$View$NewEmployee$row(
+					$author$project$Components$Input$render(
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$Attributes$value(model.surname),
+								$rtfeldman$elm_css$Html$Styled$Events$onInput($author$project$View$NewEmployee$actionChangeSurname)
+							]))),
+					$author$project$View$NewEmployee$row(
+					A2(
+						$author$project$Components$Button$render,
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$Events$onClick(
+								A2($author$project$View$NewEmployee$save, store, model))
+							]),
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$text('Сохранить')
+							]))),
+					$author$project$View$NewEmployee$row(
+					A2(
+						$rtfeldman$elm_css$Html$Styled$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$author$project$Components$Link$default,
+								_List_fromArray(
+									[
+										$rtfeldman$elm_css$Html$Styled$Attributes$href('/')
+									]),
+								_List_fromArray(
+									[
+										$rtfeldman$elm_css$Html$Styled$text('Назад')
+									]))
+							])))
+				]));
+	});
 var $author$project$View$NewEmployee$view = F2(
-	function (_v0, model) {
+	function (store, model) {
 		return A2(
 			$rtfeldman$elm_css$Html$Styled$div,
 			_List_fromArray(
 				[$author$project$View$NewEmployee$baseStyles]),
 			_List_fromArray(
 				[
-					$author$project$View$NewEmployee$form(model),
+					A2($author$project$View$NewEmployee$form, store, model),
 					$author$project$View$NewEmployee$exmaple(model)
 				]));
 	});
@@ -14409,7 +14504,7 @@ var $author$project$Main$updateUrl = F2(
 				store: A2($author$project$Store$updateUrl, url, model.store)
 			});
 	});
-var $author$project$Main$updateByClickUrl = F2(
+var $author$project$Main$updateLink = F2(
 	function (request, model) {
 		if (request.$ === 'Internal') {
 			var url = request.a;
@@ -14426,6 +14521,58 @@ var $author$project$Main$updateByClickUrl = F2(
 				$elm$browser$Browser$Navigation$load(url));
 		}
 	});
+var $elm$json$Json$Encode$int = _Json_wrap;
+var $author$project$Employee$encode = function (employee) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'id',
+				$elm$json$Json$Encode$int(employee.id)),
+				_Utils_Tuple2(
+				'name',
+				$elm$json$Json$Encode$string(employee.name)),
+				_Utils_Tuple2(
+				'surname',
+				$elm$json$Json$Encode$string(employee.surname))
+			]));
+};
+var $author$project$Employee$encodeDictItem = function (_v0) {
+	var id = _v0.a;
+	var employee = _v0.b;
+	return _Utils_Tuple2(
+		$elm$core$String$fromInt(id),
+		$author$project$Employee$encode(employee));
+};
+var $author$project$Employee$encodeEmployees = function (employees) {
+	return $elm$json$Json$Encode$object(
+		A2(
+			$elm$core$List$map,
+			$author$project$Employee$encodeDictItem,
+			$elm$core$Dict$toList(employees)));
+};
+var $author$project$Store$Employees$encode = function (model) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'nextId',
+				$elm$json$Json$Encode$int(model.nextId)),
+				_Utils_Tuple2(
+				'items',
+				$author$project$Employee$encodeEmployees(model.items))
+			]));
+};
+var $author$project$Store$encode = function (store) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'employees',
+				$author$project$Store$Employees$encode(store.employees))
+			]));
+};
+var $author$project$Ports$saveStore = _Platform_outgoingPort('saveStore', $elm$core$Basics$identity);
 var $author$project$Employee$insert = F3(
 	function (employees, id, employee) {
 		return A3($elm$core$Dict$insert, id, employee, employees);
@@ -14444,6 +14591,17 @@ var $author$project$Employee$updateId = F2(
 			employee,
 			{id: id});
 	});
+var $author$project$Store$Employees$insert = F2(
+	function (model, employee) {
+		return {
+			items: A3(
+				$author$project$Employee$insert,
+				model.items,
+				model.nextId,
+				A2($author$project$Employee$updateId, model.nextId, employee)),
+			nextId: model.nextId + 1
+		};
+	});
 var $author$project$Store$Employees$update = F2(
 	function (action, model) {
 		if (action.$ === 'Change') {
@@ -14455,14 +14613,7 @@ var $author$project$Store$Employees$update = F2(
 		} else {
 			var employee = action.a;
 			return _Utils_Tuple2(
-				{
-					items: A3(
-						$author$project$Employee$insert,
-						model.items,
-						model.lastId,
-						A2($author$project$Employee$updateId, model.lastId, employee)),
-					lastId: model.lastId + 1
-				},
+				A2($author$project$Store$Employees$insert, model, employee),
 				$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -14477,10 +14628,25 @@ var $author$project$Store$updateEmployees = F2(
 				{employees: employees}),
 			cmd);
 	});
-var $author$project$Store$update = F2(
+var $author$project$Store$updateModel = F2(
 	function (action, model) {
 		var actionEmployees = action.a;
 		return A2($author$project$Store$updateEmployees, actionEmployees, model);
+	});
+var $author$project$Store$update = F2(
+	function (action, model) {
+		var _v0 = A2($author$project$Store$updateModel, action, model);
+		var newModel = _v0.a;
+		var cmds = _v0.b;
+		return _Utils_Tuple2(
+			newModel,
+			$elm$core$Platform$Cmd$batch(
+				_List_fromArray(
+					[
+						$author$project$Ports$saveStore(
+						$author$project$Store$encode(newModel)),
+						cmds
+					])));
 	});
 var $author$project$Main$updateStore = F2(
 	function (action, model) {
@@ -14502,7 +14668,17 @@ var $author$project$Main$update = F2(
 				return $author$project$Router$handleUrl(model.store);
 			case 'LinkClicked':
 				var request = action.a;
-				return A2($author$project$Main$updateByClickUrl, request, model);
+				return A2($author$project$Main$updateLink, request, model);
+			case 'Redirect':
+				var request = action.a;
+				return A2($author$project$Main$updateLink, request, model);
+			case 'RedirectAfterAction':
+				var request = action.a;
+				var actionAfterRedirect = action.b;
+				return A2(
+					$author$project$Main$updateByRedirectAction,
+					actionAfterRedirect,
+					A2($author$project$Main$updateLink, request, model));
 			case 'Store':
 				var storeAction = action.a;
 				return A2($author$project$Main$updateStore, storeAction, model);
@@ -14513,7 +14689,20 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
+var $author$project$Main$updateByRedirectAction = F2(
+	function (action, _v0) {
+		var model = _v0.a;
+		var cmds = _v0.b;
+		var _v1 = A2($author$project$Main$update, action, model);
+		var newModel = _v1.a;
+		var newCmds = _v1.b;
+		return _Utils_Tuple2(
+			newModel,
+			$elm$core$Platform$Cmd$batch(
+				_List_fromArray(
+					[newCmds, cmds])));
+	});
 var $author$project$Main$main = $elm$browser$Browser$application(
 	{init: $author$project$Main$init, onUrlChange: $author$project$Action$UrlChanged, onUrlRequest: $author$project$Action$LinkClicked, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$render});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Action.Action","aliases":{"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"},"Employee.Employee":{"args":[],"type":"{ id : Employee.Id, name : String.String, surname : String.String }"},"Employee.Id":{"args":[],"type":"Basics.Int"}},"unions":{"Action.Action":{"args":[],"tags":{"None":[],"Store":["Action.Store.Action"],"Example":["Action.Example.Action"],"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"Views":["Action.Views.Action"]}},"Action.Example.Action":{"args":[],"tags":{"Increment":[],"Decrement":[]}},"Action.Store.Action":{"args":[],"tags":{"Employees":["Action.Store.Employees.Action"]}},"Action.Views.Action":{"args":[],"tags":{"Home":["Action.Views.Home.Action"],"NewEmployee":["Action.Views.NewEmployee.Action"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Action.Store.Employees.Action":{"args":[],"tags":{"Insert":["Employee.Employee"],"Change":["Employee.Id","Employee.Employee"]}},"Action.Views.Home.Action":{"args":[],"tags":{"None":[]}},"Action.Views.NewEmployee.Action":{"args":[],"tags":{"UpdateName":["String.String"],"UpdateSurname":["String.String"]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Action.Action","aliases":{"Url.Url":{"args":[],"type":"{ protocol : Url.Protocol, host : String.String, port_ : Maybe.Maybe Basics.Int, path : String.String, query : Maybe.Maybe String.String, fragment : Maybe.Maybe String.String }"},"Employee.Employee":{"args":[],"type":"{ id : Employee.Id, name : String.String, surname : String.String }"},"Employee.Id":{"args":[],"type":"Basics.Int"}},"unions":{"Action.Action":{"args":[],"tags":{"None":[],"LinkClicked":["Browser.UrlRequest"],"UrlChanged":["Url.Url"],"Redirect":["Browser.UrlRequest"],"RedirectAfterAction":["Browser.UrlRequest","Action.Action"],"Store":["Action.Store.Action"],"Example":["Action.Example.Action"],"Views":["Action.Views.Action"]}},"Action.Example.Action":{"args":[],"tags":{"Increment":[],"Decrement":[]}},"Action.Store.Action":{"args":[],"tags":{"Employees":["Action.Store.Employees.Action"]}},"Action.Views.Action":{"args":[],"tags":{"Home":["Action.Views.Home.Action"],"NewEmployee":["Action.Views.NewEmployee.Action"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Url.Protocol":{"args":[],"tags":{"Http":[],"Https":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Browser.UrlRequest":{"args":[],"tags":{"Internal":["Url.Url"],"External":["String.String"]}},"Action.Store.Employees.Action":{"args":[],"tags":{"Insert":["Employee.Employee"],"Change":["Employee.Id","Employee.Employee"]}},"Action.Views.Home.Action":{"args":[],"tags":{"None":[]}},"Action.Views.NewEmployee.Action":{"args":[],"tags":{"UpdateName":["String.String"],"UpdateSurname":["String.String"]}}}}})}});}(this));

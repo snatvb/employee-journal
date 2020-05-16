@@ -1,15 +1,17 @@
-module Helpers exposing (packDocument, packModelWithCmd)
-
-import Browser exposing (Document)
-import Html.Styled exposing (Html, toUnstyled)
+module Helpers exposing (packDocument, packModelWithCmd, prepareInternalUrlRequest)
 
 import Action exposing (Action)
+import Browser exposing (Document)
+import Html.Styled exposing (Html, toUnstyled)
+import Url exposing (Url)
+
 
 packDocument : String -> Html Action -> Document Action
 packDocument title html =
     { title = title
-    , body = [toUnstyled html]
+    , body = [ toUnstyled html ]
     }
+
 
 packModelWithCmd : (m -> pm) -> (a -> m -> ( m, Cmd Action )) -> a -> m -> ( pm, Cmd Action )
 packModelWithCmd packer updateFn action model =
@@ -18,3 +20,8 @@ packModelWithCmd packer updateFn action model =
             updateFn action model
     in
     ( packer updatedModel, cmd )
+
+
+prepareInternalUrlRequest : String -> Url -> Browser.UrlRequest
+prepareInternalUrlRequest path url =
+    Browser.Internal { url | path = path }

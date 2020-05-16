@@ -1,27 +1,24 @@
 module Helpers.Color exposing (getById)
 
-import Css exposing (Color, hex)
 import Array
+import Css exposing (Color, hex)
+
 
 colors : Array.Array Color
 colors =
     Array.fromList
-        [ hex "333333"
-        , hex "333333"
-        , hex "333333"
-        , hex "333333"
-        , hex "333333"
-        , hex "333333"
-        , hex "333333"
-        , hex "333333"
-        , hex "333333"
-        , hex "333333"
+        [ hex "#333333"
+        , hex "#3498db"
+        , hex "#22313f"
+        , hex "#c0392b"
+        , hex "#9b59b6"
+        , hex "#f39c12"
         ]
 
 
 calcColorIndex : Int -> Int
 calcColorIndex int =
-    int // Array.length colors
+    remainderBy (Array.length colors) int
 
 
 getById : Int -> Color

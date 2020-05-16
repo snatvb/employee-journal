@@ -3,8 +3,11 @@ module View.Home exposing (Model, init, render, update)
 import Action exposing (Action)
 import Action.Views.Home as HomeActions
 import Browser exposing (Document)
+import Components.Employees as EmployeesComponent
 import Components.Link as Link
 import Css exposing (..)
+import Dict
+import Employee
 import Helpers exposing (packDocument)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href)
@@ -36,6 +39,8 @@ baseStyles =
         , flexDirection column
         , justifyContent center
         , alignItems center
+        , width (pct 100)
+        , height (pct 100)
         ]
 
 
@@ -43,14 +48,21 @@ headerStyles : Attribute Action
 headerStyles =
     css
         [ fontSize (px 24)
-        , margin2 (px 20) (px 0)
+        ]
+
+
+employeesStyles : Attribute Action
+employeesStyles =
+    css
+        [ margin2 (px 40) (px 0)
         ]
 
 
 view : Store -> Model -> Html Action
-view _ _ =
+view store _ =
     div [ baseStyles ]
-        [ div [headerStyles] [ text "Журнал сотрудников" ]
+        [ div [ headerStyles ] [ text "Журнал сотрудников" ]
+        , div [ employeesStyles ] [ EmployeesComponent.render <| getLastThreeEmployees store.employees.items ]
         , div []
             [ Link.default [ href "add-employee" ] [ text "Новый сотрудник" ]
             ]
@@ -60,3 +72,12 @@ view _ _ =
 render : Store -> Model -> Document Action
 render store model =
     packDocument "Home" (view store model)
+
+
+getLastThreeEmployees : Employee.Employees -> List Employee.Employee
+getLastThreeEmployees employees =
+    List.take 3
+        << List.reverse
+        << Dict.values
+    <|
+        employees

@@ -9,8 +9,10 @@ import Url exposing (Url)
 
 type Action
     = None
-    | Store Action.Store.Action
-    | Example Action.Example.Action
     | LinkClicked UrlRequest
     | UrlChanged Url
+    | Redirect UrlRequest
+    | RedirectAfterAction UrlRequest Action
+    | Store Action.Store.Action
+    | Example Action.Example.Action
     | Views Action.Views.Action

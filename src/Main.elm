@@ -42,7 +42,14 @@ update action model =
             handleUrl model.store
 
         Action.LinkClicked request ->
-            updateByClickUrl request model
+            updateLink request model
+
+        Action.Redirect request ->
+            updateLink request model
+
+        Action.RedirectAfterAction request actionAfterRedirect ->
+            updateByRedirectAction actionAfterRedirect <|
+                updateLink request model
 
         Action.Store storeAction ->
             updateStore storeAction model
@@ -62,8 +69,17 @@ updateUrl url model =
     }
 
 
-updateByClickUrl : UrlRequest -> Model -> ( Model, Cmd Action )
-updateByClickUrl request model =
+updateByRedirectAction : Action -> ( Model, Cmd Action ) -> ( Model, Cmd Action )
+updateByRedirectAction action ( model, cmds ) =
+    let
+        ( newModel, newCmds ) =
+            update action model
+    in
+    ( newModel, Cmd.batch [ newCmds, cmds ] )
+
+
+updateLink : UrlRequest -> Model -> ( Model, Cmd Action )
+updateLink request model =
     case request of
         Browser.Internal url ->
             ( updateUrl url model, Navigation.pushUrl model.store.navigationKey (URL.toString url) )
