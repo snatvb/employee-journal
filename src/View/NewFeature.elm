@@ -7,13 +7,14 @@ import Action.Views as ViewsActions
 import Action.Views.NewFeature as NewFeatureActions
 import Browser exposing (Document)
 import Components.Button as Button
+import Components.Date as DateComponent
 import Components.Input as Input
 import Components.Link as Link
 import Css exposing (..)
 import Date
 import Helpers exposing (packDocument, prepareInternalUrlRequest)
 import Html.Styled exposing (Attribute, Html, div, text)
-import Html.Styled.Attributes exposing (css, href, value, placeholder)
+import Html.Styled.Attributes exposing (css, href, placeholder, value)
 import Html.Styled.Events exposing (onClick, onInput)
 import Store exposing (Store)
 import Structures.Feature exposing (Feature)
@@ -85,6 +86,11 @@ form store model =
         , row [ Input.render [ value model.feautre.title, onInput titleChangeAction, placeholder "Название" ] ]
         , row [ Input.render [ value model.feautre.pm, onInput pmChangeAction, placeholder "Проектный менедржер" ] ]
         , row [ Input.render [ value model.feautre.fo, onInput foChangeAction, placeholder "Фич-овнер" ] ]
+        , row
+            [ DateComponent.render [] model.feautre.dateStart
+            , text " - "
+            , DateComponent.render [] model.feautre.dateStart
+            ]
         , row [ Button.render [] [ text "Сохранить" ] ]
         , row
             [ div []
@@ -144,6 +150,7 @@ pmChangeAction =
         << ViewsActions.NewFeature
         << NewFeatureActions.Form
         << NewFeatureActions.UpdatePM
+
 
 foChangeAction : String -> Action
 foChangeAction =
