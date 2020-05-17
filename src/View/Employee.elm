@@ -3,14 +3,15 @@ module View.Employee exposing (Model, init, render, update)
 import Action exposing (Action)
 import Action.Views.Home as HomeActions
 import Browser exposing (Document)
-import Components.Employees as EmployeesComponent
+import Components.Employee as EmployeeComponent
 import Components.Link as Link
+import Components.NotFound as NotFound
 import Css exposing (..)
-import Dict
 import Employee
-import Helpers exposing (packDocument, prepareInternalUrlRequest)
+import Helpers exposing (packDocument)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href)
+import Selectors.Store.Employee as EmployeeSelectors
 import Store exposing (Store)
 
 
@@ -44,12 +45,37 @@ baseStyles =
         ]
 
 
-view : Store -> Model -> Html Action
-view store _ =
+backLinkStyles : Attribute Action
+backLinkStyles =
+    css [ marginTop (px 20) ]
+
+
+viewEmployee : Employee.Employee -> Html Action
+viewEmployee employee =
     div [ baseStyles ]
-        [ text "here will be employee"
-        , Link.default [ href "/" ] [ text "Назад" ]
+        [ EmployeeComponent.render employee
+        , Link.default [ backLinkStyles, href "/" ] [ text "Назад" ]
         ]
+
+
+viewNotFound : Html Action
+viewNotFound =
+    div [ baseStyles ]
+        [ NotFound.render []
+            [ div [] [ text "Сотрудник не найден" ]
+            , Link.default [ backLinkStyles, href "/" ] [ text "Назад" ]
+            ]
+        ]
+
+
+view : Store -> Model -> Html Action
+view store model =
+    case EmployeeSelectors.get model.id store of
+        Just employee ->
+            viewEmployee employee
+
+        Nothing ->
+            viewNotFound
 
 
 render : Store -> Model -> Document Action
