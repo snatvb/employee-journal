@@ -3,7 +3,7 @@ module Components.Employee exposing (render)
 import ComponentSize exposing (Size)
 import Components.Avatar as Avatar
 import Css exposing (..)
-import Employee exposing (Employee)
+import Structures.Employee exposing (Employee)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css)
 

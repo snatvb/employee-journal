@@ -7,11 +7,11 @@ import Components.Employees as EmployeesComponent
 import Components.Link as Link
 import Css exposing (..)
 import Dict
-import Employee
 import Helpers exposing (packDocument, prepareInternalUrlRequest)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href)
 import Store exposing (Store)
+import Structures.Employee as Employee
 
 
 type alias Model =
@@ -58,6 +58,14 @@ employeesStyles =
         ]
 
 
+linkRowStyles : Attribute Action
+linkRowStyles =
+    css
+        [ margin2 (px 10) (px 0)
+        , textAlign center
+        ]
+
+
 makePathFromEmployee : Employee.Employee -> String
 makePathFromEmployee employee =
     "/employee/" ++ String.fromInt employee.id
@@ -85,7 +93,8 @@ view store _ =
         [ div [ headerStyles ] [ text "Журнал сотрудников" ]
         , div [ employeesStyles ] [ viewEmployees store ]
         , div []
-            [ Link.default [ href "add-employee" ] [ text "Новый сотрудник" ]
+            [ linkRow [ Link.default [ href "add-employee" ] [ text "Новый сотрудник" ] ]
+            , linkRow [ Link.default [ href "add-feature" ] [ text "Добавить фичу" ] ]
             ]
         ]
 
@@ -93,6 +102,11 @@ view store _ =
 render : Store -> Model -> Document Action
 render store model =
     packDocument "Home" (view store model)
+
+
+linkRow : List (Html Action) -> Html Action
+linkRow =
+    div [ linkRowStyles ]
 
 
 getLastThreeEmployees : Employee.Employees -> List Employee.Employee

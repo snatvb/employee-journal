@@ -3,7 +3,7 @@ module Components.Employees exposing (onItemClick, onItemHover, render)
 import Components.Employee as EmployeeItem
 import Components.Event as Events exposing (Event)
 import Css exposing (..)
-import Employee exposing (Employee)
+import Structures.Employee exposing (Employee)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (onClick, onMouseEnter)

@@ -2,8 +2,8 @@ module Store.Employees exposing (Model, encode, update)
 
 import Action exposing (Action)
 import Action.Store.Employees as EmployeesActions
-import Employee
 import Json.Encode as Encoder
+import Structures.Employee as Employee
 
 
 type alias Model =

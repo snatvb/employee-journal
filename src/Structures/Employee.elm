@@ -1,4 +1,4 @@
-module Employee exposing
+module Structures.Employee exposing
     ( Employee
     , Employees
     , Id

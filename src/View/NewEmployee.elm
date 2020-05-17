@@ -11,12 +11,12 @@ import Components.Employee
 import Components.Input as Input
 import Components.Link as Link
 import Css exposing (..)
-import Employee exposing (Employee)
 import Helpers exposing (packDocument, prepareInternalUrlRequest)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href, value)
 import Html.Styled.Events exposing (onClick, onInput)
 import Store exposing (Store)
+import Structures.Employee exposing (Employee)
 
 
 type alias Model =
@@ -109,6 +109,8 @@ baseStyles =
         [ displayFlex
         , justifyContent center
         , alignItems center
+        , width (pct 100)
+        , height (pct 100)
         , paddingTop (px 20)
         ]
 

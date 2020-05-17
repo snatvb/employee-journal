@@ -12,6 +12,7 @@ import Url as URL exposing (Url)
 import View
 import View.Employee
 import View.Home
+import View.NewFeature
 import View.NewEmployee
 
 
@@ -59,9 +60,6 @@ update action model =
         Action.Views viewsAction ->
             View.update viewsAction model
 
-        _ ->
-            ( model, Cmd.none )
-
 
 updateUrl : Url -> Model -> Model
 updateUrl url model =
@@ -104,6 +102,9 @@ render model =
 
         Model.NewEmployee newEmployee ->
             View.NewEmployee.render model.store newEmployee
+
+        Model.NewFeature submodel ->
+            View.NewFeature.render model.store submodel
 
         Model.Employee employee ->
             View.Employee.render model.store employee

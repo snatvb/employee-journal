@@ -23,7 +23,4 @@ addCustomAttributes attributes =
 
 render : List (Attribute msg) -> Html msg
 render attributes =
-  div []
-    [
-      input (addCustomAttributes attributes) []
-    ]
+  input (addCustomAttributes attributes) []

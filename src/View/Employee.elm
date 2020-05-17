@@ -7,7 +7,7 @@ import Components.Employee as EmployeeComponent
 import Components.Link as Link
 import Components.NotFound as NotFound
 import Css exposing (..)
-import Employee
+import Structures.Employee as Employee
 import Helpers exposing (packDocument)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href)

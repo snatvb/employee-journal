@@ -5,15 +5,17 @@ import Action.Store as StoreActions
 import Action.Store.Employees as EmployeesActions
 import Browser.Navigation as Navigation
 import Dict exposing (empty)
-import Employee
+import Structures.Employee as Employee
 import Json.Encode as Encoder
 import Ports exposing (saveStore)
 import Store.Employees
+import Store.Features
 import Url exposing (Url)
 
 
 type alias Store =
     { employees : Store.Employees.Model
+    , features : Store.Features.Model
     , navigationKey : Navigation.Key
     , url : Url
     }
@@ -31,6 +33,7 @@ initEmployeesForTest =
 initStore : Url -> Navigation.Key -> Store
 initStore url key =
     { employees = { nextId = 3, items = initEmployeesForTest }
+    , features = Store.Features.init
     , navigationKey = key
     , url = url
     }

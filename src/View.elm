@@ -6,17 +6,20 @@ import Helpers exposing (packModelWithCmd)
 import Model exposing (Model, ViewModel)
 import View.Home
 import View.NewEmployee
-
+import View.NewFeature
 
 
 updateViewModel : Action.Views.Action -> ViewModel -> ( ViewModel, Cmd Action )
 updateViewModel action viewModel =
-    case (action, viewModel) of
-        (Action.Views.Home viewActon, Model.Home model) ->
+    case ( action, viewModel ) of
+        ( Action.Views.Home viewActon, Model.Home model ) ->
             packModelWithCmd Model.Home View.Home.update viewActon model
 
-        (Action.Views.NewEmployee viewActon, Model.NewEmployee model) ->
+        ( Action.Views.NewEmployee viewActon, Model.NewEmployee model ) ->
             packModelWithCmd Model.NewEmployee View.NewEmployee.update viewActon model
+
+        ( Action.Views.NewFeature viewActon, Model.NewFeature model ) ->
+            packModelWithCmd Model.NewFeature View.NewFeature.update viewActon model
 
         _ ->
             ( viewModel, Cmd.none )

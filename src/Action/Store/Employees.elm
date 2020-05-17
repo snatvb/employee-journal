@@ -1,6 +1,6 @@
 module Action.Store.Employees exposing (Action(..))
 
-import Employee exposing (Employee, Id)
+import Structures.Employee exposing (Employee, Id)
 
 
 type Action
