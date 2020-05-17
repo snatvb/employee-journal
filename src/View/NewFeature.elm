@@ -10,6 +10,7 @@ import Components.Button as Button
 import Components.Date as DateComponent
 import Components.Input as Input
 import Components.Link as Link
+import Components.MonthChooser as MonthChooser
 import Css exposing (..)
 import Date
 import Helpers exposing (packDocument, prepareInternalUrlRequest)
@@ -30,7 +31,7 @@ initFeature : Feature
 initFeature =
     { title = ""
     , description = ""
-    , dateStart = Date.fromCalendarDate 1970 Jan 1
+    , dateStart = Date.fromCalendarDate 1970 Jan -1
     , dateEnd = Date.fromCalendarDate 1970 Jan 1
     , pm = ""
     , fo = ""
@@ -90,6 +91,9 @@ form store model =
             [ DateComponent.render [] model.feautre.dateStart
             , text " - "
             , DateComponent.render [] model.feautre.dateStart
+            ]
+        , row
+            [ MonthChooser.render [] model.feautre.dateStart
             ]
         , row [ Button.render [] [ text "Сохранить" ] ]
         , row
