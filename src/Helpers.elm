@@ -1,4 +1,4 @@
-module Helpers exposing (packDocument, packModelWithCmd, prepareInternalUrlRequest)
+module Helpers exposing (packDocument, fixPathInUrl, packModelWithCmd, prepareInternalUrlRequest)
 
 import Action exposing (Action)
 import Browser exposing (Document)
@@ -25,3 +25,12 @@ packModelWithCmd packer updateFn action model =
 prepareInternalUrlRequest : String -> Url -> Browser.UrlRequest
 prepareInternalUrlRequest path url =
     Browser.Internal { url | path = path }
+
+
+fixPathInUrl : Url -> Url
+fixPathInUrl url =
+    if String.startsWith "/" url.path then
+        url
+
+    else
+        { url | path = "/" ++ url.path }

@@ -4,13 +4,14 @@ import Action exposing (Action)
 import Action.Store
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation as Navigation
+import Helpers exposing (fixPathInUrl)
 import Model exposing (Model)
 import Router exposing (handleUrl)
 import Store exposing (initStore)
 import Url as URL exposing (Url)
 import View
-import View.Home
 import View.Employee
+import View.Home
 import View.NewEmployee
 
 
@@ -83,7 +84,11 @@ updateLink : UrlRequest -> Model -> ( Model, Cmd Action )
 updateLink request model =
     case request of
         Browser.Internal url ->
-            ( updateUrl url model, Navigation.pushUrl model.store.navigationKey (URL.toString url) )
+            let
+                fixedUrl =
+                    fixPathInUrl url
+            in
+            ( updateUrl fixedUrl model, Navigation.pushUrl model.store.navigationKey (URL.toString fixedUrl) )
 
         Browser.External url ->
             ( model
