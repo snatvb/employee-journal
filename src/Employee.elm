@@ -7,10 +7,12 @@ module Employee exposing
     , insert
     , remove
     , updateId
+    , urlParser
     )
 
 import Dict
 import Json.Encode as Encoder
+import Url.Parser
 
 
 type alias Id =
@@ -62,3 +64,7 @@ encodeEmployees employees =
     Encoder.object <|
         List.map encodeDictItem <|
             Dict.toList employees
+
+urlParser : Url.Parser.Parser (Id -> a) a
+urlParser =
+    Url.Parser.custom "EMPLOYEE" String.toInt

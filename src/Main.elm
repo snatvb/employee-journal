@@ -10,6 +10,7 @@ import Store exposing (initStore)
 import Url as URL exposing (Url)
 import View
 import View.Home
+import View.Employee
 import View.NewEmployee
 
 
@@ -38,8 +39,8 @@ update action model =
         Action.None ->
             ( model, Cmd.none )
 
-        Action.UrlChanged _ ->
-            handleUrl model.store
+        Action.UrlChanged url ->
+            handleUrl <| Store.updateUrl url model.store
 
         Action.LinkClicked request ->
             updateLink request model
@@ -98,6 +99,9 @@ render model =
 
         Model.NewEmployee newEmployee ->
             View.NewEmployee.render model.store newEmployee
+
+        Model.Employee employee ->
+            View.Employee.render model.store employee
 
 
 main : Program () Model Action

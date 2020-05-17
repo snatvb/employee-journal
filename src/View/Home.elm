@@ -8,7 +8,7 @@ import Components.Link as Link
 import Css exposing (..)
 import Dict
 import Employee
-import Helpers exposing (packDocument)
+import Helpers exposing (packDocument, prepareInternalUrlRequest)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href)
 import Store exposing (Store)
@@ -58,10 +58,23 @@ employeesStyles =
         ]
 
 
+makePathFromEmployee : Employee.Employee -> String
+makePathFromEmployee employee =
+    "/employee/" ++ String.fromInt employee.id
+
+
+handleEmployeeClick : Store -> Employee.Employee -> Action
+handleEmployeeClick store employee =
+    Action.Redirect
+        << prepareInternalUrlRequest (makePathFromEmployee employee)
+    <|
+        store.url
+
+
 viewEmployees : Store -> Html Action
 viewEmployees store =
     EmployeesComponent.render
-        [EmployeesComponent.onItemClick Action.None]
+        [ EmployeesComponent.onItemClick <| handleEmployeeClick store ]
     <|
         getLastThreeEmployees store.employees.items
 

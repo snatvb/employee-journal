@@ -10583,6 +10583,22 @@ var $author$project$View$Home$init = _Utils_Tuple2(
 var $author$project$Router$getHome = function (store) {
 	return A3($author$project$Router$convertInitView, $author$project$Model$Home, $author$project$View$Home$init, store);
 };
+var $author$project$Model$Employee = function (a) {
+	return {$: 'Employee', a: a};
+};
+var $author$project$View$Employee$init = function (id) {
+	return _Utils_Tuple2(
+		{id: id},
+		$elm$core$Platform$Cmd$none);
+};
+var $author$project$Router$getEmployee = F2(
+	function (store, employeeId) {
+		return A3(
+			$author$project$Router$convertInitView,
+			$author$project$Model$Employee,
+			$author$project$View$Employee$init(employeeId),
+			store);
+	});
 var $author$project$Model$NewEmployee = function (a) {
 	return {$: 'NewEmployee', a: a};
 };
@@ -10673,11 +10689,57 @@ var $elm$url$Url$Parser$s = function (str) {
 			}
 		});
 };
+var $elm$url$Url$Parser$slash = F2(
+	function (_v0, _v1) {
+		var parseBefore = _v0.a;
+		var parseAfter = _v1.a;
+		return $elm$url$Url$Parser$Parser(
+			function (state) {
+				return A2(
+					$elm$core$List$concatMap,
+					parseAfter,
+					parseBefore(state));
+			});
+	});
 var $elm$url$Url$Parser$top = $elm$url$Url$Parser$Parser(
 	function (state) {
 		return _List_fromArray(
 			[state]);
 	});
+var $elm$url$Url$Parser$custom = F2(
+	function (tipe, stringToSomething) {
+		return $elm$url$Url$Parser$Parser(
+			function (_v0) {
+				var visited = _v0.visited;
+				var unvisited = _v0.unvisited;
+				var params = _v0.params;
+				var frag = _v0.frag;
+				var value = _v0.value;
+				if (!unvisited.b) {
+					return _List_Nil;
+				} else {
+					var next = unvisited.a;
+					var rest = unvisited.b;
+					var _v2 = stringToSomething(next);
+					if (_v2.$ === 'Just') {
+						var nextValue = _v2.a;
+						return _List_fromArray(
+							[
+								A5(
+								$elm$url$Url$Parser$State,
+								A2($elm$core$List$cons, next, visited),
+								rest,
+								params,
+								frag,
+								value(nextValue))
+							]);
+					} else {
+						return _List_Nil;
+					}
+				}
+			});
+	});
+var $author$project$Employee$urlParser = A2($elm$url$Url$Parser$custom, 'EMPLOYEE', $elm$core$String$toInt);
 var $author$project$Router$parse = function (store) {
 	return $elm$url$Url$Parser$oneOf(
 		_List_fromArray(
@@ -10689,7 +10751,16 @@ var $author$project$Router$parse = function (store) {
 				A2(
 				$author$project$Router$route,
 				$elm$url$Url$Parser$s('add-employee'),
-				$author$project$Router$getNewEmployee(store))
+				$author$project$Router$getNewEmployee(store)),
+				A2(
+				$author$project$Router$route,
+				A2(
+					$elm$url$Url$Parser$slash,
+					$elm$url$Url$Parser$s('employee'),
+					$author$project$Employee$urlParser),
+				function (employeeId) {
+					return A2($author$project$Router$getEmployee, store, employeeId);
+				})
 			]));
 };
 var $elm$url$Url$Parser$getFirstMatch = function (states) {
@@ -13174,7 +13245,7 @@ var $rtfeldman$elm_css$Css$justifyContent = function (fn) {
 var $rtfeldman$elm_css$Css$PercentageUnits = {$: 'PercentageUnits'};
 var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$PercentageUnits, '%');
 var $rtfeldman$elm_css$Css$width = $rtfeldman$elm_css$Css$prop1('width');
-var $author$project$View$Home$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+var $author$project$View$Employee$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
 	_List_fromArray(
 		[
 			$rtfeldman$elm_css$Css$displayFlex,
@@ -13623,6 +13694,72 @@ var $author$project$Components$Link$default = F2(
 			html);
 	});
 var $rtfeldman$elm_css$Html$Styled$div = $rtfeldman$elm_css$Html$Styled$node('div');
+var $rtfeldman$elm_css$VirtualDom$Styled$property = F2(
+	function (key, value) {
+		return A3(
+			$rtfeldman$elm_css$VirtualDom$Styled$Attribute,
+			A2($elm$virtual_dom$VirtualDom$property, key, value),
+			_List_Nil,
+			'');
+	});
+var $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			$rtfeldman$elm_css$VirtualDom$Styled$property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $rtfeldman$elm_css$Html$Styled$Attributes$href = function (url) {
+	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'href', url);
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
+	return {$: 'Unstyled', a: a};
+};
+var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
+	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
+		$elm$virtual_dom$VirtualDom$text(str));
+};
+var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
+var $author$project$View$Employee$view = F2(
+	function (store, _v0) {
+		return A2(
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[$author$project$View$Employee$baseStyles]),
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Html$Styled$text('here will be employee'),
+					A2(
+					$author$project$Components$Link$default,
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$Attributes$href('/')
+						]),
+					_List_fromArray(
+						[
+							$rtfeldman$elm_css$Html$Styled$text('Назад')
+						]))
+				]));
+	});
+var $author$project$View$Employee$render = F2(
+	function (store, model) {
+		return A2(
+			$author$project$Helpers$packDocument,
+			'Home',
+			A2($author$project$View$Employee$view, store, model));
+	});
+var $author$project$View$Home$baseStyles = $rtfeldman$elm_css$Html$Styled$Attributes$css(
+	_List_fromArray(
+		[
+			$rtfeldman$elm_css$Css$displayFlex,
+			$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column),
+			$rtfeldman$elm_css$Css$justifyContent($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$alignItems($rtfeldman$elm_css$Css$center),
+			$rtfeldman$elm_css$Css$width(
+			$rtfeldman$elm_css$Css$pct(100)),
+			$rtfeldman$elm_css$Css$height(
+			$rtfeldman$elm_css$Css$pct(100))
+		]));
 var $rtfeldman$elm_css$Css$prop2 = F3(
 	function (key, argA, argB) {
 		return A2(
@@ -13652,33 +13789,6 @@ var $author$project$View$Home$headerStyles = $rtfeldman$elm_css$Html$Styled$Attr
 			$rtfeldman$elm_css$Css$fontSize(
 			$rtfeldman$elm_css$Css$px(24))
 		]));
-var $rtfeldman$elm_css$VirtualDom$Styled$property = F2(
-	function (key, value) {
-		return A3(
-			$rtfeldman$elm_css$VirtualDom$Styled$Attribute,
-			A2($elm$virtual_dom$VirtualDom$property, key, value),
-			_List_Nil,
-			'');
-	});
-var $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			$rtfeldman$elm_css$VirtualDom$Styled$property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
-var $rtfeldman$elm_css$Html$Styled$Attributes$href = function (url) {
-	return A2($rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'href', url);
-};
-var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
-	return {$: 'Unstyled', a: a};
-};
-var $rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
-	return $rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
-		$elm$virtual_dom$VirtualDom$text(str));
-};
-var $rtfeldman$elm_css$Html$Styled$text = $rtfeldman$elm_css$VirtualDom$Styled$text;
-var $author$project$Action$None = {$: 'None'};
 var $author$project$View$Home$getLastThreeEmployees = function (employees) {
 	return A3(
 		$elm$core$Basics$composeL,
@@ -13689,15 +13799,37 @@ var $author$project$View$Home$getLastThreeEmployees = function (employees) {
 		$elm$core$Dict$values,
 		employees);
 };
+var $author$project$Action$Redirect = function (a) {
+	return {$: 'Redirect', a: a};
+};
+var $author$project$View$Home$makePathFromEmployee = function (employee) {
+	return '/employee/' + $elm$core$String$fromInt(employee.id);
+};
+var $author$project$Helpers$prepareInternalUrlRequest = F2(
+	function (path, url) {
+		return $elm$browser$Browser$Internal(
+			_Utils_update(
+				url,
+				{path: path}));
+	});
+var $author$project$View$Home$handleEmployeeClick = F2(
+	function (store, employee) {
+		return A3(
+			$elm$core$Basics$composeL,
+			$author$project$Action$Redirect,
+			$author$project$Helpers$prepareInternalUrlRequest(
+				$author$project$View$Home$makePathFromEmployee(employee)),
+			store.url);
+	});
 var $author$project$Components$Employees$Item = function (a) {
 	return {$: 'Item', a: a};
 };
 var $author$project$Components$Event$OnClick = function (a) {
 	return {$: 'OnClick', a: a};
 };
-var $author$project$Components$Employees$onItemClick = function (action) {
+var $author$project$Components$Employees$onItemClick = function (handler) {
 	return $author$project$Components$Employees$Item(
-		$author$project$Components$Event$OnClick(action));
+		$author$project$Components$Event$OnClick(handler));
 };
 var $rtfeldman$elm_css$Css$flexWrap = $rtfeldman$elm_css$Css$prop1('flex-wrap');
 var $rtfeldman$elm_css$Css$wrap = {flexDirectionOrWrap: $rtfeldman$elm_css$Css$Structure$Compatible, flexWrap: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'wrap'};
@@ -13762,28 +13894,32 @@ var $rtfeldman$elm_css$Html$Styled$Events$onMouseEnter = function (msg) {
 		'mouseenter',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $author$project$Components$Employees$eventToAttribute = function (event) {
-	switch (event.$) {
-		case 'OnClick':
-			var action = event.a;
-			return $elm$core$Maybe$Just(
-				$rtfeldman$elm_css$Html$Styled$Events$onClick(action));
-		case 'OnHover':
-			var action = event.a;
-			return $elm$core$Maybe$Just(
-				$rtfeldman$elm_css$Html$Styled$Events$onMouseEnter(action));
-		default:
+var $author$project$Components$Employees$eventToAttribute = F2(
+	function (employee, event) {
+		switch (event.$) {
+			case 'OnClick':
+				var handler = event.a;
+				return $elm$core$Maybe$Just(
+					$rtfeldman$elm_css$Html$Styled$Events$onClick(
+						handler(employee)));
+			case 'OnHover':
+				var handler = event.a;
+				return $elm$core$Maybe$Just(
+					$rtfeldman$elm_css$Html$Styled$Events$onMouseEnter(
+						handler(employee)));
+			default:
+				return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$Components$Employees$itemControlAsAttribute = F2(
+	function (employee, control) {
+		if (control.$ === 'Item') {
+			var event = control.a;
+			return A2($author$project$Components$Employees$eventToAttribute, employee, event);
+		} else {
 			return $elm$core$Maybe$Nothing;
-	}
-};
-var $author$project$Components$Employees$itemControlAsAttribute = function (control) {
-	if (control.$ === 'Item') {
-		var event = control.a;
-		return $author$project$Components$Employees$eventToAttribute(event);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
+		}
+	});
 var $rtfeldman$elm_css$Css$borderRadius = $rtfeldman$elm_css$Css$prop1('border-radius');
 var $rtfeldman$elm_css$Css$backgroundColor = function (c) {
 	return A2($rtfeldman$elm_css$Css$property, 'background-color', c.value);
@@ -14066,7 +14202,10 @@ var $author$project$Components$Employees$renderItem = F2(
 				$elm$core$List$cons,
 				$author$project$Components$Employees$itemStyles(
 					$author$project$Components$Employees$hasClick(controls)),
-				A2($author$project$Components$Employees$controlsAsAttributes, $author$project$Components$Employees$itemControlAsAttribute, controls)),
+				A2(
+					$author$project$Components$Employees$controlsAsAttributes,
+					$author$project$Components$Employees$itemControlAsAttribute(employee),
+					controls)),
 			_List_fromArray(
 				[
 					$author$project$Components$Employee$render(employee)
@@ -14089,7 +14228,8 @@ var $author$project$View$Home$viewEmployees = function (store) {
 		$author$project$Components$Employees$render,
 		_List_fromArray(
 			[
-				$author$project$Components$Employees$onItemClick($author$project$Action$None)
+				$author$project$Components$Employees$onItemClick(
+				$author$project$View$Home$handleEmployeeClick(store))
 			]),
 		$author$project$View$Home$getLastThreeEmployees(store.employees.items));
 };
@@ -14358,13 +14498,6 @@ var $author$project$Action$RedirectAfterAction = F2(
 var $author$project$Action$Store = function (a) {
 	return {$: 'Store', a: a};
 };
-var $author$project$Helpers$prepareInternalUrlRequest = F2(
-	function (path, url) {
-		return $elm$browser$Browser$Internal(
-			_Utils_update(
-				url,
-				{path: path}));
-	});
 var $author$project$View$NewEmployee$save = F2(
 	function (store, model) {
 		return A3(
@@ -14463,12 +14596,16 @@ var $author$project$View$NewEmployee$render = F2(
 	});
 var $author$project$Main$render = function (model) {
 	var _v0 = model.viewModel;
-	if (_v0.$ === 'Home') {
-		var home = _v0.a;
-		return A2($author$project$View$Home$render, model.store, home);
-	} else {
-		var newEmployee = _v0.a;
-		return A2($author$project$View$NewEmployee$render, model.store, newEmployee);
+	switch (_v0.$) {
+		case 'Home':
+			var home = _v0.a;
+			return A2($author$project$View$Home$render, model.store, home);
+		case 'NewEmployee':
+			var newEmployee = _v0.a;
+			return A2($author$project$View$NewEmployee$render, model.store, newEmployee);
+		default:
+			var employee = _v0.a;
+			return A2($author$project$View$Employee$render, model.store, employee);
 	}
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -14764,7 +14901,9 @@ var $author$project$Main$update = F2(
 			case 'None':
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			case 'UrlChanged':
-				return $author$project$Router$handleUrl(model.store);
+				var url = action.a;
+				return $author$project$Router$handleUrl(
+					A2($author$project$Store$updateUrl, url, model.store));
 			case 'LinkClicked':
 				var request = action.a;
 				return A2($author$project$Main$updateLink, request, model);

@@ -1,9 +1,11 @@
 module Router exposing (handleUrl)
 
 import Action exposing (Action)
+import Employee
 import Model exposing (Model, ViewModel, buildModel)
 import Store exposing (Store)
-import Url.Parser as Parser exposing (Parser, oneOf, s, top)
+import Url.Parser as Parser exposing ((</>), Parser, oneOf, s, top)
+import View.Employee
 import View.Home
 import View.NewEmployee
 
@@ -23,6 +25,11 @@ getNewEmployee store =
     convertInitView Model.NewEmployee View.NewEmployee.init store
 
 
+getEmployee : Store -> Employee.Id -> ( Model, Cmd Action )
+getEmployee store employeeId =
+    convertInitView Model.Employee (View.Employee.init employeeId) store
+
+
 parse : Store -> Parser (( Model, Cmd Action ) -> a) a
 parse store =
     oneOf
@@ -30,6 +37,8 @@ parse store =
             getHome store
         , route (s "add-employee") <|
             getNewEmployee store
+        , route (s "employee" </> Employee.urlParser) <|
+            \employeeId -> getEmployee store employeeId
         ]
 
 

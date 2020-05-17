@@ -11,7 +11,7 @@ import List
 
 
 type Control action
-    = Item (Event action)
+    = Item (Event (Employee -> action))
     | None
 
 
@@ -19,14 +19,14 @@ type alias Controls action =
     List (Control action)
 
 
-onItemClick : action -> Control action
-onItemClick action =
-    Item (Events.OnClick action)
+onItemClick : (Employee -> action) -> Control action
+onItemClick handler =
+    Item (Events.OnClick handler)
 
 
-onItemHover : action -> Control action
-onItemHover action =
-    Item (Events.OnHover action)
+onItemHover : (Employee -> action) -> Control action
+onItemHover handler =
+    Item (Events.OnHover handler)
 
 
 baseStyles : Attribute action
@@ -60,14 +60,14 @@ itemStyles needHover =
         ]
 
 
-eventToAttribute : Event action -> Maybe (Attribute action)
-eventToAttribute event =
+eventToAttribute : Employee -> Event (Employee -> action) -> Maybe (Attribute action)
+eventToAttribute employee event =
     case event of
-        Events.OnClick action ->
-            Just <| onClick action
+        Events.OnClick handler ->
+            Just <| onClick <| handler employee
 
-        Events.OnHover action ->
-            Just <| onMouseEnter action
+        Events.OnHover handler ->
+            Just <| onMouseEnter <| handler employee
 
         _ ->
             Nothing
@@ -88,11 +88,11 @@ hasClick controls =
     List.any clickInControl controls
 
 
-itemControlAsAttribute : Control action -> Maybe (Attribute action)
-itemControlAsAttribute control =
+itemControlAsAttribute : Employee -> Control action -> Maybe (Attribute action)
+itemControlAsAttribute employee control =
     case control of
         Item event ->
-            eventToAttribute event
+            eventToAttribute employee event
 
         _ ->
             Nothing
@@ -108,7 +108,7 @@ controlsAsAttributes converter controls =
 
 renderItem : Controls action -> Employee -> Html action
 renderItem controls employee =
-    div (itemStyles (hasClick controls) :: controlsAsAttributes itemControlAsAttribute controls)
+    div (itemStyles (hasClick controls) :: controlsAsAttributes (itemControlAsAttribute employee) controls)
         [ EmployeeItem.render employee
         ]
 
