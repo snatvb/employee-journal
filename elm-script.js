@@ -13803,7 +13803,7 @@ var $author$project$Action$Redirect = function (a) {
 	return {$: 'Redirect', a: a};
 };
 var $author$project$View$Home$makePathFromEmployee = function (employee) {
-	return '/employee/' + $elm$core$String$fromInt(employee.id);
+	return 'employee/' + $elm$core$String$fromInt(employee.id);
 };
 var $author$project$Helpers$prepareInternalUrlRequest = F2(
 	function (path, url) {
@@ -14680,11 +14680,6 @@ var $author$project$View$update = F2(
 				{viewModel: viewModel}),
 			cmd);
 	});
-var $author$project$Helpers$fixPathInUrl = function (url) {
-	return A2($elm$core$String$startsWith, '/', url.path) ? url : _Utils_update(
-		url,
-		{path: '/' + url.path});
-};
 var $elm$browser$Browser$Navigation$load = _Browser_load;
 var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
 var $elm$url$Url$addPort = F2(
@@ -14749,13 +14744,12 @@ var $author$project$Main$updateLink = F2(
 	function (request, model) {
 		if (request.$ === 'Internal') {
 			var url = request.a;
-			var fixedUrl = $author$project$Helpers$fixPathInUrl(url);
 			return _Utils_Tuple2(
-				A2($author$project$Main$updateUrl, fixedUrl, model),
+				A2($author$project$Main$updateUrl, url, model),
 				A2(
 					$elm$browser$Browser$Navigation$pushUrl,
 					model.store.navigationKey,
-					$elm$url$Url$toString(fixedUrl)));
+					$elm$url$Url$toString(url)));
 		} else {
 			var url = request.a;
 			return _Utils_Tuple2(

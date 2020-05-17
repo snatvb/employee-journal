@@ -60,7 +60,7 @@ employeesStyles =
 
 makePathFromEmployee : Employee.Employee -> String
 makePathFromEmployee employee =
-    "/employee/" ++ String.fromInt employee.id
+    "employee/" ++ String.fromInt employee.id
 
 
 handleEmployeeClick : Store -> Employee.Employee -> Action

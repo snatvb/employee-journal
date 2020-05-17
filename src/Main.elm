@@ -84,11 +84,7 @@ updateLink : UrlRequest -> Model -> ( Model, Cmd Action )
 updateLink request model =
     case request of
         Browser.Internal url ->
-            let
-                fixedUrl =
-                    fixPathInUrl url
-            in
-            ( updateUrl fixedUrl model, Navigation.pushUrl model.store.navigationKey (URL.toString fixedUrl) )
+            ( updateUrl url model, Navigation.pushUrl model.store.navigationKey (URL.toString url) )
 
         Browser.External url ->
             ( model
