@@ -1,3 +1,5 @@
 /elm-stuff
 .vscode/
 node_modules/
+
+elm-script.js
