@@ -1,4 +1,9 @@
-module Helpers.DateTime exposing (getDaysInDate, getDaysInMonth, toString)
+module Helpers.DateTime exposing
+    ( getDaysInDate
+    , getDaysInMonth
+    , toString
+    , updateDay
+    )
 
 import Date
 import Time exposing (Month(..))
@@ -75,3 +80,11 @@ getDaysInDate date =
     getDaysInMonth
         (Date.month date)
         (Date.year date)
+
+
+updateDay : Int -> Date.Date -> Date.Date
+updateDay day date =
+    Date.fromCalendarDate
+        (Date.year date)
+        (Date.month date)
+        day
