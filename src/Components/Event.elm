@@ -1,4 +1,11 @@
-module Components.Event exposing (Event(..), isClick)
+module Components.Event exposing
+    ( Event(..)
+    , eventToAttribute
+    , isClick
+    )
+
+import Html.Styled exposing (Attribute)
+import Html.Styled.Events exposing (onClick, onMouseEnter)
 
 
 type Event action
@@ -15,3 +22,16 @@ isClick event =
 
         _ ->
             False
+
+
+eventToAttribute : a -> Event (a -> action) -> Maybe (Attribute action)
+eventToAttribute employee event =
+    case event of
+        OnClick handler ->
+            Just <| onClick <| handler employee
+
+        OnHover handler ->
+            Just <| onMouseEnter <| handler employee
+
+        _ ->
+            Nothing

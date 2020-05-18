@@ -3,11 +3,11 @@ module Components.Employees exposing (onItemClick, onItemHover, render)
 import Components.Employee as EmployeeItem
 import Components.Event as Events exposing (Event)
 import Css exposing (..)
-import Structures.Employee exposing (Employee)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (onClick, onMouseEnter)
 import List
+import Structures.Employee exposing (Employee)
 
 
 type Control action
@@ -60,19 +60,6 @@ itemStyles needHover =
         ]
 
 
-eventToAttribute : Employee -> Event (Employee -> action) -> Maybe (Attribute action)
-eventToAttribute employee event =
-    case event of
-        Events.OnClick handler ->
-            Just <| onClick <| handler employee
-
-        Events.OnHover handler ->
-            Just <| onMouseEnter <| handler employee
-
-        _ ->
-            Nothing
-
-
 clickInControl : Control action -> Bool
 clickInControl control =
     case control of
@@ -92,18 +79,16 @@ itemControlAsAttribute : Employee -> Control action -> Maybe (Attribute action)
 itemControlAsAttribute employee control =
     case control of
         Item event ->
-            eventToAttribute employee event
+            Events.eventToAttribute employee event
 
         _ ->
             Nothing
 
 
 controlsAsAttributes : (Control action -> Maybe (Attribute action)) -> Controls action -> List (Attribute action)
-controlsAsAttributes converter controls =
+controlsAsAttributes converter =
     List.filterMap identity
         << List.map converter
-    <|
-        controls
 
 
 renderItem : Controls action -> Employee -> Html action

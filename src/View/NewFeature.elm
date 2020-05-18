@@ -8,9 +8,9 @@ import Action.Views.NewFeature as NewFeatureActions
 import Browser exposing (Document)
 import Components.Button as Button
 import Components.Date as DateComponent
+import Components.DayChooser as DayChooser exposing (onDayChoosed)
 import Components.Input as Input
 import Components.Link as Link
-import Components.MonthChooser as MonthChooser
 import Css exposing (..)
 import Date
 import Helpers exposing (packDocument, prepareInternalUrlRequest)
@@ -24,6 +24,7 @@ import Time exposing (Month(..))
 
 type alias Model =
     { feautre : Feature
+    , dayChooserState : DayChooser.State
     }
 
 
@@ -31,7 +32,7 @@ initFeature : Feature
 initFeature =
     { title = ""
     , description = ""
-    , dateStart = Date.fromCalendarDate 1970 Jan -1
+    , dateStart = Date.fromCalendarDate 1970 Jan 1
     , dateEnd = Date.fromCalendarDate 1970 Jan 1
     , pm = ""
     , fo = ""
@@ -40,7 +41,9 @@ initFeature =
 
 init : ( Model, Cmd Action )
 init =
-    ( { feautre = initFeature }
+    ( { feautre = initFeature
+      , dayChooserState = DayChooser.initState initFeature.dateStart
+      }
     , Cmd.none
     )
 
@@ -93,7 +96,7 @@ form store model =
             , DateComponent.render [] model.feautre.dateStart
             ]
         , row
-            [ MonthChooser.render [] model.feautre.dateStart
+            [ DayChooser.render [onDayChoosed (\_ -> Action.None)] model.dayChooserState
             ]
         , row [ Button.render [] [ text "Сохранить" ] ]
         , row
