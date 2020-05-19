@@ -8,6 +8,7 @@ import Url exposing (Url)
 
 type Action
     = None
+    | Batch (List Action)
     | LinkClicked UrlRequest
     | UrlChanged Url
     | Redirect UrlRequest

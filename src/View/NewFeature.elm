@@ -34,8 +34,11 @@ type alias Model =
     { form : FormModel
     }
 
+
 initDate : Date.Date
-initDate = Date.fromCalendarDate 1970 Jan 1
+initDate =
+    Date.fromCalendarDate 1970 Jan 1
+
 
 initFeature : Feature
 initFeature =
@@ -140,6 +143,7 @@ form _ ({ feautre } as formModel) =
     div [ formStyles ]
         [ row [ div [] [ text "Добавление новой фичи" ] ]
         , row [ Input.render [ value feautre.title, onInput titleChangeAction, placeholder "Название" ] ]
+        , row [ Input.render [ value feautre.description, onInput descriptionChangeAction, placeholder "Описание" ] ]
         , row [ Input.render [ value feautre.pm, onInput pmChangeAction, placeholder "Проектный менедржер" ] ]
         , row [ Input.render [ value feautre.fo, onInput foChangeAction, placeholder "Фич-овнер" ] ]
         , row
@@ -207,6 +211,11 @@ makeAction =
         << NewFeatureActions.Form
 
 
+makeUpdateChooseDayForAction : DayChooseFor -> Date.Date -> Action
+makeUpdateChooseDayForAction dayChooseFor date =
+    makeAction (NewFeatureActions.UpdateDayChooseFor dayChooseFor date)
+
+
 titleChangeAction : String -> Action
 titleChangeAction =
     makeAction
@@ -231,25 +240,28 @@ foChangeAction =
         << NewFeatureActions.UpdateFO
 
 
+hideDayChooserAction : Action
+hideDayChooserAction =
+    makeUpdateChooseDayForAction Enum.DayChooseFor.None initDate
+
+
 updateStartDate : Date.Date -> Action
-updateStartDate =
-    makeAction
-        << NewFeatureActions.UpdateStartDate
+updateStartDate date =
+    Action.Batch
+        [ makeAction
+            << NewFeatureActions.UpdateStartDate <| date
+        , hideDayChooserAction
+        ]
 
 
 updateEndDate : Date.Date -> Action
-updateEndDate =
-    makeAction
-        << NewFeatureActions.UpdateEndDate
+updateEndDate date =
+    Action.Batch
+        [ makeAction
+            << NewFeatureActions.UpdateEndDate <| date
+        , hideDayChooserAction
+        ]
 
-
-makeUpdateChooseDayForAction : DayChooseFor -> Date.Date -> Action
-makeUpdateChooseDayForAction dayChooseFor date =
-    makeAction (NewFeatureActions.UpdateDayChooseFor dayChooseFor date)
-
-hideDayChooserAction : Action
-hideDayChooserAction =
-  makeUpdateChooseDayForAction Enum.DayChooseFor.None initDate
 
 openChooserStarDate : FormModel -> Action
 openChooserStarDate formModel =
