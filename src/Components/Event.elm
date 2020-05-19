@@ -25,13 +25,13 @@ isClick event =
 
 
 eventToAttribute : a -> Event (a -> action) -> Maybe (Attribute action)
-eventToAttribute employee event =
+eventToAttribute data event =
     case event of
         OnClick handler ->
-            Just <| onClick <| handler employee
+            Just <| onClick <| handler data
 
         OnHover handler ->
-            Just <| onMouseEnter <| handler employee
+            Just <| onMouseEnter <| handler data
 
         _ ->
             Nothing
