@@ -12,8 +12,8 @@ import Url as URL exposing (Url)
 import View
 import View.Employee
 import View.Home
-import View.NewFeature
 import View.NewEmployee
+import View.NewFeature
 
 
 init : () -> Url -> Navigation.Key -> ( Model, Cmd Action )
@@ -41,6 +41,9 @@ update action model =
         Action.None ->
             ( model, Cmd.none )
 
+        Action.Batch actions ->
+            List.foldl handleBatchActions ( model, Cmd.none ) actions
+
         Action.UrlChanged url ->
             handleUrl <| Store.updateUrl url model.store
 
@@ -67,6 +70,15 @@ updateUrl url model =
         | store =
             Store.updateUrl url model.store
     }
+
+
+handleBatchActions : Action -> ( Model, Cmd Action ) -> ( Model, Cmd Action )
+handleBatchActions action ( model, cmds ) =
+    let
+        ( newModel, newCmds ) =
+            update action model
+    in
+    ( newModel, Cmd.batch [newCmds, cmds] )
 
 
 updateByRedirectAction : Action -> ( Model, Cmd Action ) -> ( Model, Cmd Action )
