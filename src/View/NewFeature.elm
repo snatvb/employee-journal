@@ -13,6 +13,7 @@ import Components.Input as Input
 import Components.Link as Link
 import Css exposing (..)
 import Date
+import Enum.DayChooseFor exposing (DayChooseFor)
 import Helpers exposing (packDocument, prepareInternalUrlRequest)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href, placeholder, value)
@@ -22,18 +23,26 @@ import Structures.Feature exposing (Feature)
 import Time exposing (Month(..))
 
 
-type alias Model =
+type alias FormModel =
     { feautre : Feature
     , dayChooserState : DayChooser.State
+    , dayChooserDisplay : DayChooseFor
     }
 
+
+type alias Model =
+    { form : FormModel
+    }
+
+initDate : Date.Date
+initDate = Date.fromCalendarDate 1970 Jan 1
 
 initFeature : Feature
 initFeature =
     { title = ""
     , description = ""
-    , dateStart = Date.fromCalendarDate 1970 Jan 1
-    , dateEnd = Date.fromCalendarDate 1970 Jan 1
+    , dateStart = initDate
+    , dateEnd = initDate
     , pm = ""
     , fo = ""
     }
@@ -41,34 +50,60 @@ initFeature =
 
 init : ( Model, Cmd Action )
 init =
-    ( { feautre = initFeature
-      , dayChooserState = DayChooser.initState initFeature.dateStart
+    ( { form =
+            { feautre = initFeature
+            , dayChooserState = DayChooser.initState initFeature.dateStart
+            , dayChooserDisplay = Enum.DayChooseFor.None
+            }
       }
     , Cmd.none
     )
 
 
-updateForm : NewFeatureActions.Form -> Feature -> Feature
-updateForm action feature =
+updateDateInDayCooser : Date.Date -> DayChooser.State -> DayChooser.State
+updateDateInDayCooser date state =
+    { state | currentDate = date }
+
+
+updateForm : NewFeatureActions.Form -> FormModel -> FormModel
+updateForm action ({ feautre } as formModel) =
     case action of
         NewFeatureActions.UpdateTitle title ->
-            { feature | title = title }
+            { formModel | feautre = { feautre | title = title } }
 
         NewFeatureActions.UpdateDescription description ->
-            { feature | description = description }
+            { formModel | feautre = { feautre | description = description } }
 
         NewFeatureActions.UpdatePM pm ->
-            { feature | pm = pm }
+            { formModel | feautre = { feautre | pm = pm } }
 
         NewFeatureActions.UpdateFO fo ->
-            { feature | fo = fo }
+            { formModel | feautre = { feautre | fo = fo } }
+
+        NewFeatureActions.UpdateStartDate dateStart ->
+            { formModel
+                | feautre = { feautre | dateStart = dateStart }
+                , dayChooserState = updateDateInDayCooser dateStart formModel.dayChooserState
+            }
+
+        NewFeatureActions.UpdateEndDate dateEnd ->
+            { formModel
+                | feautre = { feautre | dateEnd = dateEnd }
+                , dayChooserState = updateDateInDayCooser dateEnd formModel.dayChooserState
+            }
+
+        NewFeatureActions.UpdateDayChooseFor chooseFor date ->
+            { formModel
+                | dayChooserDisplay = chooseFor
+                , dayChooserState = updateDateInDayCooser date formModel.dayChooserState
+            }
 
 
 update : NewFeatureActions.Action -> Model -> ( Model, Cmd Action )
 update action model =
     case action of
         NewFeatureActions.Form formAction ->
-            ( { model | feautre = updateForm formAction model.feautre }, Cmd.none )
+            ( { model | form = updateForm formAction model.form }, Cmd.none )
 
 
 formStyles : Attribute Action
@@ -83,21 +118,36 @@ row =
     div [ css [ marginTop (px 10) ] ]
 
 
-form : Store -> Model -> Html Action
-form store model =
+renderChooser : FormModel -> Html Action
+renderChooser { dayChooserDisplay, dayChooserState } =
+    case dayChooserDisplay of
+        Enum.DayChooseFor.StartDate ->
+            row
+                [ DayChooser.render [ onDayChoosed updateStartDate ] dayChooserState
+                ]
+
+        Enum.DayChooseFor.EndDate ->
+            row
+                [ DayChooser.render [ onDayChoosed updateEndDate ] dayChooserState
+                ]
+
+        Enum.DayChooseFor.None ->
+            text ""
+
+
+form : Store -> FormModel -> Html Action
+form _ ({ feautre } as formModel) =
     div [ formStyles ]
         [ row [ div [] [ text "Добавление новой фичи" ] ]
-        , row [ Input.render [ value model.feautre.title, onInput titleChangeAction, placeholder "Название" ] ]
-        , row [ Input.render [ value model.feautre.pm, onInput pmChangeAction, placeholder "Проектный менедржер" ] ]
-        , row [ Input.render [ value model.feautre.fo, onInput foChangeAction, placeholder "Фич-овнер" ] ]
+        , row [ Input.render [ value feautre.title, onInput titleChangeAction, placeholder "Название" ] ]
+        , row [ Input.render [ value feautre.pm, onInput pmChangeAction, placeholder "Проектный менедржер" ] ]
+        , row [ Input.render [ value feautre.fo, onInput foChangeAction, placeholder "Фич-овнер" ] ]
         , row
-            [ DateComponent.render [] model.feautre.dateStart
+            [ div [ dateStyles ] [ DateComponent.render [ onClick <| openChooserStarDate formModel ] feautre.dateStart ]
             , text " - "
-            , DateComponent.render [] model.feautre.dateStart
+            , div [ dateStyles ] [ DateComponent.render [ onClick <| openChooserEndDate formModel ] feautre.dateEnd ]
             ]
-        , row
-            [ DayChooser.render [onDayChoosed (\_ -> Action.None)] model.dayChooserState
-            ]
+        , renderChooser formModel
         , row [ Button.render [] [ text "Сохранить" ] ]
         , row
             [ div []
@@ -122,7 +172,7 @@ baseStyles =
 view : Store -> Model -> Html Action
 view store model =
     div [ baseStyles ]
-        [ form store model
+        [ form store model.form
         ]
 
 
@@ -132,36 +182,90 @@ render store model =
 
 
 
+-- styles
+
+
+dateStyles : Attribute Action
+dateStyles =
+    css
+        [ display inlineFlex
+        , cursor pointer
+        , hover
+            [ opacity (num 80)
+            ]
+        ]
+
+
+
 -- actions
+
+
+makeAction : NewFeatureActions.Form -> Action
+makeAction =
+    Action.Views
+        << ViewsActions.NewFeature
+        << NewFeatureActions.Form
 
 
 titleChangeAction : String -> Action
 titleChangeAction =
-    Action.Views
-        << ViewsActions.NewFeature
-        << NewFeatureActions.Form
+    makeAction
         << NewFeatureActions.UpdateTitle
 
 
 descriptionChangeAction : String -> Action
 descriptionChangeAction =
-    Action.Views
-        << ViewsActions.NewFeature
-        << NewFeatureActions.Form
+    makeAction
         << NewFeatureActions.UpdateDescription
 
 
 pmChangeAction : String -> Action
 pmChangeAction =
-    Action.Views
-        << ViewsActions.NewFeature
-        << NewFeatureActions.Form
+    makeAction
         << NewFeatureActions.UpdatePM
 
 
 foChangeAction : String -> Action
 foChangeAction =
-    Action.Views
-        << ViewsActions.NewFeature
-        << NewFeatureActions.Form
+    makeAction
         << NewFeatureActions.UpdateFO
+
+
+updateStartDate : Date.Date -> Action
+updateStartDate =
+    makeAction
+        << NewFeatureActions.UpdateStartDate
+
+
+updateEndDate : Date.Date -> Action
+updateEndDate =
+    makeAction
+        << NewFeatureActions.UpdateEndDate
+
+
+makeUpdateChooseDayForAction : DayChooseFor -> Date.Date -> Action
+makeUpdateChooseDayForAction dayChooseFor date =
+    makeAction (NewFeatureActions.UpdateDayChooseFor dayChooseFor date)
+
+hideDayChooserAction : Action
+hideDayChooserAction =
+  makeUpdateChooseDayForAction Enum.DayChooseFor.None initDate
+
+openChooserStarDate : FormModel -> Action
+openChooserStarDate formModel =
+    case formModel.dayChooserDisplay of
+        Enum.DayChooseFor.StartDate ->
+            hideDayChooserAction
+
+        _ ->
+            makeUpdateChooseDayForAction Enum.DayChooseFor.StartDate formModel.feautre.dateStart
+
+
+openChooserEndDate : FormModel -> Action
+openChooserEndDate formModel =
+    case formModel.dayChooserDisplay of
+        Enum.DayChooseFor.EndDate ->
+            hideDayChooserAction
+
+        _ ->
+            makeUpdateChooseDayForAction Enum.DayChooseFor.EndDate formModel.feautre.dateEnd
