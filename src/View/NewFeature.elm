@@ -56,7 +56,7 @@ init =
     ( { form =
             { feautre = initFeature
             , dayChooserState = DayChooser.initState initFeature.dateStart
-            , dayChooserDisplay = Enum.DayChooseFor.None
+            , dayChooserDisplay = Enum.DayChooseFor.StartDate
             }
       }
     , Cmd.none
@@ -245,20 +245,20 @@ hideDayChooserAction =
     makeUpdateChooseDayForAction Enum.DayChooseFor.None initDate
 
 
-updateStartDate : Date.Date -> Action
-updateStartDate date =
+updateStartDate : DayChooser.State -> Action
+updateStartDate state =
     Action.Batch
         [ makeAction
-            << NewFeatureActions.UpdateStartDate <| date
+            << NewFeatureActions.UpdateStartDate <| state.currentDate
         , hideDayChooserAction
         ]
 
 
-updateEndDate : Date.Date -> Action
-updateEndDate date =
+updateEndDate : DayChooser.State -> Action
+updateEndDate state =
     Action.Batch
         [ makeAction
-            << NewFeatureActions.UpdateEndDate <| date
+            << NewFeatureActions.UpdateEndDate <| state.currentDate
         , hideDayChooserAction
         ]
 
