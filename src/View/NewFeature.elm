@@ -56,7 +56,7 @@ init : ( Model, Cmd Action )
 init =
     ( { form =
             { feautre = initFeature
-            , dayChooserDisplay = Enum.DayChooseFor.StartDate
+            , dayChooserDisplay = Enum.DayChooseFor.None
             , daySelectorState = DaySelector.initState initFeature.dateStart
             }
       }
