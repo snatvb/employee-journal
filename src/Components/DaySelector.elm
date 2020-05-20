@@ -15,7 +15,6 @@ module Components.DaySelector exposing
 
 import Css exposing (..)
 import Date
-import Enum.DayChooserScale as DayChooserScale exposing (Scale)
 import Helpers.DateTime as DateTime exposing (monthAsStringFromDate)
 import Helpers.List exposing (aperture, listWrap)
 import Html.Styled exposing (Attribute, Html, div, input, text)
@@ -57,7 +56,7 @@ type alias Props action =
 
 initScale : Scale
 initScale =
-    Year
+    Day
 
 
 initHandlers : Handlers action
@@ -143,7 +142,7 @@ unwrapHandler maybeAttributes =
 dayHandlers : Props action -> Date.Date -> List (Attribute action)
 dayHandlers props date =
     unwrapHandler
-        << Maybe.map (\x -> onClick (x <| DateTime.clampYear 1970 2200 date))
+        << Maybe.map (\x -> onClick (x <| DateTime.clampYear 1970 9999 date))
     <|
         props.handlers.onDateChoosed
 
@@ -190,18 +189,18 @@ renderMonth props =
 
 renderYear : Props action -> Html action
 renderYear ({ state } as props) =
-    case state.scale of
-        Year ->
-            input
-                (addInputHandler props
-                    [ yearInputStyles
-                    , value <| String.fromInt <| Date.year state.currentDate
-                    ]
-                )
-                []
+    input
+        (addInputHandler props
+            [ yearInputStyles
+            , value <| String.fromInt <| Date.year state.currentDate
+            ]
+        )
+        []
 
-        _ ->
-            div (scalingStyles :: scaleHandlers props Year) [ text <| String.fromInt <| Date.year state.currentDate ]
+
+
+-- _ ->
+--     div (scalingStyles :: scaleHandlers props Year) [ text <| String.fromInt <| Date.year state.currentDate ]
 
 
 dayAttributes : Props action -> Int -> List (Attribute action)
@@ -258,12 +257,12 @@ renderByScale props =
     case props.state.scale of
         Day ->
             [ renderMonth props
-            , div [] <| renderDays props
+            , div [ gridStyles ] <| renderDays props
             ]
 
         _ ->
             [ renderYear props
-            , div [] <| renderMonthes props
+            , div [ gridStyles ] <| renderMonthes props
             ]
 
 
@@ -286,6 +285,18 @@ baseStyles =
         , backgroundColor (rgba 0 0 0 0.5)
         , borderRadius (px 4)
         , cursor default
+        ]
+
+
+gridStyles : Attribute action
+gridStyles =
+    css
+        [ displayFlex
+        , flexDirection column
+        , justifyContent center
+        , alignItems center
+        , minHeight (px 120)
+        , minWidth (px 170)
         ]
 
 
