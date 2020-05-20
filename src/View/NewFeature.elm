@@ -107,6 +107,11 @@ updateForm action ({ feautre } as formModel) =
                 | daySelectorState = DaySelector.updateScaleIn formModel.daySelectorState scaleIn
             }
 
+        NewFeatureActions.UpdateDaySelectorDate date ->
+            { formModel
+                | daySelectorState = DaySelector.updateDate formModel.daySelectorState date
+            }
+
 
 update : NewFeatureActions.Action -> Model -> ( Model, Cmd Action )
 update action model =
@@ -131,9 +136,10 @@ daySelectorProps : DaySelector.State -> (Date.Date -> Action) -> DaySelector.Pro
 daySelectorProps state onDateChoosed =
     { state = state
     , handlers =
-        { onScale = Just updateDaySelectorScale
-        , onScaleIn = Just updateDaySelectorScaleIn
+        { onScale = Just handleDaySelectorScale
+        , onScaleIn = Just handleDaySelectorScaleIn
         , onDateChoosed = Just onDateChoosed
+        , onChangeDate = Just handleChangeDate
         }
     }
 
@@ -260,16 +266,22 @@ hideDayChooserAction =
     makeUpdateChooseDayForAction Enum.DayChooseFor.None initDate
 
 
-updateDaySelectorScale : DaySelector.Scale -> Action
-updateDaySelectorScale =
+handleDaySelectorScale : DaySelector.Scale -> Action
+handleDaySelectorScale =
     makeAction
         << NewFeatureActions.UpdateDaySelectorScale
 
 
-updateDaySelectorScaleIn : DaySelector.ScaleIn -> Action
-updateDaySelectorScaleIn =
+handleDaySelectorScaleIn : DaySelector.ScaleIn -> Action
+handleDaySelectorScaleIn =
     makeAction
         << NewFeatureActions.UpdateDaySelectorScaleIn
+
+
+handleChangeDate : Date.Date -> Action
+handleChangeDate =
+    makeAction
+        << NewFeatureActions.UpdateDaySelectorDate
 
 
 updateStartDate : Date.Date -> Action

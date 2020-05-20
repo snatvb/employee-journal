@@ -1,5 +1,6 @@
 module Helpers.DateTime exposing
-    ( getDaysInDate
+    ( clampYear
+    , getDaysInDate
     , getDaysInMonth
     , monthAsString
     , monthAsStringFromDate
@@ -162,3 +163,8 @@ updateYear year date =
         year
         (Date.month date)
         (Date.day date)
+
+
+clampYear : Int -> Int -> Date.Date -> Date.Date
+clampYear min max date =
+    updateYear (clamp min max <| Date.year date) date
