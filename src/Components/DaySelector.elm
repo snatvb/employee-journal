@@ -18,9 +18,9 @@ import Date
 import Enum.DayChooserScale as DayChooserScale exposing (Scale)
 import Helpers.DateTime as DateTime exposing (monthAsStringFromDate)
 import Helpers.List exposing (aperture, listWrap)
-import Html.Styled exposing (Attribute, Html, div, text)
-import Html.Styled.Attributes exposing (css)
-import Html.Styled.Events exposing (onClick)
+import Html.Styled exposing (Attribute, Html, div, input, text)
+import Html.Styled.Attributes exposing (css, value)
+import Html.Styled.Events exposing (onClick, onInput)
 import List
 import Time exposing (Month(..))
 
@@ -45,6 +45,7 @@ type alias Handlers action =
     { onScale : Maybe (Scale -> action)
     , onDateChoosed : Maybe (Date.Date -> action)
     , onScaleIn : Maybe (ScaleIn -> action)
+    , onChangeDate : Maybe (Date.Date -> action)
     }
 
 
@@ -56,7 +57,7 @@ type alias Props action =
 
 initScale : Scale
 initScale =
-    Day
+    Year
 
 
 initHandlers : Handlers action
@@ -64,6 +65,7 @@ initHandlers =
     { onScale = Nothing
     , onDateChoosed = Nothing
     , onScaleIn = Nothing
+    , onChangeDate = Nothing
     }
 
 
@@ -141,7 +143,7 @@ unwrapHandler maybeAttributes =
 dayHandlers : Props action -> Date.Date -> List (Attribute action)
 dayHandlers props date =
     unwrapHandler
-        << Maybe.map (\x -> onClick (x date))
+        << Maybe.map (\x -> onClick (x <| DateTime.clampYear 1970 2200 date))
     <|
         props.handlers.onDateChoosed
 
@@ -149,7 +151,7 @@ dayHandlers props date =
 monthHandlers : Props action -> Date.Date -> List (Attribute action)
 monthHandlers props date =
     unwrapHandler
-        << Maybe.map (\x -> onClick (x (Day, date)))
+        << Maybe.map (\x -> onClick (x ( Day, date )))
     <|
         props.handlers.onScaleIn
 
@@ -162,14 +164,44 @@ scaleHandlers props scale =
         props.handlers.onScale
 
 
+inputHandler : (Date.Date -> action) -> Date.Date -> String -> action
+inputHandler handler date =
+    handler
+        << Maybe.withDefault date
+        << Maybe.map (\y -> DateTime.updateYear y date)
+        << String.toInt
+        << String.trim
+
+
+addInputHandler : Props action -> List (Attribute action) -> List (Attribute action)
+addInputHandler props attributes =
+    case props.handlers.onChangeDate of
+        Just handler ->
+            onInput (inputHandler handler props.state.currentDate) :: attributes
+
+        Nothing ->
+            attributes
+
+
 renderMonth : Props action -> Html action
 renderMonth props =
     div (scalingStyles :: scaleHandlers props Month) [ text <| monthAsStringFromDate props.state.currentDate ]
 
 
-renderYear : Date.Date -> Html action
-renderYear date =
-    div [ scalingStyles ] [ text <| String.fromInt <| Date.year date ]
+renderYear : Props action -> Html action
+renderYear ({ state } as props) =
+    case state.scale of
+        Year ->
+            input
+                (addInputHandler props
+                    [ yearInputStyles
+                    , value <| String.fromInt <| Date.year state.currentDate
+                    ]
+                )
+                []
+
+        _ ->
+            div (scalingStyles :: scaleHandlers props Year) [ text <| String.fromInt <| Date.year state.currentDate ]
 
 
 dayAttributes : Props action -> Int -> List (Attribute action)
@@ -191,11 +223,11 @@ monthAttributes ({ state } as props) month =
 renderCell : Props action -> Int -> Html action
 renderCell props n =
     case props.state.scale of
-        Month ->
-            div (monthAttributes props n) [ text <| numAsString n ]
+        Day ->
+            div (dayAttributes props n) [ text <| numAsString n ]
 
         _ ->
-            div (dayAttributes props n) [ text <| numAsString n ]
+            div (monthAttributes props n) [ text <| numAsString n ]
 
 
 renderRow : Props action -> List Int -> Html action
@@ -229,14 +261,9 @@ renderByScale props =
             , div [] <| renderDays props
             ]
 
-        Month ->
-            [ renderYear props.state.currentDate
+        _ ->
+            [ renderYear props
             , div [] <| renderMonthes props
-            ]
-
-        Year ->
-            [ renderMonth props
-            , div [] <| renderDays props
             ]
 
 
@@ -300,6 +327,22 @@ activeCellStyles : Attribute action
 activeCellStyles =
     css
         [ backgroundColor (hex "#2c3e5090")
+        ]
+
+
+yearInputStyles : Attribute action
+yearInputStyles =
+    css
+        [ backgroundColor (rgba 255 255 255 0.1)
+        , border (px 0)
+        , outline zero
+        , borderRadius (px 4)
+        , textAlign center
+        , marginBottom (px 4)
+        , padding (px 4)
+        , focus
+            [ backgroundImage <| linearGradient (stop <| rgba 0 0 0 0.15) (stop <| rgba 0 0 0 0) []
+            ]
         ]
 
 
