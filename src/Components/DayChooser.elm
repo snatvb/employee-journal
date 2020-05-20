@@ -23,7 +23,6 @@ type alias State =
     , scale : Scale
     }
 
-
 initState : Date.Date -> State
 initState date =
     { currentDate = date

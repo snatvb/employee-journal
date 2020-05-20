@@ -1,6 +1,7 @@
 module Action.Views.NewFeature exposing (Action(..), Form(..))
 
 import Date exposing (Date)
+import Components.DaySelector as DaySelector
 import Enum.DayChooseFor exposing (DayChooseFor)
 
 
@@ -15,4 +16,5 @@ type Form
     | UpdateEndDate Date
     | UpdatePM String
     | UpdateFO String
+    | UpdateDaySelectorScale DaySelector.Scale
     | UpdateDayChooseFor DayChooseFor Date

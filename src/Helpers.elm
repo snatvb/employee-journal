@@ -1,4 +1,9 @@
-module Helpers exposing (packDocument, fixPathInUrl, packModelWithCmd, prepareInternalUrlRequest)
+module Helpers exposing
+    ( fixPathInUrl
+    , packDocument
+    , packModelWithCmd
+    , prepareInternalUrlRequest
+    )
 
 import Action exposing (Action)
 import Browser exposing (Document)

@@ -1,4 +1,4 @@
-module Helpers.List exposing (aperture)
+module Helpers.List exposing (aperture, listWrap)
 
 import List
 
@@ -10,3 +10,7 @@ aperture chunkSize list =
 
     else
       List.take chunkSize list :: aperture chunkSize (List.drop chunkSize list)
+
+listWrap : a -> List a
+listWrap a =
+    [ a ]
