@@ -9,6 +9,7 @@ import Browser exposing (Document)
 import Components.Button as Button
 import Components.Date as DateComponent
 import Components.DayChooser as DayChooser exposing (onDayChoosed)
+import Components.DaySelector as DaySelector
 import Components.Input as Input
 import Components.Link as Link
 import Css exposing (..)
@@ -25,7 +26,7 @@ import Time exposing (Month(..))
 
 type alias FormModel =
     { feautre : Feature
-    , dayChooserState : DayChooser.State
+    , daySelectorState : DaySelector.State
     , dayChooserDisplay : DayChooseFor
     }
 
@@ -55,17 +56,12 @@ init : ( Model, Cmd Action )
 init =
     ( { form =
             { feautre = initFeature
-            , dayChooserState = DayChooser.initState initFeature.dateStart
             , dayChooserDisplay = Enum.DayChooseFor.StartDate
+            , daySelectorState = DaySelector.initState initFeature.dateStart
             }
       }
     , Cmd.none
     )
-
-
-updateDateInDayCooser : Date.Date -> DayChooser.State -> DayChooser.State
-updateDateInDayCooser date state =
-    { state | currentDate = date }
 
 
 updateForm : NewFeatureActions.Form -> FormModel -> FormModel
@@ -86,19 +82,24 @@ updateForm action ({ feautre } as formModel) =
         NewFeatureActions.UpdateStartDate dateStart ->
             { formModel
                 | feautre = { feautre | dateStart = dateStart }
-                , dayChooserState = updateDateInDayCooser dateStart formModel.dayChooserState
+                , daySelectorState = DaySelector.updateDate formModel.daySelectorState dateStart
             }
 
         NewFeatureActions.UpdateEndDate dateEnd ->
             { formModel
                 | feautre = { feautre | dateEnd = dateEnd }
-                , dayChooserState = updateDateInDayCooser dateEnd formModel.dayChooserState
+                , daySelectorState = DaySelector.updateDate formModel.daySelectorState dateEnd
             }
 
         NewFeatureActions.UpdateDayChooseFor chooseFor date ->
             { formModel
                 | dayChooserDisplay = chooseFor
-                , dayChooserState = updateDateInDayCooser date formModel.dayChooserState
+                , daySelectorState = DaySelector.updateDate formModel.daySelectorState date
+            }
+
+        NewFeatureActions.UpdateDaySelectorScale scale ->
+            { formModel
+                | daySelectorState = DaySelector.updateScale formModel.daySelectorState scale
             }
 
 
@@ -121,18 +122,26 @@ row =
     div [ css [ marginTop (px 10) ] ]
 
 
-renderChooser : FormModel -> Html Action
-renderChooser { dayChooserDisplay, dayChooserState } =
+daySelectorProps : DaySelector.State -> (Date.Date -> Action) -> DaySelector.Props Action
+daySelectorProps state onDateChoosed =
+    { state = state
+    , handlers =
+        { onScale = Just updateDaySelectorScale
+        , onDateChoosed = Just onDateChoosed
+        }
+    }
+
+
+renderDaySelector : FormModel -> Html Action
+renderDaySelector { dayChooserDisplay, daySelectorState } =
     case dayChooserDisplay of
         Enum.DayChooseFor.StartDate ->
             row
-                [ DayChooser.render [ onDayChoosed updateStartDate ] dayChooserState
-                ]
+                [ DaySelector.render <| daySelectorProps daySelectorState updateStartDate ]
 
         Enum.DayChooseFor.EndDate ->
             row
-                [ DayChooser.render [ onDayChoosed updateEndDate ] dayChooserState
-                ]
+                [ DaySelector.render <| daySelectorProps daySelectorState updateEndDate ]
 
         Enum.DayChooseFor.None ->
             text ""
@@ -151,25 +160,13 @@ form _ ({ feautre } as formModel) =
             , text " - "
             , div [ dateStyles ] [ DateComponent.render [ onClick <| openChooserEndDate formModel ] feautre.dateEnd ]
             ]
-        , renderChooser formModel
+        , renderDaySelector formModel
         , row [ Button.render [] [ text "Сохранить" ] ]
         , row
             [ div []
                 [ Link.default [ href "/" ] [ text "Назад" ]
                 ]
             ]
-        ]
-
-
-baseStyles : Attribute Action
-baseStyles =
-    css
-        [ displayFlex
-        , justifyContent center
-        , alignItems center
-        , width (pct 100)
-        , height (pct 100)
-        , paddingTop (px 20)
         ]
 
 
@@ -187,6 +184,18 @@ render store model =
 
 
 -- styles
+
+
+baseStyles : Attribute Action
+baseStyles =
+    css
+        [ displayFlex
+        , justifyContent center
+        , alignItems center
+        , width (pct 100)
+        , height (pct 100)
+        , paddingTop (px 20)
+        ]
 
 
 dateStyles : Attribute Action
@@ -245,20 +254,32 @@ hideDayChooserAction =
     makeUpdateChooseDayForAction Enum.DayChooseFor.None initDate
 
 
-updateStartDate : DayChooser.State -> Action
-updateStartDate state =
+updateDaySelectorScale : DaySelector.Scale -> Action
+updateDaySelectorScale scale =
+    makeAction
+        << NewFeatureActions.UpdateDaySelectorScale
+    <|
+        scale
+
+
+updateStartDate : Date.Date -> Action
+updateStartDate date =
     Action.Batch
         [ makeAction
-            << NewFeatureActions.UpdateStartDate <| state.currentDate
+            << NewFeatureActions.UpdateStartDate
+          <|
+            date
         , hideDayChooserAction
         ]
 
 
-updateEndDate : DayChooser.State -> Action
-updateEndDate state =
+updateEndDate : Date.Date -> Action
+updateEndDate date =
     Action.Batch
         [ makeAction
-            << NewFeatureActions.UpdateEndDate <| state.currentDate
+            << NewFeatureActions.UpdateEndDate
+          <|
+            date
         , hideDayChooserAction
         ]
 
