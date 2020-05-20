@@ -6,6 +6,7 @@ module Helpers.DateTime exposing
     , toString
     , updateDay
     , updateMonth
+    , updateMonthNumber
     , updateYear
     )
 
@@ -144,6 +145,14 @@ updateMonth month date =
     Date.fromCalendarDate
         (Date.year date)
         month
+        (Date.day date)
+
+
+updateMonthNumber : Int -> Date.Date -> Date.Date
+updateMonthNumber month date =
+    Date.fromCalendarDate
+        (Date.year date)
+        (Date.numberToMonth month)
         (Date.day date)
 
 
