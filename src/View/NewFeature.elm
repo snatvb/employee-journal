@@ -8,19 +8,19 @@ import Action.Views.NewFeature as NewFeatureActions
 import Browser exposing (Document)
 import Components.Button as Button
 import Components.Date as DateComponent
-import Components.DayChooser as DayChooser exposing (onDayChoosed)
 import Components.DaySelector as DaySelector
 import Components.Input as Input
 import Components.Link as Link
 import Css exposing (..)
 import Date
 import Enum.DayChooseFor exposing (DayChooseFor)
-import Helpers exposing (packDocument, prepareInternalUrlRequest)
+import Helpers exposing (applyTo, packDocument, prepareInternalUrlRequest)
 import Html.Styled exposing (Attribute, Html, div, text)
 import Html.Styled.Attributes exposing (css, href, placeholder, value)
 import Html.Styled.Events exposing (onClick, onInput)
 import Store exposing (Store)
 import Structures.Feature exposing (Feature)
+import Task exposing (Task)
 import Time exposing (Month(..))
 
 
@@ -60,7 +60,7 @@ init =
             , daySelectorState = DaySelector.initState initFeature.dateStart
             }
       }
-    , Cmd.none
+    , Task.perform updateDates Date.today
     )
 
 
@@ -122,9 +122,7 @@ update action model =
 
 formStyles : Attribute Action
 formStyles =
-    css
-        [ marginRight (px 30)
-        ]
+    css []
 
 
 row : List (Html Action) -> Html Action
@@ -313,6 +311,16 @@ updateStartDate date =
             date
         , hideDayChooserAction
         ]
+
+
+updateDates : Date.Date -> Action
+updateDates date =
+    Action.Batch <|
+        List.map
+            (applyTo date)
+            [ makeAction << NewFeatureActions.UpdateStartDate
+            , makeAction << NewFeatureActions.UpdateEndDate
+            ]
 
 
 updateEndDate : Date.Date -> Action
