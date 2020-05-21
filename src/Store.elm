@@ -3,6 +3,7 @@ module Store exposing (Store, initStore, update, updateUrl)
 import Action exposing (Action)
 import Action.Store as StoreActions
 import Action.Store.Employees as EmployeesActions
+import Action.Store.Features as FeaturesActions
 import Browser.Navigation as Navigation
 import Dict exposing (empty)
 import Structures.Employee as Employee
@@ -48,6 +49,15 @@ updateEmployees action model =
     ( { model | employees = employees }, cmd )
 
 
+updateFeatures : FeaturesActions.Action -> Store -> ( Store, Cmd Action )
+updateFeatures action model =
+    let
+        ( features, cmd ) =
+            Store.Features.update action model.features
+    in
+    ( { model | features = features }, cmd )
+
+
 updateUrl : Url -> Store -> Store
 updateUrl url store =
     { store | url = url }
@@ -58,6 +68,9 @@ updateModel action model =
     case action of
         StoreActions.Employees actionEmployees ->
             updateEmployees actionEmployees model
+
+        StoreActions.Features actionFeatures ->
+            updateFeatures actionFeatures model
 
 
 update : StoreActions.Action -> Store -> ( Store, Cmd Action )
