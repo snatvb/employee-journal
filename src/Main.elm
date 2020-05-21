@@ -22,8 +22,14 @@ init _ url key =
 
 
 subscriptions : Model -> Sub Action
-subscriptions _ =
-    Sub.none
+subscriptions model =
+    case model.viewModel of
+        Model.NewFeature submodel ->
+            View.NewFeature.subscriptions submodel
+
+        _ ->
+          Sub.none
+
 
 
 updateStore : Action.Store.Action -> Model -> ( Model, Cmd Action )

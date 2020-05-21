@@ -1,4 +1,4 @@
-module View.NewFeature exposing (Model, init, render, update)
+module View.NewFeature exposing (Model, init, render, update, subscriptions)
 
 import Action exposing (Action)
 import Action.Store
@@ -6,21 +6,23 @@ import Action.Store.Features
 import Action.Views as ViewsActions
 import Action.Views.NewFeature as NewFeatureActions
 import Browser exposing (Document)
+import Browser.Events
 import Components.Button as Button
 import Components.Date as DateComponent
 import Components.DaySelector as DaySelector
 import Components.Input as Input
 import Components.Link as Link
 import Css exposing (..)
-import Date
+import Date exposing (Date)
 import Enum.DayChooseFor exposing (DayChooseFor)
 import Helpers exposing (applyTo, packDocument, prepareInternalUrlRequest)
+import Helpers.OutsideTarget exposing (outsideTarget)
 import Html.Styled exposing (Attribute, Html, div, text)
-import Html.Styled.Attributes exposing (css, href, placeholder, value)
+import Html.Styled.Attributes exposing (css, href, placeholder, value, id)
 import Html.Styled.Events exposing (onClick, onInput)
 import Store exposing (Store)
 import Structures.Feature exposing (Feature)
-import Task exposing (Task)
+import Task
 import Time exposing (Month(..))
 
 
@@ -36,7 +38,7 @@ type alias Model =
     }
 
 
-initDate : Date.Date
+initDate : Date
 initDate =
     Date.fromCalendarDate 1970 Jan 1
 
@@ -63,6 +65,13 @@ init =
     , Task.perform updateDates Date.today
     )
 
+subscriptions : Model -> Sub Action
+subscriptions model =
+    if model.form.dayChooserDisplay /= Enum.DayChooseFor.None then
+        Browser.Events.onMouseDown (outsideTarget hideDaySelectorAction "day-selector")
+
+    else
+        Sub.none
 
 updateForm : NewFeatureActions.Form -> FormModel -> FormModel
 updateForm action ({ feautre } as formModel) =
@@ -125,12 +134,20 @@ formStyles =
     css []
 
 
+rowWithAttrs : List (Attribute Action) -> List (Html Action) -> Html Action
+rowWithAttrs attributes =
+    div (css [ marginTop (px 10) ] :: attributes)
+
 row : List (Html Action) -> Html Action
 row =
-    div [ css [ marginTop (px 10) ] ]
+    rowWithAttrs []
+
+rowDaySelector : List (Html Action) -> Html Action
+rowDaySelector =
+    rowWithAttrs [id "day-selector"]
 
 
-daySelectorProps : DaySelector.State -> (Date.Date -> Action) -> DaySelector.Props Action
+daySelectorProps : DaySelector.State -> (Date -> Action) -> DaySelector.Props Action
 daySelectorProps state onDateChoosed =
     { state = state
     , handlers =
@@ -146,11 +163,11 @@ renderDaySelector : FormModel -> Html Action
 renderDaySelector { dayChooserDisplay, daySelectorState } =
     case dayChooserDisplay of
         Enum.DayChooseFor.StartDate ->
-            row
+            rowDaySelector
                 [ DaySelector.render <| daySelectorProps daySelectorState updateStartDate ]
 
         Enum.DayChooseFor.EndDate ->
-            row
+            rowDaySelector
                 [ DaySelector.render <| daySelectorProps daySelectorState updateEndDate ]
 
         Enum.DayChooseFor.None ->
@@ -242,8 +259,8 @@ makeAction =
         << NewFeatureActions.Form
 
 
-makeUpdateChooseDayForAction : DayChooseFor -> Date.Date -> Action
-makeUpdateChooseDayForAction dayChooseFor date =
+makeUpdateSelectorDayForAction : DayChooseFor -> Date -> Action
+makeUpdateSelectorDayForAction dayChooseFor date =
     makeAction (NewFeatureActions.UpdateDayChooseFor dayChooseFor date)
 
 
@@ -279,9 +296,9 @@ saveAction store =
         << Action.Store.Features.Add
 
 
-hideDayChooserAction : Action
-hideDayChooserAction =
-    makeUpdateChooseDayForAction Enum.DayChooseFor.None initDate
+hideDaySelectorAction : Action
+hideDaySelectorAction =
+    makeUpdateSelectorDayForAction Enum.DayChooseFor.None initDate
 
 
 handleDaySelectorScale : DaySelector.Scale -> Action
@@ -296,24 +313,24 @@ handleDaySelectorScaleIn =
         << NewFeatureActions.UpdateDaySelectorScaleIn
 
 
-handleChangeDate : Date.Date -> Action
+handleChangeDate : Date -> Action
 handleChangeDate =
     makeAction
         << NewFeatureActions.UpdateDaySelectorDate
 
 
-updateStartDate : Date.Date -> Action
+updateStartDate : Date -> Action
 updateStartDate date =
     Action.Batch
         [ makeAction
             << NewFeatureActions.UpdateStartDate
           <|
             date
-        , hideDayChooserAction
+        , hideDaySelectorAction
         ]
 
 
-updateDates : Date.Date -> Action
+updateDates : Date -> Action
 updateDates date =
     Action.Batch <|
         List.map
@@ -323,14 +340,14 @@ updateDates date =
             ]
 
 
-updateEndDate : Date.Date -> Action
+updateEndDate : Date -> Action
 updateEndDate date =
     Action.Batch
         [ makeAction
             << NewFeatureActions.UpdateEndDate
           <|
             date
-        , hideDayChooserAction
+        , hideDaySelectorAction
         ]
 
 
@@ -338,17 +355,17 @@ openChooserStarDate : FormModel -> Action
 openChooserStarDate formModel =
     case formModel.dayChooserDisplay of
         Enum.DayChooseFor.StartDate ->
-            hideDayChooserAction
+            hideDaySelectorAction
 
         _ ->
-            makeUpdateChooseDayForAction Enum.DayChooseFor.StartDate formModel.feautre.dateStart
+            makeUpdateSelectorDayForAction Enum.DayChooseFor.StartDate formModel.feautre.dateStart
 
 
 openChooserEndDate : FormModel -> Action
 openChooserEndDate formModel =
     case formModel.dayChooserDisplay of
         Enum.DayChooseFor.EndDate ->
-            hideDayChooserAction
+            hideDaySelectorAction
 
         _ ->
-            makeUpdateChooseDayForAction Enum.DayChooseFor.EndDate formModel.feautre.dateEnd
+            makeUpdateSelectorDayForAction Enum.DayChooseFor.EndDate formModel.feautre.dateEnd

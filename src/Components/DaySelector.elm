@@ -14,7 +14,7 @@ module Components.DaySelector exposing
     )
 
 import Css exposing (..)
-import Date
+import Date exposing (Date)
 import Helpers.DateTime as DateTime exposing (monthAsStringFromDate)
 import Helpers.List exposing (aperture, listWrap)
 import Html.Styled exposing (Attribute, Html, div, input, text)
@@ -25,7 +25,7 @@ import Time exposing (Month(..))
 
 
 type alias ScaleIn =
-    ( Scale, Date.Date )
+    ( Scale, Date )
 
 
 type Scale
@@ -35,16 +35,16 @@ type Scale
 
 
 type alias State =
-    { currentDate : Date.Date
+    { currentDate : Date
     , scale : Scale
     }
 
 
 type alias Handlers action =
     { onScale : Maybe (Scale -> action)
-    , onDateChoosed : Maybe (Date.Date -> action)
+    , onDateChoosed : Maybe (Date -> action)
     , onScaleIn : Maybe (ScaleIn -> action)
-    , onChangeDate : Maybe (Date.Date -> action)
+    , onChangeDate : Maybe (Date -> action)
     }
 
 
@@ -68,14 +68,14 @@ initHandlers =
     }
 
 
-initState : Date.Date -> State
+initState : Date -> State
 initState date =
     { currentDate = date
     , scale = initScale
     }
 
 
-initProps : Date.Date -> Props action
+initProps : Date -> Props action
 initProps date =
     { state = initState date
     , handlers = initHandlers
@@ -92,7 +92,7 @@ updateScaleIn state ( scale, date ) =
     { state | scale = scale, currentDate = date }
 
 
-updateDate : State -> Date.Date -> State
+updateDate : State -> Date -> State
 updateDate state date =
     { state | currentDate = date }
 
@@ -103,17 +103,17 @@ numAsString =
         << String.fromInt
 
 
-isChoosedDay : Date.Date -> Int -> Bool
+isChoosedDay : Date -> Int -> Bool
 isChoosedDay date day =
     Date.day date == day
 
 
-isChoosedMonth : Date.Date -> Int -> Bool
+isChoosedMonth : Date -> Int -> Bool
 isChoosedMonth date month =
     Date.monthNumber date == month
 
 
-getDayStyles : Date.Date -> Int -> List (Attribute action)
+getDayStyles : Date -> Int -> List (Attribute action)
 getDayStyles date day =
     if isChoosedDay date day then
         [ cellStyles, activeCellStyles ]
@@ -122,7 +122,7 @@ getDayStyles date day =
         [ cellStyles ]
 
 
-getMonthStyles : Date.Date -> Int -> List (Attribute action)
+getMonthStyles : Date -> Int -> List (Attribute action)
 getMonthStyles date month =
     if isChoosedMonth date month then
         [ cellStyles, activeCellStyles ]
@@ -139,7 +139,7 @@ unwrapHandler maybeAttributes =
         maybeAttributes
 
 
-dayHandlers : Props action -> Date.Date -> List (Attribute action)
+dayHandlers : Props action -> Date -> List (Attribute action)
 dayHandlers props date =
     unwrapHandler
         << Maybe.map (\x -> onClick (x <| DateTime.clampYear 1970 9999 date))
@@ -147,7 +147,7 @@ dayHandlers props date =
         props.handlers.onDateChoosed
 
 
-monthHandlers : Props action -> Date.Date -> List (Attribute action)
+monthHandlers : Props action -> Date -> List (Attribute action)
 monthHandlers props date =
     unwrapHandler
         << Maybe.map (\x -> onClick (x ( Day, date )))
@@ -163,7 +163,7 @@ scaleHandlers props scale =
         props.handlers.onScale
 
 
-inputHandler : (Date.Date -> action) -> Date.Date -> String -> action
+inputHandler : (Date -> action) -> Date -> String -> action
 inputHandler handler date =
     handler
         << Maybe.withDefault date
