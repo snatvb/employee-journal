@@ -159,8 +159,20 @@ renderDaySelector { dayChooserDisplay, daySelectorState } =
             text ""
 
 
+onSaveAttribute : Store -> Feature -> Attribute Action
+onSaveAttribute store feature =
+    if String.length feature.title > 2 then
+        onClick <| saveAction store feature
+
+    else
+        css
+            [ opacity (num 0.8)
+            , important <| cursor notAllowed
+            ]
+
+
 form : Store -> FormModel -> Html Action
-form _ ({ feautre } as formModel) =
+form store ({ feautre } as formModel) =
     div [ formStyles ]
         [ row [ div [] [ text "Добавление новой фичи" ] ]
         , row [ Input.render [ value feautre.title, onInput titleChangeAction, placeholder "Название" ] ]
@@ -173,7 +185,7 @@ form _ ({ feautre } as formModel) =
             , div [ dateStyles ] [ DateComponent.render [ onClick <| openChooserEndDate formModel ] feautre.dateEnd ]
             ]
         , renderDaySelector formModel
-        , row [ Button.render [] [ text "Сохранить" ] ]
+        , row [ Button.render [ onSaveAttribute store feautre ] [ text "Сохранить" ] ]
         , row
             [ div []
                 [ Link.default [ href "/" ] [ text "Назад" ]
@@ -216,7 +228,7 @@ dateStyles =
         [ display inlineFlex
         , cursor pointer
         , hover
-            [ opacity (num 80)
+            [ opacity (num 0.8)
             ]
         ]
 
@@ -259,6 +271,14 @@ foChangeAction : String -> Action
 foChangeAction =
     makeAction
         << NewFeatureActions.UpdateFO
+
+
+saveAction : Store -> Feature -> Action
+saveAction store =
+    Action.RedirectAfterAction (prepareInternalUrlRequest "/" store.url)
+        << Action.Store
+        << Action.Store.Features
+        << Action.Store.Features.Add
 
 
 hideDayChooserAction : Action

@@ -15,7 +15,6 @@ baseStyles =
         , fontSize (em 0.8)
         , backgroundColor (rgba 0 0 0 0.5)
         , borderRadius (px 3)
-        , cursor default
         ]
 
 
