@@ -3,6 +3,7 @@ module Helpers exposing
     , packDocument
     , packModelWithCmd
     , prepareInternalUrlRequest
+    , applyTo
     )
 
 import Action exposing (Action)
@@ -39,3 +40,7 @@ fixPathInUrl url =
 
     else
         { url | path = "/" ++ url.path }
+
+applyTo : a -> (a -> b) -> b
+applyTo a f =
+  f a
